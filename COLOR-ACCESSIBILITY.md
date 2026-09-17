@@ -12,6 +12,33 @@ When debugging is active, every theme uses the approved lavender `#BAA4E5`
 status-bar background with dark-blue `#1C3C55` foreground text, which has a
 5.22:1 contrast ratio.
 
+## Film themes
+
+Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are outside the
+approved LCARS palette: each takes its surfaces and accents from the matching
+Deckard webview theme (`src/ui/webview/themes.ts` in Deckard).
+`scripts/build-film-themes.js` holds those palettes and maps them onto the
+workbench roles through `buildWorkbenchColors` in `q-theme.js`, the same
+mapping Q uses, so the film themes and Q stay aligned as roles are added.
+
+| Theme | File | Primary accent | Secondary accent |
+| --- | --- | --- | --- |
+| Replicant | `themes/Replicant-color-theme.json` | Amber `#FFB000` | Cyan `#00E5FF` |
+| Oblivion | `themes/Oblivion-color-theme.json` | Cyan `#3FB6C9` | Orange `#E8562A` |
+| Synthwave | `themes/Synthwave-color-theme.json` | Cyan `#00E5FF` | Pink `#FF3CA6` |
+| Tomcat | `themes/Tomcat-color-theme.json` | Phosphor green `#54DB51` | Amber `#D89D31` |
+| Fellowship (light) | `themes/Fellowship-color-theme.json` | Olive `#455E30` | Gold `#685225` |
+| Cooper | `themes/Cooper-color-theme.json` | Gold `#DCA24A` | Steel blue `#9FBFD4` |
+
+The build enforces the same AA target as Q. Every accent that also serves as
+text reads at 4.5:1 or better on every workbench surface; each accent fill
+gets a foreground that reaches 4.5:1 on it; and every syntax color reaches
+4.5:1 on the editor background, the line highlight, and the secondary-accent
+bracket-match tint. A Deckard color that misses is blended toward the theme's
+foreground until it passes, which is why Fellowship's accents are darker than
+their Deckard originals. The build fails rather than write a theme with a
+pair below the target.
+
 ## Q generated theme
 
 Q is a runtime-generated exception to the fixed approved palette above. Its

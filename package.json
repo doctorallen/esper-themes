@@ -3,13 +3,14 @@
   "displayName": "Esper Themes",
   "publisher": "esperinnovations",
   "version": "0.2.0",
-  "description": "High-contrast themes for Visual Studio Code, including the LCARS-inspired theme family and a generated accessibility-aware Q theme.",
+  "description": "High-contrast, film-inspired themes for Visual Studio Code: LCARS, Replicant, Oblivion, Synthwave, Tomcat, Fellowship, Cooper, and a generated accessibility-aware Q theme.",
   "main": "./extension.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/doctorallen/esper-themes.git"
   },
   "scripts": {
+    "build:themes": "node scripts/build-film-themes.js",
     "package:vsix": "vsce package --no-dependencies --skip-license"
   },
   "devDependencies": {
@@ -68,6 +69,36 @@
         "label": "Q",
         "uiTheme": "vs-dark",
         "path": "./themes/Q-color-theme.json"
+      },
+      {
+        "label": "Replicant",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Replicant-color-theme.json"
+      },
+      {
+        "label": "Oblivion",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Oblivion-color-theme.json"
+      },
+      {
+        "label": "Synthwave",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Synthwave-color-theme.json"
+      },
+      {
+        "label": "Tomcat",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Tomcat-color-theme.json"
+      },
+      {
+        "label": "Fellowship",
+        "uiTheme": "vs",
+        "path": "./themes/Fellowship-color-theme.json"
+      },
+      {
+        "label": "Cooper",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Cooper-color-theme.json"
       }
     ]
   }

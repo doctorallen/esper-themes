@@ -438,23 +438,15 @@ function minimumContrastForColors(
   return Math.min(...ratios);
 }
 
-function generateQTheme(template, random = Math.random) {
-  if (!template || !template.colors) {
-    throw new TypeError("A theme template with a colors object is required.");
-  }
-
-  const colors = clone(template.colors);
-  const baseHue = randomBetween(random, 0, 360);
-  const editorBackground = randomDarkColor(random, baseHue, 0.045, 0.09);
-  const activityBackground = randomDarkColor(random, baseHue + 15, 0.07, 0.13);
-  const sidebarBackground = randomDarkColor(random, baseHue - 15, 0.085, 0.15);
-  const panelBackground = randomDarkColor(random, baseHue + 35, 0.065, 0.125);
-  const statusBackground = randomDarkColor(random, baseHue - 35, 0.09, 0.15);
-  const widgetBackground = randomDarkColor(random, baseHue + 5, 0.1, 0.16);
-  const raisedBackground = randomDarkColor(random, baseHue - 5, 0.115, 0.17);
-  const tabActiveBackground = randomDarkColor(random, baseHue + 25, 0.08, 0.14);
-  const tabInactiveBackground = randomDarkColor(random, baseHue - 25, 0.055, 0.11);
-  const darkSurfaces = [
+/**
+ * Maps a palette of surfaces and accents onto every workbench color role the
+ * themes define. Q fills the palette at random; the fixed film themes supply
+ * their own.
+ */
+function buildWorkbenchColors(templateColors, palette) {
+  const {
+    foreground,
+    mutedForeground,
     editorBackground,
     activityBackground,
     sidebarBackground,
@@ -464,51 +456,24 @@ function generateQTheme(template, random = Math.random) {
     raisedBackground,
     tabActiveBackground,
     tabInactiveBackground,
-  ];
-
-  const foreground = pickReadableLight(darkSurfaces, random);
-  const mutedForeground = pickReadableLight(darkSurfaces, random);
-  const primaryPair = pickAccentPair(darkSurfaces, random, baseHue - 55, baseHue + 55);
-  const secondaryPair = pickAccentPair(darkSurfaces, random, baseHue + 75, baseHue + 245);
-  const errorPair = pickAccentPair(darkSurfaces, random, 0, 25);
-  const warningPair = pickAccentPair(darkSurfaces, random, 28, 68);
-  const successPair = pickAccentPair(darkSurfaces, random, 92, 165);
-  const infoPair = pickAccentPair(darkSurfaces, random, 175, 245);
-  const structuralBorder = mixHex(editorBackground, statusBackground, 0.55);
-
-  const primary = primaryPair.background;
-  const primaryForeground = primaryPair.foreground;
-  const secondary = secondaryPair.background;
-  const secondaryForeground = secondaryPair.foreground;
-  const error = errorPair.background;
-  const warning = warningPair.background;
-  const success = successPair.background;
-  const info = infoPair.background;
-  const selectionForeground = pickReadableForeground(
-    [
-      alphaComposite(primary, editorBackground, "66"),
-      alphaComposite(secondary, editorBackground, "66"),
-    ],
-    random
-  );
-  const listHoverForeground = pickReadableForeground(
-    [alphaComposite(primary, sidebarBackground, "40")],
-    random
-  );
-  const tabHoverForeground = pickReadableForeground(
-    [
-      alphaComposite(primary, editorBackground, "40"),
-      alphaComposite(primary, tabInactiveBackground, "40"),
-    ],
-    random
-  );
-  const modernTabHoverForeground = pickReadableForeground(
-    [
-      alphaComposite(primary, activityBackground, "40"),
-      alphaComposite(primary, sidebarBackground, "40"),
-    ],
-    random
-  );
+    structuralBorder,
+    primary,
+    primaryForeground,
+    secondary,
+    secondaryForeground,
+    error,
+    errorForeground,
+    warning,
+    warningForeground,
+    success,
+    info,
+    infoForeground,
+    selectionForeground,
+    listHoverForeground,
+    tabHoverForeground,
+    modernTabHoverForeground,
+  } = palette;
+  const colors = clone(templateColors);
 
   Object.assign(colors, {
     focusBorder: primary,
@@ -629,17 +594,17 @@ function generateQTheme(template, random = Math.random) {
     "statusBarItem.prominentHoverBackground": secondary,
     "statusBarItem.prominentHoverForeground": secondaryForeground,
     "statusBarItem.remoteBackground": info,
-    "statusBarItem.remoteForeground": infoPair.foreground,
+    "statusBarItem.remoteForeground": infoForeground,
     "statusBarItem.remoteHoverBackground": info,
-    "statusBarItem.remoteHoverForeground": infoPair.foreground,
+    "statusBarItem.remoteHoverForeground": infoForeground,
     "statusBarItem.errorBackground": error,
-    "statusBarItem.errorForeground": errorPair.foreground,
+    "statusBarItem.errorForeground": errorForeground,
     "statusBarItem.errorHoverBackground": error,
-    "statusBarItem.errorHoverForeground": errorPair.foreground,
+    "statusBarItem.errorHoverForeground": errorForeground,
     "statusBarItem.warningBackground": warning,
-    "statusBarItem.warningForeground": warningPair.foreground,
+    "statusBarItem.warningForeground": warningForeground,
     "statusBarItem.warningHoverBackground": warning,
-    "statusBarItem.warningHoverForeground": warningPair.foreground,
+    "statusBarItem.warningHoverForeground": warningForeground,
     "statusBarItem.offlineBackground": raisedBackground,
     "statusBarItem.offlineForeground": foreground,
     "statusBarItem.offlineHoverBackground": raisedBackground,
@@ -722,6 +687,110 @@ function generateQTheme(template, random = Math.random) {
     "gitDecoration.untrackedResourceForeground": success,
   });
 
+  return colors;
+}
+
+function generateQTheme(template, random = Math.random) {
+  if (!template || !template.colors) {
+    throw new TypeError("A theme template with a colors object is required.");
+  }
+
+  const baseHue = randomBetween(random, 0, 360);
+  const editorBackground = randomDarkColor(random, baseHue, 0.045, 0.09);
+  const activityBackground = randomDarkColor(random, baseHue + 15, 0.07, 0.13);
+  const sidebarBackground = randomDarkColor(random, baseHue - 15, 0.085, 0.15);
+  const panelBackground = randomDarkColor(random, baseHue + 35, 0.065, 0.125);
+  const statusBackground = randomDarkColor(random, baseHue - 35, 0.09, 0.15);
+  const widgetBackground = randomDarkColor(random, baseHue + 5, 0.1, 0.16);
+  const raisedBackground = randomDarkColor(random, baseHue - 5, 0.115, 0.17);
+  const tabActiveBackground = randomDarkColor(random, baseHue + 25, 0.08, 0.14);
+  const tabInactiveBackground = randomDarkColor(random, baseHue - 25, 0.055, 0.11);
+  const darkSurfaces = [
+    editorBackground,
+    activityBackground,
+    sidebarBackground,
+    panelBackground,
+    statusBackground,
+    widgetBackground,
+    raisedBackground,
+    tabActiveBackground,
+    tabInactiveBackground,
+  ];
+
+  const foreground = pickReadableLight(darkSurfaces, random);
+  const mutedForeground = pickReadableLight(darkSurfaces, random);
+  const primaryPair = pickAccentPair(darkSurfaces, random, baseHue - 55, baseHue + 55);
+  const secondaryPair = pickAccentPair(darkSurfaces, random, baseHue + 75, baseHue + 245);
+  const errorPair = pickAccentPair(darkSurfaces, random, 0, 25);
+  const warningPair = pickAccentPair(darkSurfaces, random, 28, 68);
+  const successPair = pickAccentPair(darkSurfaces, random, 92, 165);
+  const infoPair = pickAccentPair(darkSurfaces, random, 175, 245);
+  const structuralBorder = mixHex(editorBackground, statusBackground, 0.55);
+
+  const primary = primaryPair.background;
+  const primaryForeground = primaryPair.foreground;
+  const secondary = secondaryPair.background;
+  const secondaryForeground = secondaryPair.foreground;
+  const error = errorPair.background;
+  const warning = warningPair.background;
+  const success = successPair.background;
+  const info = infoPair.background;
+  const selectionForeground = pickReadableForeground(
+    [
+      alphaComposite(primary, editorBackground, "66"),
+      alphaComposite(secondary, editorBackground, "66"),
+    ],
+    random
+  );
+  const listHoverForeground = pickReadableForeground(
+    [alphaComposite(primary, sidebarBackground, "40")],
+    random
+  );
+  const tabHoverForeground = pickReadableForeground(
+    [
+      alphaComposite(primary, editorBackground, "40"),
+      alphaComposite(primary, tabInactiveBackground, "40"),
+    ],
+    random
+  );
+  const modernTabHoverForeground = pickReadableForeground(
+    [
+      alphaComposite(primary, activityBackground, "40"),
+      alphaComposite(primary, sidebarBackground, "40"),
+    ],
+    random
+  );
+
+  const colors = buildWorkbenchColors(template.colors, {
+    foreground,
+    mutedForeground,
+    editorBackground,
+    activityBackground,
+    sidebarBackground,
+    panelBackground,
+    statusBackground,
+    widgetBackground,
+    raisedBackground,
+    tabActiveBackground,
+    tabInactiveBackground,
+    structuralBorder,
+    primary,
+    primaryForeground,
+    secondary,
+    secondaryForeground,
+    error,
+    errorForeground: errorPair.foreground,
+    warning,
+    warningForeground: warningPair.foreground,
+    success,
+    info,
+    infoForeground: infoPair.foreground,
+    selectionForeground,
+    listHoverForeground,
+    tabHoverForeground,
+    modernTabHoverForeground,
+  });
+
   const syntaxBackgrounds = [
     editorBackground,
     alphaComposite(secondary, editorBackground, "20"),
@@ -775,9 +844,17 @@ function generateQTheme(template, random = Math.random) {
 }
 
 module.exports = {
+  DEBUGGING_STATUS_BACKGROUND,
+  DEBUGGING_STATUS_FOREGROUND,
   MIN_TEXT_CONTRAST,
+  alphaComposite,
+  buildWorkbenchColors,
   contrastRatio,
   generateQTheme,
+  mixHex,
+  syntaxRoleForSemanticToken,
+  syntaxRoleForToken,
+  withAlpha,
   hslToHex,
   relativeLuminance,
 };

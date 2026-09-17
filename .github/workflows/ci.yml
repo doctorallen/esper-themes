@@ -36,9 +36,10 @@ jobs:
 
       - name: Validate extension metadata and theme
         run: |
-          node -e "const fs=require('fs'); for (const file of ['package.json','themes/LCARS-color-theme.json','themes/Q-color-theme.json']) JSON.parse(fs.readFileSync(file, 'utf8'));"
+          node -e "const fs=require('fs'); for (const file of ['package.json','themes/LCARS-color-theme.json','themes/Q-color-theme.json','themes/Replicant-color-theme.json','themes/Oblivion-color-theme.json','themes/Synthwave-color-theme.json','themes/Tomcat-color-theme.json','themes/Fellowship-color-theme.json','themes/Cooper-color-theme.json']) JSON.parse(fs.readFileSync(file, 'utf8'));"
           node --check extension.js
           node --check q-theme.js
+          node --check scripts/build-film-themes.js
 
       - name: Build VSIX
         run: npm run package:vsix

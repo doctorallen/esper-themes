@@ -1,7 +1,19 @@
 # Esper Themes
 
-High-contrast dark color themes for Visual Studio Code, including the
-LCARS-inspired LCARS theme and a generated Q theme.
+High-contrast color themes for Visual Studio Code: the LCARS-inspired LCARS
+theme, six film themes carried over from Deckard's webview themes, and a
+generated Q theme.
+
+| Theme | Type | Look |
+| --- | --- | --- |
+| LCARS | Dark | Starfleet console panels. |
+| Replicant | Dark | Amber readouts and cyan telemetry on near-black. |
+| Oblivion | Dark | Steel frames and cyan readouts, with orange kept for alerts. |
+| Synthwave | Dark | Neon cyan and hot pink on violet night. |
+| Tomcat | Dark | Green phosphor cockpit display with amber warnings. |
+| Fellowship | Light | Parchment with olive greens and aged gold. |
+| Cooper | Dark | White-on-black instrument readouts and Gargantua's gold. |
+| Q | Dark | A new accessible palette generated on demand. |
 
 The root `COLOR-ACCESSIBILITY.md` file records the approved palette, its theme
 roles, and the accessibility rationale for each assignment.
@@ -11,6 +23,21 @@ same dark surface as the editor and terminal. Panel section headers retain
 each theme's identity color through the supported
 `panelSectionHeader.*` roles; VS Code's Modern UI top panel strip shares the
 native `panel.background` role.
+
+## Film themes
+
+Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are generated
+from the palettes of the matching Deckard webview themes. The palettes live in
+`scripts/build-film-themes.js`; after changing one, rebuild the theme files
+with:
+
+```sh
+npm run build:themes
+```
+
+The script maps each palette onto the same workbench roles the Q generator
+uses, and adjusts any text color that falls short of WCAG AA (4.5:1) on its
+surfaces before writing the theme.
 
 ## Q generated theme
 
