@@ -1,4 +1,4 @@
-# LCARS Color and Accessibility Log
+# Esper Themes Color and Accessibility Log
 
 ## Character theme variants
 
@@ -41,8 +41,8 @@ Q starts from `themes/Q-color-theme.json` as a safe static fallback. When Q is
 active, the extension writes generated values into the theme-scoped
 `workbench.colorCustomizations`, `editor.tokenColorCustomizations`, and
 `editor.semanticTokenColorCustomizations` settings. **Mon Capitan** in the
-status bar and **LCARS: Generate Q Theme** in the Command Palette invoke the
-same generator; other LCARS themes remain unchanged. Runtime syntax colors use
+status bar and **Esper Themes: Generate Q Theme** in the Command Palette invoke the
+same generator; the other themes remain unchanged. Runtime syntax colors use
 a shared semantic role palette for comments, keywords, operators, strings,
 numbers, constants, variables, properties, functions, types, markup,
 decorators, and invalid code, so TextMate and semantic-token highlighting
@@ -248,11 +248,11 @@ palette or color-role change so it stays accurate. Color edits in the
 inspector are restricted to the 27 approved palette swatches (the same
 colors documented in the "Approved palette and usage" table above) — there is
 no free-form/native color picker, so any edit made in the page stays within
-the approved LCARS palette.
+the approved Esper Themes palette.
 
 ## Scope
 
-This is the approved LCARS palette for the five fixed themes. Each RGB color is
+This is the approved Esper Themes palette for the five fixed themes. Each RGB color is
 used exactly as provided; where VS Code supports alpha, opacity is used only to
 soften an overlay without introducing a new base hue. Modern UI action
 backgrounds are the corresponding opaque composites required by VS Code for
@@ -315,9 +315,9 @@ fundamental taxonomies:
   words. Theme files consume scopes produced by language grammars; grammar
   injections belong in language extensions.
 
-LCARS already follows the common taxonomy and has a broader semantic map than
-most of the sample ([`tokenColors`](https://github.com/doctorallen/lcars/blob/main/themes/LCARS-color-theme.json#L132-L452),
-[`semanticTokenColors`](https://github.com/doctorallen/lcars/blob/main/themes/LCARS-color-theme.json#L452-L484)).
+Esper Themes already follows the common taxonomy and has a broader semantic map than
+most of the sample ([`tokenColors`](https://github.com/doctorallen/esper-themes/blob/main/themes/LCARS-color-theme.json#L132-L452),
+[`semanticTokenColors`](https://github.com/doctorallen/esper-themes/blob/main/themes/LCARS-color-theme.json#L452-L484)).
 The top-ten comparison supports targeted alias and semantic-token refinements,
 not a replacement of the current palette or taxonomy.
 

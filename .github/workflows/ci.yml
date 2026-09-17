@@ -46,7 +46,7 @@ jobs:
       - name: Upload VSIX build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: lcars-vsix-${{ github.sha }}
+          name: esper-themes-vsix-${{ github.sha }}
           path: '*.vsix'
           if-no-files-found: error
           retention-days: 7

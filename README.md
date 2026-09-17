@@ -1,6 +1,8 @@
-# LCARS
+# Esper Themes
 
-An LCARS-inspired high-contrast dark color theme for Visual Studio Code.
+High-contrast dark color themes for Visual Studio Code, including the
+LCARS-inspired LCARS, Picard, Troi, Data, and Crusher themes and a generated
+Q theme.
 
 The root `COLOR-ACCESSIBILITY.md` file records the approved palette, its theme
 roles, and the accessibility rationale for each assignment.
@@ -21,14 +23,14 @@ and hover states.
 
 While Q is active, click **Mon Capitan** in the status bar to generate another
 palette. The same action is available in the Command Palette as
-**LCARS: Generate Q Theme**. The generated values are stored as Q-scoped VS
+**Esper Themes: Generate Q Theme**. The generated values are stored as Q-scoped VS
 Code color customizations, so the fixed LCARS, Picard, Troi, Data, and Crusher
 themes are not changed.
 
 ## Saving generated Q themes
 
-While Q is active, run **LCARS: Save Current Q Theme** from the Command Palette
-and give the palette a name. Run **LCARS: Pick Saved Q Theme** later to restore
+While Q is active, run **Esper Themes: Save Current Q Theme** from the Command Palette
+and give the palette a name. Run **Esper Themes: Pick Saved Q Theme** later to restore
 any saved workbench and syntax palette; saved snapshots are kept in the
 extension's global storage and do not create separate theme files.
 

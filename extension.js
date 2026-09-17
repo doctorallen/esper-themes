@@ -4,13 +4,15 @@ const vscode = require("vscode");
 const { generateQTheme } = require("./q-theme");
 const qThemeTemplate = require("./themes/Q-color-theme.json");
 
-const COMMAND = "lcars.generateQTheme";
-const SAVE_COMMAND = "lcars.saveQTheme";
-const PICK_COMMAND = "lcars.pickSavedQTheme";
+const COMMAND = "esperThemes.generateQTheme";
+const SAVE_COMMAND = "esperThemes.saveQTheme";
+const PICK_COMMAND = "esperThemes.pickSavedQTheme";
 const THEME_NAME = "Q";
 const THEME_REFRESH_FALLBACK = "Default Dark Modern";
 const THEME_SCOPE = "[Q]";
-const GENERATED_TOKEN_RULE_PREFIX = "LCARS Q generated token ";
+const GENERATED_TOKEN_RULE_PREFIX = "Esper Themes Q generated token ";
+// Rules written before the extension was renamed from LCARS still need cleanup.
+const LEGACY_GENERATED_TOKEN_RULE_PREFIX = "LCARS Q generated token ";
 const SAVED_Q_THEMES_KEY = "savedQThemes";
 const MAX_SAVED_Q_THEMES = 50;
 const Q_GENERATION_MESSAGES = [
@@ -30,6 +32,13 @@ let statusBarItem;
 let generationInProgress = false;
 let generationPromise;
 let extensionContext;
+
+function isGeneratedTokenRuleName(name) {
+  return (
+    name.startsWith(GENERATED_TOKEN_RULE_PREFIX) ||
+    name.startsWith(LEGACY_GENERATED_TOKEN_RULE_PREFIX)
+  );
+}
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -91,7 +100,7 @@ function getCurrentQTheme() {
           rule =>
             isRecord(rule) &&
             typeof rule.name === "string" &&
-            rule.name.startsWith(GENERATED_TOKEN_RULE_PREFIX) &&
+            isGeneratedTokenRuleName(rule.name) &&
             isRecord(rule.settings) &&
             typeof rule.settings.foreground === "string"
         )
@@ -145,7 +154,7 @@ async function updateTokenColors(generated) {
           !(
             isRecord(rule) &&
             typeof rule.name === "string" &&
-            rule.name.startsWith(GENERATED_TOKEN_RULE_PREFIX)
+            isGeneratedTokenRuleName(rule.name)
           )
       )
     : [];
@@ -338,7 +347,7 @@ async function runPickSavedQThemeCommand() {
     const savedThemes = getSavedQThemes();
     if (savedThemes.length === 0) {
       await vscode.window.showInformationMessage(
-        "No saved Q themes yet. Use LCARS: Save Current Q Theme while Q is active."
+        "No saved Q themes yet. Use Esper Themes: Save Current Q Theme while Q is active."
       );
       return;
     }

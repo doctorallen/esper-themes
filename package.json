@@ -1,13 +1,13 @@
 {
-  "name": "esper-lcars",
-  "displayName": "LCARS",
+  "name": "esper-themes",
+  "displayName": "Esper Themes",
   "publisher": "esperinnovations",
   "version": "0.2.0",
-  "description": "LCARS-inspired high-contrast themes for Visual Studio Code, including a generated accessibility-aware Q theme.",
+  "description": "High-contrast themes for Visual Studio Code, including the LCARS-inspired theme family and a generated accessibility-aware Q theme.",
   "main": "./extension.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/doctorallen/lcars.git"
+    "url": "https://github.com/doctorallen/esper-themes.git"
   },
   "scripts": {
     "package:vsix": "vsce package --no-dependencies --skip-license"
@@ -23,38 +23,38 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:lcars.generateQTheme",
-    "onCommand:lcars.saveQTheme",
-    "onCommand:lcars.pickSavedQTheme"
+    "onCommand:esperThemes.generateQTheme",
+    "onCommand:esperThemes.saveQTheme",
+    "onCommand:esperThemes.pickSavedQTheme"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "lcars.generateQTheme",
-        "title": "LCARS: Generate Q Theme",
-        "category": "LCARS"
+        "command": "esperThemes.generateQTheme",
+        "title": "Esper Themes: Generate Q Theme",
+        "category": "Esper Themes"
       },
       {
-        "command": "lcars.saveQTheme",
-        "title": "LCARS: Save Current Q Theme",
-        "category": "LCARS"
+        "command": "esperThemes.saveQTheme",
+        "title": "Esper Themes: Save Current Q Theme",
+        "category": "Esper Themes"
       },
       {
-        "command": "lcars.pickSavedQTheme",
-        "title": "LCARS: Pick Saved Q Theme",
-        "category": "LCARS"
+        "command": "esperThemes.pickSavedQTheme",
+        "title": "Esper Themes: Pick Saved Q Theme",
+        "category": "Esper Themes"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "lcars.generateQTheme"
+          "command": "esperThemes.generateQTheme"
         },
         {
-          "command": "lcars.saveQTheme"
+          "command": "esperThemes.saveQTheme"
         },
         {
-          "command": "lcars.pickSavedQTheme"
+          "command": "esperThemes.pickSavedQTheme"
         }
       ]
     },

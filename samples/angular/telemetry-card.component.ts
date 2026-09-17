@@ -9,7 +9,7 @@ import {
 import type { TelemetryReading } from './relay-telemetry.models';
 
 @Component({
-  selector: 'lcars-telemetry-card',
+  selector: 'esper-telemetry-card',
   standalone: true,
   imports: [DatePipe, UpperCasePipe],
   templateUrl: './telemetry-card.component.html',

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LCARS Theme Palettes &amp; Accessibility</title>
+<title>Esper Themes Palettes &amp; Accessibility</title>
 <style>
   :root {
     --bg: #14202B;
@@ -307,8 +307,8 @@
 </head>
 <body>
 <header>
-  <h1>LCARS Theme Palettes &amp; Accessibility</h1>
-  <p>All colors below come from the approved LCARS palette in <code>COLOR-ACCESSIBILITY.md</code>. The palette data keeps semantic names and hex values together, derives RGB values automatically, and checks color theory separately from text and UI accessibility.</p>
+  <h1>Esper Themes Palettes &amp; Accessibility</h1>
+  <p>All colors below come from the approved Esper Themes palette in <code>COLOR-ACCESSIBILITY.md</code>. The palette data keeps semantic names and hex values together, derives RGB values automatically, and checks color theory separately from text and UI accessibility.</p>
 </header>
 <div class="toolbar">
   <label for="themeSelect">Theme</label>
@@ -324,7 +324,7 @@
     <div class="mock-window">
       <div class="mock-titlebar" data-keys="titleBar.activeBackground,titleBar.activeForeground" data-label="Title bar">
         <span class="mock-dot red"></span><span class="mock-dot yellow"></span><span class="mock-dot green"></span>
-        <span class="mock-titlebar-title">sample.ts — lcars</span>
+        <span class="mock-titlebar-title">sample.ts — esper-themes</span>
       </div>
       <div class="mock-body">
         <div class="mock-activitybar">
@@ -362,7 +362,7 @@
             <div class="mock-tab" data-keys="modernEditorTab.inactiveBackground,modernEditorTab.hoverBackground,modernEditorTab.hoverActionBackground,modernEditorTab.hoverForeground,tab.inactiveForeground" data-label="Inactive Modern UI tab">main.rs</div>
           </div>
           <div class="mock-editor" data-keys="editor.background,editor.foreground" data-label="Editor background">
-<div class="line"><span class="ln">1</span><span class="tok tok-comment" data-keys="token:Comments" data-label="Comments">// LCARS telemetry relay</span></div>
+<div class="line"><span class="ln">1</span><span class="tok tok-comment" data-keys="token:Comments" data-label="Comments">// Esper telemetry relay</span></div>
 <div class="line"><span class="ln">2</span><span class="tok tok-decorator" data-keys="token:Decorators" data-label="Decorators">@Injectable</span><span class="tok tok-keyword" data-keys="token:Keywords" data-label="Keywords">()</span></div>
 <div class="line"><span class="ln">3</span><span class="tok tok-keyword" data-keys="token:Keywords" data-label="Keywords">export class</span> <span class="tok tok-type" data-keys="token:Types" data-label="Types">Telemetry</span> {</div>
 <div class="line active-line"><span class="ln">4</span>&nbsp;&nbsp;<span class="tok tok-const" data-keys="token:Named-constants-and-enum-members" data-label="Named constants">MAX_RETRIES</span> = <span class="tok tok-number" data-keys="token:Numbers-and-constants" data-label="Numbers and constants">3</span>;</div>
@@ -895,7 +895,7 @@ function friendlyKey(k){
 }
 
 // Builds a grid of the approved palette swatches only — no arbitrary/native
-// color picker — so edits always stay within the documented LCARS palette.
+// color picker — so edits always stay within the documented Esper Themes palette.
 function buildPalettePicker(currentValue, onSelect){
   const wrap = document.createElement("div");
   wrap.className = "palette-picker";
@@ -919,7 +919,7 @@ function openElementInspector(el){
   const state = getState(currentThemeKey);
   const keys = el.dataset.keys.split(",");
   inspTitle.textContent = el.dataset.label || "Element";
-  inspSub.textContent = "Edit any role bound to this element by picking a color from the approved LCARS palette. Changes update the live preview instantly.";
+  inspSub.textContent = "Edit any role bound to this element by picking a color from the approved Esper Themes palette. Changes update the live preview instantly.";
   inspBody.innerHTML = "";
   keys.forEach(k => {
     const isToken = k.startsWith("token:");
@@ -943,7 +943,7 @@ function openElementInspector(el){
 
 function openSwatchInspector(state, hex, name){
   inspTitle.textContent = name;
-  inspSub.textContent = "This palette color is used in the roles below. Pick a replacement from the approved LCARS palette to update every one of them at once.";
+  inspSub.textContent = "This palette color is used in the roles below. Pick a replacement from the approved Esper Themes palette to update every one of them at once.";
   inspBody.innerHTML = "";
 
   const matchingColorKeys = Object.entries(state.colors)
@@ -1018,7 +1018,7 @@ document.getElementById("exportBtn").addEventListener("click", () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `LCARS-${state.label}-custom-color-theme.json`;
+  a.download = `Esper-${state.label}-custom-color-theme.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

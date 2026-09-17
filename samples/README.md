@@ -1,6 +1,6 @@
 # Theme Samples
 
-These original source fixtures exercise the LCARS theme across common language
+These original source fixtures exercise the Esper themes across common language
 grammars. They are for visual development and manual theme checks only, and are
 excluded from the packaged VSIX.
 
