@@ -1,17 +1,33 @@
 "use strict";
 
+const path = require("path");
 const vscode = require("vscode");
 const { generateQTheme } = require("./q-theme");
+const manifest = require("./package.json");
 const qThemeTemplate = require("./themes/Q-color-theme.json");
 
-const COMMAND = "lcars.generateQTheme";
-const SAVE_COMMAND = "lcars.saveQTheme";
-const PICK_COMMAND = "lcars.pickSavedQTheme";
+const COMMAND = "esperThemes.generateQTheme";
+const SAVE_COMMAND = "esperThemes.saveQTheme";
+const PICK_COMMAND = "esperThemes.pickSavedQTheme";
 const THEME_NAME = "Q";
 const THEME_REFRESH_FALLBACK = "Default Dark Modern";
 const THEME_SCOPE = "[Q]";
-const GENERATED_TOKEN_RULE_PREFIX = "LCARS Q generated token ";
+const GENERATED_TOKEN_RULE_PREFIX = "Esper Themes Q generated token ";
+// Rules written before the extension was renamed from LCARS still need cleanup.
+const LEGACY_GENERATED_TOKEN_RULE_PREFIX = "LCARS Q generated token ";
 const SAVED_Q_THEMES_KEY = "savedQThemes";
+// VS Code's Modern UI draws the active editor tab's top and bottom strokes only
+// from workbench.colorCustomizations, never from a theme file, so the fixed
+// themes copy these roles into their theme-scoped settings.
+const MODERN_UI_SETTING = "workbench.experimental.modernUI";
+const MODERN_TAB_BORDER_KEYS = [
+  "tab.activeBorder",
+  "tab.activeBorderTop",
+  "tab.unfocusedActiveBorder",
+  "tab.unfocusedActiveBorderTop",
+  "tab.selectedBorderTop",
+];
+const FIXED_THEMES = manifest.contributes.themes.filter(theme => theme.label !== "Q");
 const MAX_SAVED_Q_THEMES = 50;
 const Q_GENERATION_MESSAGES = [
   "The trial never ends.",
@@ -30,6 +46,13 @@ let statusBarItem;
 let generationInProgress = false;
 let generationPromise;
 let extensionContext;
+
+function isGeneratedTokenRuleName(name) {
+  return (
+    name.startsWith(GENERATED_TOKEN_RULE_PREFIX) ||
+    name.startsWith(LEGACY_GENERATED_TOKEN_RULE_PREFIX)
+  );
+}
 
 function isRecord(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -91,7 +114,7 @@ function getCurrentQTheme() {
           rule =>
             isRecord(rule) &&
             typeof rule.name === "string" &&
-            rule.name.startsWith(GENERATED_TOKEN_RULE_PREFIX) &&
+            isGeneratedTokenRuleName(rule.name) &&
             isRecord(rule.settings) &&
             typeof rule.settings.foreground === "string"
         )
@@ -145,7 +168,7 @@ async function updateTokenColors(generated) {
           !(
             isRecord(rule) &&
             typeof rule.name === "string" &&
-            rule.name.startsWith(GENERATED_TOKEN_RULE_PREFIX)
+            isGeneratedTokenRuleName(rule.name)
           )
       )
     : [];
@@ -338,7 +361,7 @@ async function runPickSavedQThemeCommand() {
     const savedThemes = getSavedQThemes();
     if (savedThemes.length === 0) {
       await vscode.window.showInformationMessage(
-        "No saved Q themes yet. Use LCARS: Save Current Q Theme while Q is active."
+        "No saved Q themes yet. Use Esper Themes: Save Current Q Theme while Q is active."
       );
       return;
     }
@@ -361,6 +384,46 @@ async function runPickSavedQThemeCommand() {
   } catch (error) {
     reportGenerationError(error);
   }
+}
+
+function activeFixedTheme() {
+  const themeName = vscode.workspace.getConfiguration("workbench").get("colorTheme");
+  return FIXED_THEMES.find(theme => theme.label === themeName);
+}
+
+/** Adds the active fixed theme's tab strokes to its settings scope, keeping user values. */
+async function synchronizeModernTabBorders() {
+  const theme = activeFixedTheme();
+  if (!theme || !vscode.workspace.getConfiguration().get(MODERN_UI_SETTING)) {
+    return;
+  }
+  const { colors } = require(path.join(__dirname, theme.path));
+  const scope = `[${theme.label}]`;
+  const customizations = getGlobalSetting("workbench.colorCustomizations");
+  const current = isRecord(customizations[scope]) ? customizations[scope] : {};
+  const missing = MODERN_TAB_BORDER_KEYS.filter(
+    key => typeof colors[key] === "string" && current[key] === undefined
+  );
+  if (missing.length === 0) {
+    return;
+  }
+  customizations[scope] = {
+    ...current,
+    ...Object.fromEntries(missing.map(key => [key, colors[key]])),
+  };
+  await vscode.workspace
+    .getConfiguration()
+    .update("workbench.colorCustomizations", customizations, vscode.ConfigurationTarget.Global);
+}
+
+function reportTabBorderError(error) {
+  const message = error instanceof Error ? error.message : String(error);
+  void vscode.window.showErrorMessage(`Unable to apply Modern UI tab borders: ${message}`);
+}
+
+function synchronizeThemes() {
+  synchronizeQTheme();
+  void synchronizeModernTabBorders().catch(reportTabBorderError);
 }
 
 function synchronizeQTheme() {
@@ -386,19 +449,20 @@ async function activate(context) {
     vscode.commands.registerCommand(COMMAND, runGenerateCommand),
     vscode.commands.registerCommand(SAVE_COMMAND, runSaveQThemeCommand),
     vscode.commands.registerCommand(PICK_COMMAND, runPickSavedQThemeCommand),
-    vscode.window.onDidChangeActiveColorTheme(() => synchronizeQTheme()),
+    vscode.window.onDidChangeActiveColorTheme(() => synchronizeThemes()),
     vscode.workspace.onDidChangeConfiguration(event => {
       if (
         event.affectsConfiguration("workbench.colorTheme") ||
-        event.affectsConfiguration("workbench.colorCustomizations")
+        event.affectsConfiguration("workbench.colorCustomizations") ||
+        event.affectsConfiguration(MODERN_UI_SETTING)
       ) {
-        synchronizeQTheme();
+        synchronizeThemes();
       }
     })
   );
 
   extensionContext = context;
-  synchronizeQTheme();
+  synchronizeThemes();
 }
 
 function deactivate() {}

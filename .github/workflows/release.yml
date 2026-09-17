@@ -64,5 +64,5 @@ jobs:
           gh release create "$TAG_NAME" "$vsix_path" \
             --generate-notes \
             --target "$GITHUB_SHA" \
-            --title "LCARS $TAG_NAME" \
+            --title "Esper Themes $TAG_NAME" \
             --repo "$GITHUB_REPOSITORY"

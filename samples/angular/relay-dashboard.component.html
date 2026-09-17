@@ -14,7 +14,7 @@
   </header>
 
   @if (alertMessage()) {
-    <lcars-alert-banner
+    <esper-alert-banner
       [message]="alertMessage()"
       [severity]="criticalReadings().length > 0 ? 'critical' : 'warning'"
       (dismissed)="dismissAlert()"
@@ -29,7 +29,7 @@
 
     <div class="telemetry-grid">
       @for (reading of readings(); track reading.id) {
-        <lcars-telemetry-card
+        <esper-telemetry-card
           [reading]="reading"
           (acknowledged)="acknowledge($event)"
         />

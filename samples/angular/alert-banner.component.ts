@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 export type AlertSeverity = 'info' | 'warning' | 'critical';
 
 @Component({
-  selector: 'lcars-alert-banner',
+  selector: 'esper-alert-banner',
   standalone: true,
   imports: [UpperCasePipe],
   templateUrl: './alert-banner.component.html',

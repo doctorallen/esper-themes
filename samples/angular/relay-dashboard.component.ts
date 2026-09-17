@@ -17,7 +17,7 @@ import type {
 import { TelemetryCardComponent } from './telemetry-card.component';
 
 @Component({
-  selector: 'lcars-relay-dashboard',
+  selector: 'esper-relay-dashboard',
   standalone: true,
   imports: [AlertBannerComponent, DatePipe, TelemetryCardComponent, UpperCasePipe],
   templateUrl: './relay-dashboard.component.html',

@@ -1,6 +1,19 @@
-# LCARS
+# Esper Themes
 
-An LCARS-inspired high-contrast dark color theme for Visual Studio Code.
+High-contrast color themes for Visual Studio Code: the LCARS-inspired LCARS
+theme, six film themes carried over from Deckard's webview themes, and a
+generated Q theme.
+
+| Theme | Type | Look |
+| --- | --- | --- |
+| LCARS | Dark | Starfleet console panels. |
+| Replicant | Dark | Amber readouts and cyan telemetry on near-black. |
+| Oblivion | Dark | Steel frames and cyan readouts, with orange kept for alerts. |
+| Synthwave | Dark | Neon cyan and hot pink on violet night. |
+| Tomcat | Dark | Green phosphor cockpit display with amber warnings. |
+| Fellowship | Light | Parchment with olive greens and aged gold. |
+| Cooper | Dark | White-on-black instrument readouts and Gargantua's gold. |
+| Q | Dark | A new accessible palette generated on demand. |
 
 The root `COLOR-ACCESSIBILITY.md` file records the approved palette, its theme
 roles, and the accessibility rationale for each assignment.
@@ -10,6 +23,69 @@ same dark surface as the editor and terminal. Panel section headers retain
 each theme's identity color through the supported
 `panelSectionHeader.*` roles; VS Code's Modern UI top panel strip shares the
 native `panel.background` role.
+
+VS Code's Modern UI (`workbench.experimental.modernUI`) draws the active
+editor tab's top and bottom strokes only from `workbench.colorCustomizations`,
+not from theme files. While Modern UI is on, the extension adds the active
+theme's tab border colors to that setting under the theme's scope, without
+replacing values you have set yourself.
+
+## Screenshots
+
+Regenerate these with `npm run capture:screenshots` (or name themes, as in
+`npm run capture:screenshots -- Replicant Q`). Each capture opens the sample
+code in an isolated VS Code Extension Development Host.
+
+<!-- theme-screenshots:start -->
+
+### LCARS
+
+![LCARS theme](docs/images/themes/lcars.png)
+
+### Q
+
+![Q theme](docs/images/themes/q.png)
+
+### Replicant
+
+![Replicant theme](docs/images/themes/replicant.png)
+
+### Oblivion
+
+![Oblivion theme](docs/images/themes/oblivion.png)
+
+### Synthwave
+
+![Synthwave theme](docs/images/themes/synthwave.png)
+
+### Tomcat
+
+![Tomcat theme](docs/images/themes/tomcat.png)
+
+### Fellowship
+
+![Fellowship theme](docs/images/themes/fellowship.png)
+
+### Cooper
+
+![Cooper theme](docs/images/themes/cooper.png)
+
+<!-- theme-screenshots:end -->
+
+## Film themes
+
+Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are generated
+from the palettes of the matching Deckard webview themes. The palettes live in
+`scripts/build-film-themes.js`; after changing one, rebuild the theme files
+with:
+
+```sh
+npm run build:themes
+```
+
+The script maps each palette onto the same workbench roles the Q generator
+uses, and adjusts any text color that falls short of WCAG AA (4.5:1) on its
+surfaces before writing the theme.
 
 ## Q generated theme
 
@@ -21,14 +97,14 @@ and hover states.
 
 While Q is active, click **Mon Capitan** in the status bar to generate another
 palette. The same action is available in the Command Palette as
-**LCARS: Generate Q Theme**. The generated values are stored as Q-scoped VS
-Code color customizations, so the fixed LCARS, Picard, Troi, Data, and Crusher
-themes are not changed.
+**Esper Themes: Generate Q Theme**. The generated values are stored as Q-scoped VS
+Code color customizations, so the fixed LCARS
+theme is not changed.
 
 ## Saving generated Q themes
 
-While Q is active, run **LCARS: Save Current Q Theme** from the Command Palette
-and give the palette a name. Run **LCARS: Pick Saved Q Theme** later to restore
+While Q is active, run **Esper Themes: Save Current Q Theme** from the Command Palette
+and give the palette a name. Run **Esper Themes: Pick Saved Q Theme** later to restore
 any saved workbench and syntax palette; saved snapshots are kept in the
 extension's global storage and do not create separate theme files.
 

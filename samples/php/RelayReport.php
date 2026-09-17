@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Esper\Lcars;
+namespace Esper\Themes;
 
 use DateTimeImmutable;
 use InvalidArgumentException;
