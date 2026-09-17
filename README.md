@@ -24,6 +24,54 @@ each theme's identity color through the supported
 `panelSectionHeader.*` roles; VS Code's Modern UI top panel strip shares the
 native `panel.background` role.
 
+VS Code's Modern UI (`workbench.experimental.modernUI`) draws the active
+editor tab's top and bottom strokes only from `workbench.colorCustomizations`,
+not from theme files. While Modern UI is on, the extension adds the active
+theme's tab border colors to that setting under the theme's scope, without
+replacing values you have set yourself.
+
+## Screenshots
+
+Regenerate these with `npm run capture:screenshots` (or name themes, as in
+`npm run capture:screenshots -- Replicant Q`). Each capture opens the sample
+code in an isolated VS Code Extension Development Host.
+
+<!-- theme-screenshots:start -->
+
+### LCARS
+
+![LCARS theme](docs/images/themes/lcars.png)
+
+### Q
+
+![Q theme](docs/images/themes/q.png)
+
+### Replicant
+
+![Replicant theme](docs/images/themes/replicant.png)
+
+### Oblivion
+
+![Oblivion theme](docs/images/themes/oblivion.png)
+
+### Synthwave
+
+![Synthwave theme](docs/images/themes/synthwave.png)
+
+### Tomcat
+
+![Tomcat theme](docs/images/themes/tomcat.png)
+
+### Fellowship
+
+![Fellowship theme](docs/images/themes/fellowship.png)
+
+### Cooper
+
+![Cooper theme](docs/images/themes/cooper.png)
+
+<!-- theme-screenshots:end -->
+
 ## Film themes
 
 Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are generated

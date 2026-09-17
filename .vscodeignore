@@ -5,3 +5,4 @@ samples/**
 .gitignore
 vsc-extension-quickstart.md
 scripts/**
+docs/**

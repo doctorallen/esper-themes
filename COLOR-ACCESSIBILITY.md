@@ -127,9 +127,14 @@ those variables from `tab.activeBorder`, `tab.activeBorderTop`, and their
 unfocused counterparts only when those legacy roles are supplied through
 `workbench.colorCustomizations`.
 
-The user's theme-scoped color customizations therefore repeat each theme's
-active border colors: `tab.activeBorder` supplies the bottom stroke and
-`tab.activeBorderTop` supplies the top stroke. For the base LCARS theme these
+When Modern UI is enabled and a fixed theme is active, the extension
+therefore copies that theme's active border roles (`tab.activeBorder`,
+`tab.activeBorderTop`, their unfocused counterparts, and
+`tab.selectedBorderTop`) into the theme-scoped
+`workbench.colorCustomizations`, leaving any value the user already set
+untouched; Q writes the same roles with its generated palette.
+`tab.activeBorder` supplies the bottom stroke and `tab.activeBorderTop`
+supplies the top stroke. For the base LCARS theme these
 are intentionally different: orange on the bottom and blue on the top. This is a VS Code runtime
 requirement, not a shape override or custom CSS injection; the theme files
 retain the same `tab.*` roles for legacy workbench rendering. The

@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build:themes": "node scripts/build-film-themes.js",
+    "capture:screenshots": "node scripts/capture-theme-screenshots.mjs",
     "package:vsix": "vsce package --no-dependencies --skip-license"
   },
   "devDependencies": {
