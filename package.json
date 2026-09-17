@@ -68,26 +68,6 @@
         "label": "Q",
         "uiTheme": "vs-dark",
         "path": "./themes/Q-color-theme.json"
-      },
-      {
-        "label": "LCARS: Picard",
-        "uiTheme": "vs-dark",
-        "path": "./themes/LCARS-Picard-color-theme.json"
-      },
-      {
-        "label": "LCARS: Troi",
-        "uiTheme": "vs-dark",
-        "path": "./themes/LCARS-Troi-color-theme.json"
-      },
-      {
-        "label": "LCARS: Data",
-        "uiTheme": "vs-dark",
-        "path": "./themes/LCARS-Data-color-theme.json"
-      },
-      {
-        "label": "LCARS: Crusher",
-        "uiTheme": "vs-dark",
-        "path": "./themes/LCARS-Crusher-color-theme.json"
       }
     ]
   }
