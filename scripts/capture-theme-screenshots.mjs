@@ -249,11 +249,15 @@ async function activate() {
     await run('revealInExplorer', editor.document.uri);
     await run('workbench.action.focusActiveEditorGroup');
     await delay(1500);
+    // Revealing the Explorer can scroll the editor, so put the line back on top.
+    editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.AtTop);
+    await delay(500);
     fs.writeFileSync(
       path.join(__dirname, 'ready'),
       JSON.stringify({
         editorBackground: isQ ? scopedColor('editor.background') : undefined,
         activeBorderTop: scopedColor('tab.activeBorderTop'),
+        topLine: String(line + 1),
       }),
     );
   } catch (error) {
@@ -318,12 +322,17 @@ async function stopHost(port, owner) {
 
 // The editor has painted the expected background and active tab stroke, and
 // tokenized the sample.
-function renderedExpression(editorBackground, activeBorderTop) {
+function renderedExpression(editorBackground, activeBorderTop, topLine) {
   return `(() => {
     const editor = document.querySelector('.part.editor .monaco-editor .monaco-editor-background');
     if (!editor || getComputedStyle(editor).backgroundColor !== ${JSON.stringify(editorBackground)}) return false;
     const tab = document.querySelector('.part.editor .tab.active > .tab-fill');
     if (!tab || getComputedStyle(tab).borderTopColor !== ${JSON.stringify(activeBorderTop)}) return false;
+    const firstLine = document.querySelector('.part.editor .margin-view-overlays .line-numbers');
+    if (firstLine?.textContent?.trim() !== ${JSON.stringify(topLine)}) return false;
+    // The capture window takes focus, so stray typing can land in a sample
+    // file; never shoot a modified one.
+    if (document.querySelector('.part.editor .tab.dirty')) return false;
     const tokens = new Set([...document.querySelectorAll('.part.editor .view-lines span[class^="mtk"]')].map((span) => span.className));
     const explorerRows = document.querySelectorAll('.explorer-folders-view .monaco-list-row').length;
     return tokens.size > 5 && explorerRows > 3;
@@ -405,7 +414,13 @@ async function captureTheme(theme, output) {
             throw new Error(`${theme.label} has no Modern UI tab border in settings.`);
           }
           const expectedBorder = hexToRgb(ready.activeBorderTop);
-          if (await evaluate(client, renderedExpression(expectedBackground, expectedBorder), sessionId)) {
+          if (
+            await evaluate(
+              client,
+              renderedExpression(expectedBackground, expectedBorder, ready.topLine),
+              sessionId,
+            )
+          ) {
             // Semantic tokens arrive after the TypeScript server starts.
             await delay(4000);
             const screenshot = await client.call(

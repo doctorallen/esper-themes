@@ -1,10 +1,12 @@
 #!/usr/bin/env node
-// Builds the fixed film themes from the palettes of Deckard's webview themes
-// (~/projects/deckard/src/ui/webview/themes.ts). Every color role comes from the
-// shared Q mapping; only the palette differs. Text colors that miss WCAG AA on
-// their surfaces are nudged toward the theme's foreground until they pass.
+// Builds the fixed themes from curated palettes: the film themes from Deckard's
+// webview themes (~/projects/deckard/src/ui/webview/themes.ts), and the two
+// Bluey themes from colors sampled out of the Heeler family artwork. Every color
+// role comes from the shared Q mapping; only the palette differs. Text colors
+// that miss WCAG AA on their surfaces are nudged toward the theme's foreground
+// until they pass.
 //
-// Usage: node scripts/build-film-themes.js
+// Usage: node scripts/build-themes.js
 
 const fs = require("fs");
 const path = require("path");
@@ -15,7 +17,9 @@ const {
   alphaComposite,
   buildWorkbenchColors,
   contrastRatio,
+  hslToHex,
   mixHex,
+  relativeLuminance,
   syntaxRoleForSemanticToken,
   syntaxRoleForToken,
 } = require("../q-theme");
@@ -283,6 +287,106 @@ const THEMES = [
       invalid: "#D9673B",
     },
   },
+  // The two Bluey themes are built from the characters' own colors, sampled from
+  // the family artwork: navy #040620, purple-navy #403F65, Bluey blue #83BBE3,
+  // steel #75A6BE, pale blue #D2EBFD, cream #FFF9D8, gold #EDCE74, orange
+  // #FFB070, Bingo orange #E37A3B, Chilli's brown #9B5E33, and the tongue red
+  // #C9504F. Colors are paired the way they are painted: measuring which colors
+  // touch on the characters gives blue+steel, navy+purple-navy, pale blue+steel,
+  // blue+pale blue, cream+orange, brown+orange, brown+gold, and gold+pale blue,
+  // so the surfaces run along the navy/purple-navy of Bluey's head, code
+  // structure takes the blues of his body, and literals take the warm family
+  // shared by Chilli, Bingo and the muzzles.
+  {
+    name: "Bluey",
+    type: "light",
+    surfaces: {
+      editor: "#FFF9D8",
+      activity: "#83BBE3",
+      sidebar: "#D2EBFD",
+      panel: "#D2EBFD",
+      status: "#83BBE3",
+      widget: "#FFFFFF",
+      // Muzzle gold, lightened toward cream: it carries the line highlight and
+      // the unfocused selection, where full gold reads as a stripe.
+      raised: mixHex("#EDCE74", "#FFF9D8", 0.55),
+      tabActive: "#FFFFFF",
+      tabInactive: "#D2EBFD",
+      border: "#75A6BE",
+    },
+    foreground: "#040620",
+    muted: "#403F65",
+    // Purple-navy fills with cream on them, the way Bluey's head sits against
+    // the muzzle; brown stays a text color, where it belongs.
+    primary: "#403F65",
+    secondary: "#83BBE3",
+    accentForeground: ["#FFF9D8"],
+    error: "#C9504F",
+    warning: "#E37A3B",
+    success: "#75A6BE",
+    info: "#403F65",
+    syntax: {
+      text: "#040620",
+      comment: mixHex("#75A6BE", "#9B5E33", 0.45),
+      keyword: "#403F65",
+      operator: mixHex("#403F65", "#040620", 0.45),
+      string: "#9B5E33",
+      number: "#E37A3B",
+      constant: "#EDCE74",
+      variable: "#83BBE3",
+      property: "#040620",
+      function: "#C9504F",
+      libraryFunction: mixHex("#9B5E33", "#403F65", 0.4),
+      type: mixHex("#EDCE74", "#9B5E33", 0.5),
+      markup: "#E37A3B",
+      decorator: mixHex("#403F65", "#C9504F", 0.5),
+      invalid: "#C9504F",
+    },
+  },
+  // Bluey after bedtime: the workbench runs along the navy and purple-navy of
+  // Bluey's own head, the blues of his body carry the code's structure, and the
+  // muzzle golds, Chilli's brown and Bingo's orange carry its literals.
+  {
+    name: "Bluey Night",
+    type: "dark",
+    surfaces: {
+      editor: "#040620",
+      activity: "#222345",
+      sidebar: "#2B2A4E",
+      panel: "#2B2A4E",
+      status: "#403F65",
+      widget: "#403F65",
+      raised: "#4E4D76",
+      tabActive: "#403F65",
+      tabInactive: "#2B2A4E",
+      border: "#4E4D76",
+    },
+    foreground: "#FFF9D8",
+    muted: "#75A6BE",
+    primary: "#83BBE3",
+    secondary: "#EDCE74",
+    error: "#C9504F",
+    warning: "#FFB070",
+    success: "#D2EBFD",
+    info: "#75A6BE",
+    syntax: {
+      text: "#FFF9D8",
+      comment: "#75A6BE",
+      keyword: "#83BBE3",
+      operator: mixHex("#83BBE3", "#D2EBFD", 0.5),
+      string: "#EDCE74",
+      number: "#FFD08D",
+      constant: "#FFB070",
+      variable: "#D2EBFD",
+      property: "#FFF9D8",
+      function: "#E37A3B",
+      libraryFunction: "#9B5E33",
+      type: mixHex("#EDCE74", "#9B5E33", 0.4),
+      markup: "#FFB070",
+      decorator: mixHex("#403F65", "#D2EBFD", 0.45),
+      invalid: "#C9504F",
+    },
+  },
 ];
 
 // The shared role matcher reads "type-parameter" as a parameter; types keep the type role here.
@@ -293,8 +397,48 @@ function passes(color, backgrounds) {
   return backgrounds.every(background => contrastRatio(color, background) >= MIN_TEXT_CONTRAST);
 }
 
-/** Moves `color` toward `target` in small steps until it reads on every background. */
+function toHsl(color) {
+  const [red, green, blue] = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16) / 255);
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const lightness = (max + min) / 2;
+  const span = max - min;
+  if (span === 0) {
+    return { hue: 0, saturation: 0, lightness };
+  }
+  const saturation = span / (1 - Math.abs(2 * lightness - 1));
+  const hue =
+    max === red
+      ? 60 * (((green - blue) / span) % 6)
+      : max === green
+        ? 60 * ((blue - red) / span + 2)
+        : 60 * ((red - green) / span + 4);
+  return { hue, saturation, lightness };
+}
+
+/**
+ * Darkens (or lightens) `color` until it reads on every background, keeping its
+ * hue and holding on to its saturation. Blending toward the theme's foreground
+ * instead would pull every hue to the same washed-out dark, which is what makes
+ * a pastel palette unreadable as syntax colors on a light ground.
+ */
 function readable(color, backgrounds, target) {
+  if (passes(color, backgrounds)) {
+    return color.toUpperCase();
+  }
+  const { hue, saturation, lightness } = toHsl(color);
+  const towardDark = relativeLuminance(target) < relativeLuminance(color);
+  for (let step = 1; step <= 48; step += 1) {
+    const nextLightness = towardDark ? lightness - step * 0.02 : lightness + step * 0.02;
+    if (nextLightness <= 0.04 || nextLightness >= 0.97) {
+      break;
+    }
+    // Saturation rises as the color darkens, so the hue stays recognizable.
+    const candidate = hslToHex(hue, Math.min(1, saturation * (1 + step * 0.03)), nextLightness);
+    if (passes(candidate, backgrounds)) {
+      return candidate.toUpperCase();
+    }
+  }
   for (let step = 0; step <= 20; step += 1) {
     const candidate = mixHex(color, target, step / 20);
     if (passes(candidate, backgrounds)) {
@@ -336,7 +480,14 @@ function buildTheme(spec) {
   ];
   const foreground = readable(spec.foreground, allSurfaces, ink);
   const mutedForeground = readable(spec.muted, allSurfaces, foreground);
-  const onAccent = [s.activity, s.editor, foreground, "#000000", "#FFFFFF"];
+  const onAccent = [
+    ...(spec.accentForeground ?? []),
+    s.activity,
+    s.editor,
+    foreground,
+    "#000000",
+    "#FFFFFF",
+  ];
 
   // Accents double as text (links, titles, icons), so they must read on every surface.
   const accentText = color => readable(color, allSurfaces, foreground);
@@ -470,7 +621,7 @@ function uppercaseColors(colors) {
 
 for (const spec of THEMES) {
   const theme = buildTheme(spec);
-  const file = path.join(ROOT, "themes", `${spec.name}-color-theme.json`);
+  const file = path.join(ROOT, "themes", `${spec.name.replace(/\s+/g, "-")}-color-theme.json`);
   fs.writeFileSync(file, `${JSON.stringify(theme, null, 2)}\n`);
   console.log(`wrote ${path.relative(ROOT, file)}`);
 }
