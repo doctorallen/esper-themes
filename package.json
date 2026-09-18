@@ -2,16 +2,17 @@
   "name": "esper-themes",
   "displayName": "Esper Themes",
   "publisher": "esperinnovations",
-  "version": "0.3.0",
-  "description": "High-contrast, film-inspired themes for Visual Studio Code: LCARS, Replicant, Oblivion, Synthwave, Tomcat, Fellowship, Cooper, and a generated accessibility-aware Q theme.",
+  "version": "0.4.0",
+  "description": "High-contrast, film-inspired themes for Visual Studio Code: LCARS, Replicant, Oblivion, Synthwave, Tomcat, Fellowship, Cooper, Bluey, Bluey Night, and a generated accessibility-aware Q theme.",
   "main": "./extension.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/doctorallen/esper-themes.git"
   },
   "scripts": {
-    "build:themes": "node scripts/build-film-themes.js",
+    "build:themes": "node scripts/build-themes.js",
     "capture:screenshots": "node scripts/capture-theme-screenshots.mjs",
+    "build:palette-page": "node scripts/build-palette-page.js",
     "package:vsix": "vsce package --no-dependencies --skip-license"
   },
   "devDependencies": {
@@ -100,6 +101,16 @@
         "label": "Cooper",
         "uiTheme": "vs-dark",
         "path": "./themes/Cooper-color-theme.json"
+      },
+      {
+        "label": "Bluey",
+        "uiTheme": "vs",
+        "path": "./themes/Bluey-color-theme.json"
+      },
+      {
+        "label": "Bluey Night",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Bluey-Night-color-theme.json"
       }
     ]
   }

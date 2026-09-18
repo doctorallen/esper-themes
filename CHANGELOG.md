@@ -10,6 +10,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper themes, built from Deckard's webview theme palettes.
 - README screenshots of every theme, regenerated with `npm run capture:screenshots`.
+- Bluey and Bluey Night themes, built from colors sampled out of the Heeler family artwork.
+- `theme-palettes.html` covers every theme, each with its own named palette.
 
 ### Changed
 

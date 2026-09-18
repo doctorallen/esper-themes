@@ -17,7 +17,7 @@ status-bar background with dark-blue `#1C3C55` foreground text, which has a
 Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are outside the
 approved LCARS palette: each takes its surfaces and accents from the matching
 Deckard webview theme (`src/ui/webview/themes.ts` in Deckard).
-`scripts/build-film-themes.js` holds those palettes and maps them onto the
+`scripts/build-themes.js` holds those palettes and maps them onto the
 workbench roles through `buildWorkbenchColors` in `q-theme.js`, the same
 mapping Q uses, so the film themes and Q stay aligned as roles are added.
 
@@ -30,6 +30,11 @@ mapping Q uses, so the film themes and Q stay aligned as roles are added.
 | Fellowship (light) | `themes/Fellowship-color-theme.json` | Olive `#455E30` | Gold `#685225` |
 | Cooper | `themes/Cooper-color-theme.json` | Gold `#DCA24A` | Steel blue `#9FBFD4` |
 
+A color that misses the target is darkened (or lightened) in HSL with its
+saturation held, rather than blended toward the theme's foreground: blending
+pulls every hue toward the same washed-out dark, which on a light ground
+leaves the syntax colors nearly indistinguishable.
+
 The build enforces the same AA target as Q. Every accent that also serves as
 text reads at 4.5:1 or better on every workbench surface; each accent fill
 gets a foreground that reaches 4.5:1 on it; and every syntax color reaches
@@ -38,6 +43,32 @@ bracket-match tint. A Deckard color that misses is blended toward the theme's
 foreground until it passes, which is why Fellowship's accents are darker than
 their Deckard originals. The build fails rather than write a theme with a
 pair below the target.
+
+## Bluey themes
+
+Bluey (light) and Bluey Night (dark) take their palette from the characters in
+the family artwork, sampled from the image rather than derived: navy `#040620`,
+purple-navy `#403F65`, Bluey blue `#83BBE3`, steel `#75A6BE`, pale blue
+`#D2EBFD`, cream `#FFF9D8`, gold `#EDCE74`, Bandit orange `#FFB070`, Bingo
+orange `#E37A3B`, Chilli's brown `#9B5E33`, and the tongue red `#C9504F`.
+
+The assignment follows how the artwork pairs colors rather than treating them
+as a flat list. Counting which colors border each other on the characters
+gives, in order: blue + steel, navy + purple-navy, pale blue + steel, blue +
+pale blue, cream + orange, brown + orange, brown + gold, and gold + pale blue.
+Roles that sit next to each other on screen therefore use colors that sit next
+to each other on the characters: workbench surfaces run along the navy /
+purple-navy axis of Bluey's head, with steel borders; keywords, operators and
+variables use blue, steel and pale blue; strings, numbers, constants and types
+use gold, the oranges and brown; text and properties are cream, which the
+artwork pairs with orange.
+
+A few surfaces and three syntax roles are blends of two adjacent artwork
+colors; nothing outside the artwork is introduced. Bluey is the only light
+theme besides Fellowship: cream editor paper, pale blue side bar and panels,
+Bluey blue activity bar and status bar. Its accents are the artwork's darker
+colors, since the pastels cannot carry text on cream — the build darkens each
+one only as far as 4.5:1 requires.
 
 ## Q generated theme
 
@@ -195,7 +226,7 @@ browser, no build step) with an interactive mock VS Code window styled from
 each theme's real color values — activity bar, sidebar, Modern UI tab roles,
 editor with syntax-highlighted sample code, dark panel content with an
 identity-colored header, status bar, and badges. A theme selector
-switches between the LCARS theme and the Q fallback snapshot. Clicking any
+switches between every contributed theme. Clicking any
 element in the mock-up (or any color in the palette legend below it) opens an
 inspector showing exactly which color role(s) it uses, with a live color
 picker to edit them; editing a palette-legend color updates every role that
@@ -203,12 +234,12 @@ shares that exact color at once. The WCAG contrast table recalculates live as
 colors are edited. An **Export theme JSON** button downloads the edited
 result as a ready-to-use VS Code theme file. Edits are local to the browser
 session only (a **Reset changes** button restores the original per theme).
-Regenerate the embedded theme data from the JSON files in `themes/` after any
-palette or color-role change so it stays accurate. Color edits in the
-inspector are restricted to the 27 approved palette swatches (the same
-colors documented in the "Approved palette and usage" table above) — there is
-no free-form/native color picker, so any edit made in the page stays within
-the approved Esper Themes palette.
+Regenerate the embedded theme data with `npm run build:palette-page` after any
+palette or color-role change so it stays accurate. Each theme carries its own
+named palette, derived from the colors that theme actually uses and grouped
+into surfaces, accents and syntax. Color edits in the inspector are restricted
+to that palette — there is no free-form or native color picker, so an edit made
+in the page stays within the colors its theme is built from.
 
 ## Scope
 
