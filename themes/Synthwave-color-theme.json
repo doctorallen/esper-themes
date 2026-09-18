@@ -29,8 +29,8 @@
     "input.placeholderForeground": "#8E8BB3",
     "badge.background": "#FF3CA6",
     "badge.foreground": "#090713",
-    "activityBar.background": "#090713",
-    "activityBar.foreground": "#00E5FF",
+    "activityBar.background": "#211748",
+    "activityBar.foreground": "#FF2D95",
     "activityBar.inactiveForeground": "#8E8BB3",
     "activityBarBadge.background": "#00E5FF",
     "activityBarBadge.foreground": "#090713",
@@ -41,7 +41,7 @@
     "sideBarSectionHeader.foreground": "#E7E8FF",
     "sideBar.border": "#33295E",
     "list.activeSelectionBackground": "#00E5FF",
-    "list.activeSelectionForeground": "#090713",
+    "list.activeSelectionForeground": "#33295E",
     "list.activeSelectionIconForeground": "#090713",
     "list.inactiveSelectionBackground": "#211748",
     "list.inactiveSelectionForeground": "#E7E8FF",
@@ -136,7 +136,7 @@
     "tab.unfocusedActiveModifiedBorder": "#FF3CA6",
     "tab.unfocusedInactiveModifiedBorder": "#FF3CA6",
     "modernTab.activeBackground": "#00E5FF",
-    "modernTab.activeForeground": "#090713",
+    "modernTab.activeForeground": "#211748",
     "modernTab.hoverBackground": "#00E5FF40",
     "modernTab.hoverForeground": "#E7E8FF",
     "modernEditorTab.activeBackground": "#211748",
@@ -349,7 +349,7 @@
         "constant.escape"
       ],
       "settings": {
-        "foreground": "#8F75FF"
+        "foreground": "#FF647E"
       }
     },
     {
@@ -373,7 +373,7 @@
         "variable.instance"
       ],
       "settings": {
-        "foreground": "#E7E8FF"
+        "foreground": "#FF8B55"
       }
     },
     {
@@ -411,7 +411,7 @@
         "support.type.property-name"
       ],
       "settings": {
-        "foreground": "#BEEDFF"
+        "foreground": "#8F75FF"
       }
     },
     {
@@ -456,7 +456,7 @@
         "support.token.decorator"
       ],
       "settings": {
-        "foreground": "#FF3CA6"
+        "foreground": "#00E5FF"
       }
     },
     {
@@ -566,13 +566,13 @@
   "semanticTokenColors": {
     "comment": "#8E8BB3",
     "string": "#FF8B55",
-    "number": "#8F75FF",
+    "number": "#FF647E",
     "regexp": "#FF8B55",
     "operator": "#5FF7FF",
     "function": "#00E5FF",
     "function.defaultLibrary": "#74E7FF",
     "method": "#00E5FF",
-    "decorator": "#FF3CA6",
+    "decorator": "#00E5FF",
     "macro": "#FF3CA6",
     "keyword": "#FF3CA6",
     "modifier": "#FF3CA6",
@@ -587,13 +587,13 @@
     "enum": "#FF647E",
     "enumMember": "#FF647E",
     "typeParameter": "#AE9DFF",
-    "variable": "#E7E8FF",
+    "variable": "#FF8B55",
     "variable.defaultLibrary": "#E7E8FF",
     "variable.constant": "#FF647E",
     "variable.readonly": "#E7E8FF",
-    "property": "#BEEDFF",
-    "property.readonly": "#BEEDFF",
-    "member": "#BEEDFF",
+    "property": "#8F75FF",
+    "property.readonly": "#8F75FF",
+    "member": "#8F75FF",
     "parameter": "#E7E8FF",
     "method.defaultLibrary": "#74E7FF"
   }

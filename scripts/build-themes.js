@@ -143,6 +143,28 @@ const THEMES = [
     warning: "#FF8B55",
     success: "#62F5FF",
     info: "#8F75FF",
+    // Hand-tuned after the generated mapping: the activity bar sits on the
+    // raised surface with pink icons, and a few token roles were reassigned.
+    colorOverrides: {
+      "activityBar.background": "#211748",
+      "activityBar.foreground": "#FF2D95",
+      "list.activeSelectionForeground": "#33295E",
+      "modernTab.activeForeground": "#211748",
+    },
+    tokenOverrides: {
+      "Numbers and constants": "#FF647E",
+      Variables: "#FF8B55",
+      "Object properties": "#8F75FF",
+      Decorators: "#00E5FF",
+    },
+    semanticOverrides: {
+      number: "#FF647E",
+      variable: "#FF8B55",
+      property: "#8F75FF",
+      member: "#8F75FF",
+      "property.readonly": "#8F75FF",
+      decorator: "#00E5FF",
+    },
     syntax: {
       text: "#E7E8FF",
       comment: "#8E8BB3",
@@ -574,7 +596,51 @@ function buildTheme(spec) {
     ])
   );
 
+  Object.assign(colors, spec.colorOverrides ?? {});
+  for (const [name, color] of Object.entries(spec.tokenOverrides ?? {})) {
+    const rule = tokenColors.find(entry => entry.name === name);
+    if (!rule) {
+      throw new Error(`${spec.name} overrides unknown token rule "${name}".`);
+    }
+    rule.settings.foreground = color;
+  }
+  for (const [key, color] of Object.entries(spec.semanticOverrides ?? {})) {
+    if (!(key in semanticTokenColors)) {
+      throw new Error(`${spec.name} overrides unknown semantic token "${key}".`);
+    }
+    semanticTokenColors[key] = color;
+  }
+
+  const rolePairs = [
+    ["activityBar.foreground", "activityBar.background"],
+    ["activityBar.inactiveForeground", "activityBar.background"],
+    ["activityBarBadge.foreground", "activityBarBadge.background"],
+    ["sideBarTitle.foreground", "sideBar.background"],
+    ["sideBarSectionHeader.foreground", "sideBarSectionHeader.background"],
+    ["list.activeSelectionForeground", "list.activeSelectionBackground"],
+    ["list.inactiveSelectionForeground", "list.inactiveSelectionBackground"],
+    ["statusBar.foreground", "statusBar.background"],
+    ["titleBar.activeForeground", "titleBar.activeBackground"],
+    ["tab.activeForeground", "tab.activeBackground"],
+    ["tab.inactiveForeground", "tab.inactiveBackground"],
+    ["modernTab.activeForeground", "modernTab.activeBackground"],
+    ["modernEditorTab.activeForeground", "modernEditorTab.activeBackground"],
+    ["panelSectionHeader.foreground", "panelSectionHeader.background"],
+    ["editorSuggestWidget.selectedForeground", "editorSuggestWidget.selectedBackground"],
+    ["editorWidget.foreground", "editorWidget.background"],
+    ["input.foreground", "input.background"],
+    ["dropdown.foreground", "dropdown.background"],
+    ["button.foreground", "button.background"],
+    ["button.secondaryForeground", "button.secondaryBackground"],
+    ["badge.foreground", "badge.background"],
+  ];
+
   const pairs = [
+    ...rolePairs
+      .filter(([fg, bg]) => colors[fg] && colors[bg])
+      .map(([fg, bg]) => [colors[fg], colors[bg]]),
+    ...tokenColors.map(rule => [rule.settings.foreground, s.editor]),
+    ...Object.values(semanticTokenColors).map(color => [color, s.editor]),
     [foreground, s.editor],
     [mutedForeground, s.editor],
     [primary, s.activity],
