@@ -1,6 +1,7 @@
 "use strict";
 
 const MIN_TEXT_CONTRAST = 4.5;
+const MIN_SELECTION_CONTRAST = 1.6;
 const DEFAULT_LIGHT_FOREGROUND = "#F3F4F7";
 const DEFAULT_DARK_FOREGROUND = "#14202B";
 const DEBUGGING_STATUS_BACKGROUND = "#BAA4E5";
@@ -120,6 +121,25 @@ function withAlpha(color, alpha) {
 
 function alphaComposite(overlay, background, alpha) {
   return mixHex(background, overlay, parseInt(alpha, 16) / 255);
+}
+
+/**
+ * A selected-but-unfocused row sits straight on the surfaces lists render on,
+ * and the raised surface alone can land a hair away from them. Lift it toward
+ * the foreground until the row separates from every one of those surfaces.
+ */
+function visibleSelectionBackground(raised, foreground, backgrounds) {
+  let candidate = raised;
+  for (let step = 0; step <= 24; step += 1) {
+    candidate = mixHex(raised, foreground, step / 48);
+    const separated = backgrounds.every(
+      background => contrastRatio(candidate, background) >= MIN_SELECTION_CONTRAST
+    );
+    if (separated) {
+      break;
+    }
+  }
+  return candidate;
 }
 
 function randomDarkColor(random, hue, minimumLightness, maximumLightness) {
@@ -474,6 +494,11 @@ function buildWorkbenchColors(templateColors, palette) {
     modernTabHoverForeground,
   } = palette;
   const colors = clone(templateColors);
+  const inactiveSelectionBackground = visibleSelectionBackground(raisedBackground, foreground, [
+    sidebarBackground,
+    panelBackground,
+    widgetBackground,
+  ]);
 
   Object.assign(colors, {
     focusBorder: primary,
@@ -517,12 +542,13 @@ function buildWorkbenchColors(templateColors, palette) {
     "list.activeSelectionBackground": primary,
     "list.activeSelectionForeground": primaryForeground,
     "list.activeSelectionIconForeground": primaryForeground,
-    "list.inactiveSelectionBackground": raisedBackground,
+    "list.inactiveSelectionBackground": inactiveSelectionBackground,
     "list.inactiveSelectionForeground": foreground,
     "list.inactiveSelectionIconForeground": mutedForeground,
     "list.hoverBackground": withAlpha(primary, "40"),
     "list.hoverForeground": listHoverForeground,
     "list.focusOutline": primary,
+    "list.inactiveFocusOutline": withAlpha(primary, "99"),
     "editor.background": editorBackground,
     "editor.foreground": foreground,
     "editorLineNumber.foreground": mutedForeground,
