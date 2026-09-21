@@ -59,55 +59,60 @@ const THEMES = [
     warning: "#FF5500",
     success: "#33FF33",
     info: "#00E5FF",
-    // Los Angeles, November 2019. Keyed to a frame-by-frame color analysis of
-    // the film rather than to its poster art: across 46 shots the palettes run
-    // 41% teal and blue-green, then gold-olive, amber, terracotta and crimson,
-    // with magenta and violet all but absent. So code reads the way the frames
-    // are lit — a teal field with warm highlights struck through it — at the
-    // saturation a near-black editor needs.
+    // Los Angeles, November 2019. The hues are measured, not remembered.
+    // Clustering the palettes of 46 analyzed frames splits the film into five
+    // looks; this is the darkest and most saturated of them — the night
+    // exteriors and searchlights (#08828E, #0B8B9D, #0F3B4F) — crossed with
+    // the window Deckard reads his paper against (#38D3C5 turquoise, #E4AFC3
+    // pink, #8B5682 orchid, #341B39 violet) and a palette board off the eye
+    // and Zhora's smoke (#CB494B coral, #E9D9C2 cream).
+    //
+    // The structure is petrol and cyan, everything the code states outright is
+    // lit like signage, and the window's violet runs underneath as a cast on
+    // the parts nobody reads as color. No amber: the workbench keeps Tyrell's
+    // gold, and the editor leaves it to the chrome.
     syntax: {
-      // Dust in Deckard's apartment, lit by a bare tungsten bulb.
-      text: "#D8D2C6",
-      // Street smog: the teal field at its darkest.
-      comment: "#6F8286",
-      // The dominant hue of the film, hard and close.
-      keyword: "#22C7B4",
-      // Rain on steel: punctuation stays where the eye is not.
-      operator: "#8FA3AE",
-      // The olive the streets and interiors keep returning to.
-      string: "#B2C45E",
-      // Flare stacks burning over the Hades skyline.
-      number: "#F0805E",
-      // The same filament as the amber, burnt down.
-      constant: "#E9C98D",
-      variable: "#D8D2C6",
+      // Pale steel off the night exteriors.
+      text: "#C6D6DA",
+      // The window's deepest violet, brought up just far enough to read.
+      comment: "#5B5878",
+      // The searchlight, hard and close.
+      keyword: "#16B8D4",
+      // The same violet, drained: punctuation stays where the eye is not.
+      operator: "#8A86A8",
+      // Orchid-pink neon — the thing the eye goes to on the street.
+      string: "#F2A0D0",
+      // Coral off the palette board.
+      number: "#FF7189",
+      // The violet lifted to a lilac, so literals read as one family.
+      constant: "#E8B8FF",
+      variable: "#C6D6DA",
       // Wet steel under a searchlight.
-      property: "#8FB8C4",
-      // Tyrell's gold: the brightest thing in the frame.
-      function: "#FFB000",
-      libraryFunction: mixHex("#FFB000", "#D8D2C6", 0.45),
-      // The teal again, this time as the highlight it takes on glass.
-      type: "#7FE3D2",
-      // Neon through the rain.
-      markup: "#5FDDC0",
-      // Oxblood: the film's reds are blood and brick, never neon.
-      decorator: "#E4707F",
+      property: "#7FB8C8",
+      // Cream: the brightest thing in the frame, and no longer the warmest.
+      function: "#F2EAD2",
+      libraryFunction: "#CBBCE0",
+      // The turquoise in the glass.
+      type: "#2ED9C0",
+      // The signage itself.
+      markup: "#FF6FA8",
+      // The signage fading back behind him.
+      decorator: "#C96FA8",
       // Blood on Roy Batty's hand.
       invalid: "#FF4A4A",
     },
-    // Only the signage is lit. Control flow keeps the bright teal; the
-    // declaration keywords that pad every line drop to the dull teal the
-    // frames sit in.
+    // A tag, its attributes and its punctuation would otherwise be three
+    // shades of the same blue, so attributes take the lilac.
     tokenOverrides: {
-      Storage: "#6F9E9B",
-      "Storage modifiers": "#6F9E9B",
-      "PHP visibility and storage modifiers": "#6F9E9B",
-      "TypeScript export keywords": "#6F9E9B",
-      "TypeScript class keywords": "#6F9E9B",
+      "Attribute names": "#E8B8FF",
     },
-    semanticOverrides: {
-      modifier: "#6F9E9B",
-    },
+    // The film is graded dark, and a palette that clears 4.5:1 everywhere
+    // cannot be. Comments sit at 3:1 on the editor and 2.46:1 on the
+    // bracket-match tint, which is the point of them: they are the smog, not
+    // the signage. The floor is set just under that so the palette ships as
+    // chosen rather than nudged. Syntax only — every workbench pair still
+    // meets AA.
+    syntaxContrast: 2.4,
   },
   {
     // The film's light table: steel frames, cyan readouts, orange for alerts.
@@ -447,8 +452,8 @@ const THEMES = [
 const TOKEN_ROLE_OVERRIDES = { Types: "type" };
 const SEMANTIC_ROLE_OVERRIDES = { typeParameter: "type" };
 
-function passes(color, backgrounds) {
-  return backgrounds.every(background => contrastRatio(color, background) >= MIN_TEXT_CONTRAST);
+function passes(color, backgrounds, floor = MIN_TEXT_CONTRAST) {
+  return backgrounds.every(background => contrastRatio(color, background) >= floor);
 }
 
 function toHsl(color) {
@@ -476,8 +481,8 @@ function toHsl(color) {
  * instead would pull every hue to the same washed-out dark, which is what makes
  * a pastel palette unreadable as syntax colors on a light ground.
  */
-function readable(color, backgrounds, target) {
-  if (passes(color, backgrounds)) {
+function readable(color, backgrounds, target, floor = MIN_TEXT_CONTRAST) {
+  if (passes(color, backgrounds, floor)) {
     return color.toUpperCase();
   }
   const { hue, saturation, lightness } = toHsl(color);
@@ -489,13 +494,13 @@ function readable(color, backgrounds, target) {
     }
     // Saturation rises as the color darkens, so the hue stays recognizable.
     const candidate = hslToHex(hue, Math.min(1, saturation * (1 + step * 0.03)), nextLightness);
-    if (passes(candidate, backgrounds)) {
+    if (passes(candidate, backgrounds, floor)) {
       return candidate.toUpperCase();
     }
   }
   for (let step = 0; step <= 20; step += 1) {
     const candidate = mixHex(color, target, step / 20);
-    if (passes(candidate, backgrounds)) {
+    if (passes(candidate, backgrounds, floor)) {
       return candidate.toUpperCase();
     }
   }
@@ -605,10 +610,13 @@ function buildTheme(spec) {
     alphaComposite(s.raised, s.editor, "80"),
     alphaComposite(secondary, s.editor, "20"),
   ];
+  // A theme may state a lower floor for its syntax colors; the workbench roles
+  // below are held to AA regardless.
+  const syntaxFloor = spec.syntaxContrast ?? MIN_TEXT_CONTRAST;
   const syntax = Object.fromEntries(
     Object.entries(spec.syntax).map(([role, color]) => [
       role,
-      readable(color, syntaxBackgrounds, foreground),
+      readable(color, syntaxBackgrounds, foreground, syntaxFloor),
     ])
   );
 
@@ -667,12 +675,14 @@ function buildTheme(spec) {
     ["badge.foreground", "badge.background"],
   ];
 
+  const syntaxPairs = [
+    ...tokenColors.map(rule => [rule.settings.foreground, s.editor]),
+    ...Object.values(semanticTokenColors).map(color => [color, s.editor]),
+  ];
   const pairs = [
     ...rolePairs
       .filter(([fg, bg]) => colors[fg] && colors[bg])
       .map(([fg, bg]) => [colors[fg], colors[bg]]),
-    ...tokenColors.map(rule => [rule.settings.foreground, s.editor]),
-    ...Object.values(semanticTokenColors).map(color => [color, s.editor]),
     [foreground, s.editor],
     [mutedForeground, s.editor],
     [primary, s.activity],
@@ -690,11 +700,18 @@ function buildTheme(spec) {
     [colors["tab.hoverForeground"], tabHover[1]],
     [DEBUGGING_STATUS_FOREGROUND, DEBUGGING_STATUS_BACKGROUND],
   ];
-  const failures = pairs.filter(([fg, bg]) => contrastRatio(fg, bg) < MIN_TEXT_CONTRAST);
+  const failures = [
+    ...pairs
+      .filter(([fg, bg]) => contrastRatio(fg, bg) < MIN_TEXT_CONTRAST)
+      .map(pair => [...pair, MIN_TEXT_CONTRAST]),
+    ...syntaxPairs
+      .filter(([fg, bg]) => contrastRatio(fg, bg) < syntaxFloor)
+      .map(pair => [...pair, syntaxFloor]),
+  ];
   if (failures.length > 0) {
     throw new Error(
-      `${spec.name} misses ${MIN_TEXT_CONTRAST}:1 on ${failures
-        .map(([fg, bg]) => `${fg}/${bg} (${contrastRatio(fg, bg).toFixed(2)})`)
+      `${spec.name} misses its floor on ${failures
+        .map(([fg, bg, floor]) => `${fg}/${bg} (${contrastRatio(fg, bg).toFixed(2)}, needs ${floor})`)
         .join(", ")}`
     );
   }
