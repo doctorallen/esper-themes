@@ -59,50 +59,54 @@ const THEMES = [
     warning: "#FF5500",
     success: "#33FF33",
     info: "#00E5FF",
-    // Los Angeles, November 2019: tungsten interiors, neon signage above the
-    // street, and a searchlight sweeping the rain. Code reads as that night —
-    // bone-white prose, amber for the work being done, neon for the grammar.
+    // Los Angeles, November 2019. Keyed to a frame-by-frame color analysis of
+    // the film rather than to its poster art: across 46 shots the palettes run
+    // 41% teal and blue-green, then gold-olive, amber, terracotta and crimson,
+    // with magenta and violet all but absent. So code reads the way the frames
+    // are lit — a teal field with warm highlights struck through it — at the
+    // saturation a near-black editor needs.
     syntax: {
       // Dust in Deckard's apartment, lit by a bare tungsten bulb.
       text: "#D8D2C6",
-      // Street smog, backlit and half a stop under everything else.
-      comment: "#75848F",
-      // The geisha billboard's pink neon.
-      keyword: "#FF5FA2",
+      // Street smog: the teal field at its darkest.
+      comment: "#6F8286",
+      // The dominant hue of the film, hard and close.
+      keyword: "#22C7B4",
       // Rain on steel: punctuation stays where the eye is not.
-      operator: "#9FB6C2",
-      // Phosphor green off the Voight-Kampff display.
-      string: "#3FE0A6",
+      operator: "#8FA3AE",
+      // The olive the streets and interiors keep returning to.
+      string: "#B2C45E",
       // Flare stacks burning over the Hades skyline.
-      number: "#FF6A3C",
-      // The same filament as the amber, one step cooler.
-      constant: "#FFC96B",
+      number: "#F0805E",
+      // The same filament as the amber, burnt down.
+      constant: "#E9C98D",
       variable: "#D8D2C6",
-      // A spinner's searchlight diffused through the mist.
-      property: "#8FC9DE",
+      // Wet steel under a searchlight.
+      property: "#8FB8C4",
       // Tyrell's gold: the brightest thing in the frame.
       function: "#FFB000",
       libraryFunction: mixHex("#FFB000", "#D8D2C6", 0.45),
-      // The searchlight itself, hard and close.
-      type: "#00E5FF",
-      // Cigarette smoke under Rachael's ceiling fan.
-      markup: "#B98CFF",
-      decorator: mixHex("#FF5FA2", "#B98CFF", 0.5),
+      // The teal again, this time as the highlight it takes on glass.
+      type: "#7FE3D2",
+      // Neon through the rain.
+      markup: "#5FDDC0",
+      // Oxblood: the film's reds are blood and brick, never neon.
+      decorator: "#E4707F",
       // Blood on Roy Batty's hand.
       invalid: "#FF4A4A",
     },
-    // Only the signage is neon. Control flow keeps the geisha pink; the
-    // declaration keywords that pad every line drop to the rose it fades to
-    // through the rain.
+    // Only the signage is lit. Control flow keeps the bright teal; the
+    // declaration keywords that pad every line drop to the dull teal the
+    // frames sit in.
     tokenOverrides: {
-      Storage: "#C98AA6",
-      "Storage modifiers": "#C98AA6",
-      "PHP visibility and storage modifiers": "#C98AA6",
-      "TypeScript export keywords": "#C98AA6",
-      "TypeScript class keywords": "#C98AA6",
+      Storage: "#6F9E9B",
+      "Storage modifiers": "#6F9E9B",
+      "PHP visibility and storage modifiers": "#6F9E9B",
+      "TypeScript export keywords": "#6F9E9B",
+      "TypeScript class keywords": "#6F9E9B",
     },
     semanticOverrides: {
-      modifier: "#C98AA6",
+      modifier: "#6F9E9B",
     },
   },
   {

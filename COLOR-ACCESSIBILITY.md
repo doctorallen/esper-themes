@@ -32,11 +32,16 @@ mapping Q uses, so the film themes and Q stay aligned as roles are added.
 
 Replicant's syntax palette is the one exception to that sourcing: its
 workbench surfaces and accents still come from Deckard, but the token colors
-are keyed to the 1982 film rather than to the webview accents — tungsten amber
-for functions, searchlight cyan for types, geisha-sign pink for control flow
-(dropping to a dusty rose `#C98AA6` for the declaration keywords that pad every
-line), phosphor green for strings, ember orange for numbers, and a violet haze
-for markup. Every one of them clears the same 4.5:1 target below.
+are keyed to the 1982 film. They follow a frame-by-frame color analysis of it
+rather than its poster art — across 46 analyzed shots the palettes run 41%
+teal and blue-green, then gold-olive, amber, terracotta and crimson, with
+magenta and violet under 1% and desaturated where they appear. The palette
+therefore reads as the frames are lit: a teal field (keywords, types, markup,
+properties, comments) with warm highlights struck through it (amber functions,
+terracotta numbers, olive strings, cream constants), on bone-white prose.
+Hue comes from the film; saturation and lightness are raised to what a
+near-black editor needs, so every token still clears the 4.5:1 target below —
+the lowest is the comment grey at 5.82:1.
 
 A color that misses the target is darkened (or lightened) in HSL with its
 saturation held, rather than blended toward the theme's foreground: blending
