@@ -59,22 +59,50 @@ const THEMES = [
     warning: "#FF5500",
     success: "#33FF33",
     info: "#00E5FF",
+    // Los Angeles, November 2019: tungsten interiors, neon signage above the
+    // street, and a searchlight sweeping the rain. Code reads as that night —
+    // bone-white prose, amber for the work being done, neon for the grammar.
     syntax: {
-      text: "#D9E0E4",
-      comment: "#7D8792",
-      keyword: "#00E5FF",
-      operator: mixHex("#00E5FF", "#D9E0E4", 0.5),
-      string: mixHex("#33FF33", "#D9E0E4", 0.3),
-      number: "#FF5500",
-      constant: mixHex("#FFB000", "#FF5500", 0.5),
-      variable: "#D9E0E4",
-      property: mixHex("#D9E0E4", "#00E5FF", 0.2),
+      // Dust in Deckard's apartment, lit by a bare tungsten bulb.
+      text: "#D8D2C6",
+      // Street smog, backlit and half a stop under everything else.
+      comment: "#75848F",
+      // The geisha billboard's pink neon.
+      keyword: "#FF5FA2",
+      // Rain on steel: punctuation stays where the eye is not.
+      operator: "#9FB6C2",
+      // Phosphor green off the Voight-Kampff display.
+      string: "#3FE0A6",
+      // Flare stacks burning over the Hades skyline.
+      number: "#FF6A3C",
+      // The same filament as the amber, one step cooler.
+      constant: "#FFC96B",
+      variable: "#D8D2C6",
+      // A spinner's searchlight diffused through the mist.
+      property: "#8FC9DE",
+      // Tyrell's gold: the brightest thing in the frame.
       function: "#FFB000",
-      libraryFunction: mixHex("#FFB000", "#D9E0E4", 0.45),
-      type: mixHex("#33FF33", "#D9E0E4", 0.6),
-      markup: "#FFB000",
-      decorator: mixHex("#FFB000", "#D23C28", 0.5),
-      invalid: "#D23C28",
+      libraryFunction: mixHex("#FFB000", "#D8D2C6", 0.45),
+      // The searchlight itself, hard and close.
+      type: "#00E5FF",
+      // Cigarette smoke under Rachael's ceiling fan.
+      markup: "#B98CFF",
+      decorator: mixHex("#FF5FA2", "#B98CFF", 0.5),
+      // Blood on Roy Batty's hand.
+      invalid: "#FF4A4A",
+    },
+    // Only the signage is neon. Control flow keeps the geisha pink; the
+    // declaration keywords that pad every line drop to the rose it fades to
+    // through the rain.
+    tokenOverrides: {
+      Storage: "#C98AA6",
+      "Storage modifiers": "#C98AA6",
+      "PHP visibility and storage modifiers": "#C98AA6",
+      "TypeScript export keywords": "#C98AA6",
+      "TypeScript class keywords": "#C98AA6",
+    },
+    semanticOverrides: {
+      modifier: "#C98AA6",
     },
   },
   {

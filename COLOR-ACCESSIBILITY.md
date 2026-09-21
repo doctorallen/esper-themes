@@ -30,6 +30,14 @@ mapping Q uses, so the film themes and Q stay aligned as roles are added.
 | Fellowship (light) | `themes/Fellowship-color-theme.json` | Olive `#455E30` | Gold `#685225` |
 | Cooper | `themes/Cooper-color-theme.json` | Gold `#DCA24A` | Steel blue `#9FBFD4` |
 
+Replicant's syntax palette is the one exception to that sourcing: its
+workbench surfaces and accents still come from Deckard, but the token colors
+are keyed to the 1982 film rather than to the webview accents — tungsten amber
+for functions, searchlight cyan for types, geisha-sign pink for control flow
+(dropping to a dusty rose `#C98AA6` for the declaration keywords that pad every
+line), phosphor green for strings, ember orange for numbers, and a violet haze
+for markup. Every one of them clears the same 4.5:1 target below.
+
 A color that misses the target is darkened (or lightened) in HSL with its
 saturation held, rather than blended toward the theme's foreground: blending
 pulls every hue toward the same washed-out dark, which on a light ground

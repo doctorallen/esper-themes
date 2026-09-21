@@ -7,7 +7,7 @@ themes, and a generated Q theme.
 | Theme | Type | Look |
 | --- | --- | --- |
 | LCARS | Dark | Starfleet console panels. |
-| Replicant | Dark | Amber readouts and cyan telemetry on near-black. |
+| Replicant | Dark | Amber readouts and cyan telemetry on near-black, with syntax drawn from the 1982 film's neon. |
 | Oblivion | Dark | Steel frames and cyan readouts, with orange kept for alerts. |
 | Synthwave | Dark | Neon cyan and hot pink on violet night. |
 | Tomcat | Dark | Green phosphor cockpit display with amber warnings. |
