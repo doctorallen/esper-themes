@@ -448,8 +448,71 @@ const THEMES = [
   },
 ];
 
+// Markdown is a first-class grammar here: prose has as many roles as code, and
+// the shared matcher cannot tell a heading from a list marker from a link, so
+// every markdown rule in the template names its role outright.
+const MARKDOWN_TOKEN_ROLES = {
+  "Markdown heading 1": "heading1",
+  "Markdown heading 2": "heading2",
+  "Markdown heading 3": "heading3",
+  "Markdown deep headings": "headingDeep",
+  "Markdown heading markers": "headingMarker",
+  "Markdown bold": "bold",
+  "Markdown italic": "italic",
+  "Markdown strikethrough": "strikethrough",
+  "Markdown emphasis markers": "punctuation",
+  "Markdown block quotes": "quote",
+  "Markdown block quote markers": "punctuation",
+  "Markdown list markers": "list",
+  "Markdown link text": "linkText",
+  "Markdown link destinations": "link",
+  "Markdown link references": "linkRef",
+  "Markdown link punctuation": "punctuation",
+  "Markdown inline code": "code",
+  "Markdown fenced code": "code",
+  "Markdown code fence markers": "punctuation",
+  "Markdown code fence language": "codeLanguage",
+  "Markdown separators": "separator",
+  "Markdown table punctuation": "separator",
+  "Markdown frontmatter delimiters": "separator",
+};
+
+/**
+ * Markdown roles derived from the theme's code roles, so a palette that never
+ * mentions markdown still gets a coherent document. Headings walk from the
+ * theme's markup accent toward its body text, which gives the ladder without
+ * asking a palette for six more colors. A theme states `markdown` only where it
+ * wants to disagree.
+ */
+function markdownPalette(syntax) {
+  return {
+    heading1: syntax.markup,
+    heading2: mixHex(syntax.markup, syntax.text, 0.25),
+    heading3: mixHex(syntax.markup, syntax.text, 0.5),
+    headingDeep: mixHex(syntax.markup, syntax.text, 0.7),
+    headingMarker: syntax.operator,
+    bold: syntax.text,
+    italic: syntax.text,
+    strikethrough: syntax.comment,
+    quote: mixHex(syntax.comment, syntax.text, 0.35),
+    list: syntax.keyword,
+    link: syntax.type,
+    linkText: syntax.string,
+    linkRef: syntax.constant,
+    code: syntax.string,
+    codeLanguage: syntax.type,
+    punctuation: syntax.operator,
+    separator: syntax.operator,
+  };
+}
+
 // The shared role matcher reads "type-parameter" as a parameter; types keep the type role here.
-const TOKEN_ROLE_OVERRIDES = { Types: "type" };
+const TOKEN_ROLE_OVERRIDES = {
+  Types: "type",
+  ...Object.fromEntries(
+    Object.entries(MARKDOWN_TOKEN_ROLES).map(([name, role]) => [name, `markdown.${role}`])
+  ),
+};
 const SEMANTIC_ROLE_OVERRIDES = { typeParameter: "type" };
 
 function passes(color, backgrounds, floor = MIN_TEXT_CONTRAST) {
@@ -619,6 +682,13 @@ function buildTheme(spec) {
       readable(color, syntaxBackgrounds, foreground, syntaxFloor),
     ])
   );
+  const markdown = { ...markdownPalette(spec.syntax), ...(spec.markdown ?? {}) };
+  for (const [role, color] of Object.entries(markdown)) {
+    if (!(role in markdownPalette(spec.syntax))) {
+      throw new Error(`${spec.name} sets unknown markdown role "${role}".`);
+    }
+    syntax[`markdown.${role}`] = readable(color, syntaxBackgrounds, foreground, syntaxFloor);
+  }
 
   const tokenColors = TEMPLATE.tokenColors.map(entry => {
     const rule = JSON.parse(JSON.stringify(entry));

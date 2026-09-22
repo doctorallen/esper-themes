@@ -291,6 +291,35 @@ function syntaxRoleForToken(entry) {
   const scopes = Array.isArray(entry.scope) ? entry.scope.join(" ") : entry.scope || "";
   const text = `${name} ${scopes}`.toLowerCase();
 
+  // Markdown names a heading, a list marker and a link destination all at once,
+  // and the generic tests below would read most of them as strings. Q has no
+  // markdown roles of its own, so each one lands on the nearest code role.
+  if (text.includes("markdown") || text.includes("frontmatter")) {
+    if (text.includes("punctuation") || text.includes("separator")) {
+      return "operator";
+    }
+    if (text.includes("heading") || text.includes("section")) {
+      return "markup";
+    }
+    if (text.includes("reference")) {
+      return "constant";
+    }
+    if (text.includes("title") || text.includes("description")) {
+      return "string";
+    }
+    if (text.includes("link")) {
+      return "type";
+    }
+    if (text.includes("raw") || text.includes("fenced") || text.includes("code")) {
+      return "string";
+    }
+    if (text.includes("quote") || text.includes("strikethrough")) {
+      return "comment";
+    }
+    if (text.includes("bold") || text.includes("italic") || text.includes("list")) {
+      return "text";
+    }
+  }
   if (text.includes("comment")) {
     return "comment";
   }

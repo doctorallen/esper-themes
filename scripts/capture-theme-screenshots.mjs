@@ -32,11 +32,16 @@ const HEIGHT = 1080;
 const Q_THEME = 'Q';
 
 // Opened in this order; the last one is the active editor in the screenshot.
-const sampleFiles = [
+// ESPER_SCREENSHOT_FILES overrides the set (comma separated, workspace
+// relative), ESPER_SCREENSHOT_LINE the substring scrolled to the top of the
+// active editor, and ESPER_SCREENSHOT_SUFFIX the name each image is written
+// under, so one theme can be shot against more than one grammar.
+const sampleFiles = (process.env.ESPER_SCREENSHOT_FILES ?? [
   'angular/relay-dashboard.component.html',
   'angular/relay-telemetry.service.ts',
-];
-const activeFileLine = 'export class RelayTelemetryService';
+].join(',')).split(',').map((file) => file.trim()).filter(Boolean);
+const activeFileLine = process.env.ESPER_SCREENSHOT_LINE ?? 'export class RelayTelemetryService';
+const imageSuffix = process.env.ESPER_SCREENSHOT_SUFFIX ?? '';
 
 const manifest = JSON.parse(readFileSync(join(repositoryRoot, 'package.json'), 'utf8'));
 const contributedThemes = manifest.contributes.themes.map((theme) => ({
@@ -476,10 +481,14 @@ function updateReadme() {
 }
 
 for (const theme of themes) {
-  const output = join(imageDirectory, `${slug(theme.label)}.png`);
+  const output = join(imageDirectory, `${slug(theme.label)}${imageSuffix}.png`);
   console.log(`Capturing ${theme.label}...`);
   await captureTheme(theme, output);
   console.log(`  wrote ${relative(repositoryRoot, output)}`);
 }
-updateReadme();
-console.log('Updated README.md screenshots.');
+// The README section lists the canonical shot of each theme, so a run that
+// aimed the camera somewhere else leaves it alone.
+if (!imageSuffix) {
+  updateReadme();
+  console.log('Updated README.md screenshots.');
+}

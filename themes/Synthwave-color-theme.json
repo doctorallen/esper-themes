@@ -178,11 +178,11 @@
     "terminal.ansiBrightCyan": "#00E5FF",
     "terminal.ansiWhite": "#8E8BB3",
     "terminal.ansiBrightWhite": "#E7E8FF",
-    "diffEditor.insertedTextBorder": "#62F5FF",
-    "diffEditor.removedTextBorder": "#FF2D95",
     "gitDecoration.modifiedResourceForeground": "#FF8B55",
     "gitDecoration.deletedResourceForeground": "#FF2D95",
     "gitDecoration.untrackedResourceForeground": "#62F5FF",
+    "diffEditor.insertedTextBorder": "#62F5FF",
+    "diffEditor.removedTextBorder": "#FF2D95",
     "dropdown.listBackground": "#211748",
     "list.inactiveFocusOutline": "#00E5FF99",
     "statusBar.noFolderBackground": "#15102F",
@@ -547,6 +547,255 @@
       "scope": [
         "markup.heading",
         "entity.name.section"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown heading 1",
+      "scope": [
+        "heading.1.markdown entity.name.section",
+        "markup.heading.setext.1.markdown"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown heading 2",
+      "scope": [
+        "heading.2.markdown entity.name.section",
+        "markup.heading.setext.2.markdown"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#81F3FF"
+      }
+    },
+    {
+      "name": "Markdown heading 3",
+      "scope": [
+        "heading.3.markdown entity.name.section"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#A3F0FF"
+      }
+    },
+    {
+      "name": "Markdown deep headings",
+      "scope": [
+        "heading.4.markdown entity.name.section",
+        "heading.5.markdown entity.name.section",
+        "heading.6.markdown entity.name.section"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#BEEDFF"
+      }
+    },
+    {
+      "name": "Markdown heading markers",
+      "scope": [
+        "punctuation.definition.heading.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown bold",
+      "scope": [
+        "markup.bold",
+        "markup.bold.markdown"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#E7E8FF"
+      }
+    },
+    {
+      "name": "Markdown italic",
+      "scope": [
+        "markup.italic",
+        "markup.italic.markdown"
+      ],
+      "settings": {
+        "fontStyle": "italic",
+        "foreground": "#E7E8FF"
+      }
+    },
+    {
+      "name": "Markdown strikethrough",
+      "scope": [
+        "markup.strikethrough",
+        "markup.strikethrough.markdown"
+      ],
+      "settings": {
+        "fontStyle": "strikethrough",
+        "foreground": "#8E8BB3"
+      }
+    },
+    {
+      "name": "Markdown emphasis markers",
+      "scope": [
+        "punctuation.definition.bold.markdown",
+        "punctuation.definition.italic.markdown",
+        "punctuation.definition.strikethrough.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown block quotes",
+      "scope": [
+        "markup.quote",
+        "markup.quote.markdown"
+      ],
+      "settings": {
+        "fontStyle": "italic",
+        "foreground": "#ADACCE"
+      }
+    },
+    {
+      "name": "Markdown block quote markers",
+      "scope": [
+        "punctuation.definition.quote.begin.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown list markers",
+      "scope": [
+        "punctuation.definition.list.begin.markdown",
+        "beginning.punctuation.definition.list.markdown"
+      ],
+      "settings": {
+        "foreground": "#FF3CA6"
+      }
+    },
+    {
+      "name": "Markdown link text",
+      "scope": [
+        "string.other.link.title.markdown",
+        "string.other.link.description.markdown",
+        "string.other.link.description.title.markdown"
+      ],
+      "settings": {
+        "foreground": "#FF8B55"
+      }
+    },
+    {
+      "name": "Markdown link destinations",
+      "scope": [
+        "markup.underline.link",
+        "markup.underline.link.markdown",
+        "markup.underline.link.image.markdown"
+      ],
+      "settings": {
+        "fontStyle": "underline",
+        "foreground": "#AE9DFF"
+      }
+    },
+    {
+      "name": "Markdown link references",
+      "scope": [
+        "constant.other.reference.link.markdown"
+      ],
+      "settings": {
+        "foreground": "#FF647E"
+      }
+    },
+    {
+      "name": "Markdown link punctuation",
+      "scope": [
+        "punctuation.definition.link.markdown",
+        "punctuation.definition.link.title.begin.markdown",
+        "punctuation.definition.link.title.end.markdown",
+        "punctuation.definition.link.description.begin.markdown",
+        "punctuation.definition.link.description.end.markdown",
+        "punctuation.definition.string.begin.markdown",
+        "punctuation.definition.string.end.markdown",
+        "punctuation.definition.constant.markdown",
+        "punctuation.definition.constant.begin.markdown",
+        "punctuation.definition.constant.end.markdown",
+        "punctuation.definition.metadata.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown inline code",
+      "scope": [
+        "markup.inline.raw",
+        "markup.inline.raw.string.markdown"
+      ],
+      "settings": {
+        "foreground": "#FF8B55"
+      }
+    },
+    {
+      "name": "Markdown fenced code",
+      "scope": [
+        "markup.fenced_code.block.markdown",
+        "markup.raw.block.markdown"
+      ],
+      "settings": {
+        "foreground": "#FF8B55"
+      }
+    },
+    {
+      "name": "Markdown code fence markers",
+      "scope": [
+        "punctuation.definition.raw.markdown",
+        "punctuation.definition.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown code fence language",
+      "scope": [
+        "fenced_code.block.language",
+        "fenced_code.block.language.markdown",
+        "fenced_code.block.language.attributes.markdown"
+      ],
+      "settings": {
+        "foreground": "#AE9DFF"
+      }
+    },
+    {
+      "name": "Markdown separators",
+      "scope": [
+        "meta.separator.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown table punctuation",
+      "scope": [
+        "punctuation.definition.table.markdown",
+        "punctuation.separator.table.markdown"
+      ],
+      "settings": {
+        "foreground": "#5FF7FF"
+      }
+    },
+    {
+      "name": "Markdown frontmatter delimiters",
+      "scope": [
+        "punctuation.definition.begin.frontmatter",
+        "punctuation.definition.end.frontmatter",
+        "comment.frontmatter"
       ],
       "settings": {
         "foreground": "#5FF7FF"
