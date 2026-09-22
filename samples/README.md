@@ -6,6 +6,7 @@ excluded from the packaged VSIX.
 
 | Language | File | Syntax exercised |
 | --- | --- | --- |
+| Markdown | `markdown/relay-handbook.md` | Front matter, all six heading levels, bold, italic, strikethrough, block quotes, ordered, unordered, nested and task lists, tables, inline code, fenced code with embedded TypeScript and shell, inline, auto, reference and image links, separators, and footnotes |
 | Angular | `angular/relay-dashboard.component.ts` / `.html`, `relay-telemetry.service.ts`, `relay-telemetry.models.ts` | Standalone components, signals, RxJS streams, service injection, inputs, outputs, control flow, bindings, and pipes |
 | TypeScript | `typescript/telemetry.ts` | Types, generics, enums, async functions, decorators, and errors |
 | JavaScript | `javascript/event-bus.mjs` | Classes, private fields, optional chaining, maps, and promises |

@@ -291,6 +291,35 @@ function syntaxRoleForToken(entry) {
   const scopes = Array.isArray(entry.scope) ? entry.scope.join(" ") : entry.scope || "";
   const text = `${name} ${scopes}`.toLowerCase();
 
+  // Markdown names a heading, a list marker and a link destination all at once,
+  // and the generic tests below would read most of them as strings. Q has no
+  // markdown roles of its own, so each one lands on the nearest code role.
+  if (text.includes("markdown") || text.includes("frontmatter")) {
+    if (text.includes("punctuation") || text.includes("separator")) {
+      return "operator";
+    }
+    if (text.includes("heading") || text.includes("section")) {
+      return "markup";
+    }
+    if (text.includes("reference")) {
+      return "constant";
+    }
+    if (text.includes("title") || text.includes("description")) {
+      return "string";
+    }
+    if (text.includes("link")) {
+      return "type";
+    }
+    if (text.includes("raw") || text.includes("fenced") || text.includes("code")) {
+      return "string";
+    }
+    if (text.includes("quote") || text.includes("strikethrough")) {
+      return "comment";
+    }
+    if (text.includes("bold") || text.includes("italic") || text.includes("list")) {
+      return "text";
+    }
+  }
   if (text.includes("comment")) {
     return "comment";
   }
@@ -486,6 +515,7 @@ function buildWorkbenchColors(templateColors, palette) {
     warning,
     warningForeground,
     success,
+    successForeground,
     info,
     infoForeground,
     selectionForeground,
@@ -706,8 +736,50 @@ function buildWorkbenchColors(templateColors, palette) {
     "terminal.ansiBrightCyan": primary,
     "terminal.ansiWhite": mutedForeground,
     "terminal.ansiBrightWhite": foreground,
-    "diffEditor.insertedTextBorder": success,
-    "diffEditor.removedTextBorder": error,
+    // Changed code reads as a wash, not as an outline. Bordering every changed
+    // line boxes the code in and puts a saturated stroke next to the syntax it
+    // is meant to frame; a tint sits underneath instead. The tints carry alpha
+    // so token colors stay legible through them, and the build holds the
+    // syntax to its floor over them. Whole lines take the lighter wash and the
+    // changed words inside them the heavier one, which is the only distinction
+    // the borders were making.
+    "diffEditor.insertedLineBackground": `${success}14`,
+    "diffEditor.insertedTextBackground": `${success}1F`,
+    "diffEditor.removedLineBackground": `${error}14`,
+    "diffEditor.removedTextBackground": `${error}1F`,
+    // No code sits on these, so they can carry the accent at full strength.
+    "diffEditorGutter.insertedLineBackground": `${success}26`,
+    "diffEditorGutter.removedLineBackground": `${error}26`,
+    "diffEditorOverview.insertedForeground": `${success}CC`,
+    "diffEditorOverview.removedForeground": `${error}CC`,
+    "diffEditor.unchangedRegionBackground": raisedBackground,
+    // Copilot's inline edits and its keep/undo highlight are the same event as
+    // a diff, so they get the same wash rather than a second visual language.
+    "inlineEdit.modifiedBackground": `${success}14`,
+    "inlineEdit.modifiedChangedLineBackground": `${success}14`,
+    "inlineEdit.modifiedChangedTextBackground": `${success}1F`,
+    "inlineEdit.originalBackground": `${error}14`,
+    "inlineEdit.originalChangedLineBackground": `${error}14`,
+    "inlineEdit.originalChangedTextBackground": `${error}1F`,
+    // The suggestion box is delimited by the theme's own structural border;
+    // the accent strokes are kept for the one state that earns a stroke, when
+    // Tab will accept the edit.
+    "inlineEdit.modifiedBorder": structuralBorder,
+    "inlineEdit.originalBorder": structuralBorder,
+    "inlineEdit.tabWillAcceptModifiedBorder": success,
+    "inlineEdit.tabWillAcceptOriginalBorder": error,
+    "inlineEdit.gutterIndicator.primaryBackground": primary,
+    "inlineEdit.gutterIndicator.primaryForeground": primaryForeground,
+    "inlineEdit.gutterIndicator.secondaryBackground": raisedBackground,
+    "inlineEdit.gutterIndicator.secondaryForeground": mutedForeground,
+    "inlineEdit.gutterIndicator.successfulBackground": success,
+    "inlineEdit.gutterIndicator.successfulForeground": successForeground,
+    "editorGhostText.foreground": mutedForeground,
+    "inlineChatDiff.inserted": `${success}14`,
+    "inlineChatDiff.removed": `${error}14`,
+    "chat.linesAddedForeground": success,
+    "chat.linesRemovedForeground": error,
+    "chat.editedFileForeground": warning,
     "gitDecoration.modifiedResourceForeground": warning,
     "gitDecoration.deletedResourceForeground": error,
     "gitDecoration.untrackedResourceForeground": success,
@@ -809,6 +881,7 @@ function generateQTheme(template, random = Math.random) {
     warning,
     warningForeground: warningPair.foreground,
     success,
+    successForeground: successPair.foreground,
     info,
     infoForeground: infoPair.foreground,
     selectionForeground,

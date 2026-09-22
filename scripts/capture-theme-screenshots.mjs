@@ -32,11 +32,19 @@ const HEIGHT = 1080;
 const Q_THEME = 'Q';
 
 // Opened in this order; the last one is the active editor in the screenshot.
-const sampleFiles = [
+// ESPER_SCREENSHOT_FILES overrides the set (comma separated, workspace
+// relative), ESPER_SCREENSHOT_LINE the substring scrolled to the top of the
+// active editor, and ESPER_SCREENSHOT_SUFFIX the name each image is written
+// under, so one theme can be shot against more than one grammar.
+const sampleFiles = (process.env.ESPER_SCREENSHOT_FILES ?? [
   'angular/relay-dashboard.component.html',
   'angular/relay-telemetry.service.ts',
-];
-const activeFileLine = 'export class RelayTelemetryService';
+].join(',')).split(',').map((file) => file.trim()).filter(Boolean);
+const activeFileLine = process.env.ESPER_SCREENSHOT_LINE ?? 'export class RelayTelemetryService';
+const imageSuffix = process.env.ESPER_SCREENSHOT_SUFFIX ?? '';
+// ESPER_SCREENSHOT_DIFF shoots the diff editor instead, so the inserted and
+// removed washes can be checked the way they are actually seen.
+const diffCapture = process.env.ESPER_SCREENSHOT_DIFF === '1';
 
 const manifest = JSON.parse(readFileSync(join(repositoryRoot, 'package.json'), 'utf8'));
 const contributedThemes = manifest.contributes.themes.map((theme) => ({
@@ -145,6 +153,44 @@ function writeWorkspace(workspace) {
   const modified = join(workspace, 'angular', 'relay-dashboard.component.ts');
   writeFileSync(modified, `${readFileSync(modified, 'utf8')}\n// Pending review.\n`);
   writeFileSync(join(workspace, 'angular', 'relay-alerts.ts'), 'export const alerts = [];\n');
+  writeDiffPair(workspace);
+}
+
+// A small before/after pair with inserted, removed and changed-within-a-line
+// edits, so one frame shows every wash the diff editor paints.
+function writeDiffPair(workspace) {
+  mkdirSync(join(workspace, 'diff'), { recursive: true });
+  const before = `export const relayDefaults = {
+  socketPath: '/run/relay.sock',
+  journalDir: '/var/lib/relay',
+  maxReaders: 32,
+  logLevel: 'info',
+};
+
+export function describeRelay(status) {
+  if (status === 'degraded') {
+    return 'Relay is degraded.';
+  }
+  return 'Relay is healthy.';
+}
+`;
+  const after = `export const relayDefaults = {
+  socketPath: '/run/relay.sock',
+  journalDir: '/var/lib/relay',
+  maxReaders: 64,
+  fsync: true,
+  logLevel: 'info',
+};
+
+export function describeRelay(status, since) {
+  if (status === 'degraded') {
+    return \`Relay has been degraded since \${since}.\`;
+  }
+  return 'Relay is healthy.';
+}
+`;
+  writeFileSync(join(workspace, 'diff', 'relay-defaults.before.ts'), before);
+  writeFileSync(join(workspace, 'diff', 'relay-defaults.after.ts'), after);
 }
 
 function writeProfileSettings(profile, theme) {
@@ -206,6 +252,7 @@ const fs = require('fs');
 const path = require('path');
 const files = ${JSON.stringify(sampleFiles)};
 const activeLine = ${JSON.stringify(activeFileLine)};
+const diffCapture = ${JSON.stringify(diffCapture)};
 function delay(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
@@ -236,6 +283,26 @@ async function activate() {
     await run('workbench.action.closeAuxiliaryBar');
     await run('workbench.action.closePanel');
     const workspace = vscode.workspace.workspaceFolders[0].uri;
+    if (diffCapture) {
+      await run(
+        'vscode.diff',
+        vscode.Uri.joinPath(workspace, 'diff', 'relay-defaults.before.ts'),
+        vscode.Uri.joinPath(workspace, 'diff', 'relay-defaults.after.ts'),
+        'relay-defaults.ts (Working Tree)',
+      );
+      await run('workbench.view.explorer');
+      await run('workbench.action.focusActiveEditorGroup');
+      await delay(2500);
+      fs.writeFileSync(
+        path.join(__dirname, 'ready'),
+        JSON.stringify({
+          editorBackground: isQ ? scopedColor('editor.background') : undefined,
+          activeBorderTop: scopedColor('tab.activeBorderTop'),
+          topLine: '1',
+        }),
+      );
+      return;
+    }
     let editor;
     for (const file of files) {
       editor = await vscode.window.showTextDocument(vscode.Uri.joinPath(workspace, file), { preview: false });
@@ -476,10 +543,14 @@ function updateReadme() {
 }
 
 for (const theme of themes) {
-  const output = join(imageDirectory, `${slug(theme.label)}.png`);
+  const output = join(imageDirectory, `${slug(theme.label)}${imageSuffix}.png`);
   console.log(`Capturing ${theme.label}...`);
   await captureTheme(theme, output);
   console.log(`  wrote ${relative(repositoryRoot, output)}`);
 }
-updateReadme();
-console.log('Updated README.md screenshots.');
+// The README section lists the canonical shot of each theme, so a run that
+// aimed the camera somewhere else leaves it alone.
+if (!imageSuffix) {
+  updateReadme();
+  console.log('Updated README.md screenshots.');
+}
