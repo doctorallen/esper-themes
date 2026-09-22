@@ -601,6 +601,13 @@ function buildWorkbenchColors(templateColors, palette) {
     "editorSuggestWidget.highlightForeground": secondary,
     "editorHoverWidget.background": widgetBackground,
     "editorHoverWidget.border": primary,
+    // The markdown preview draws mermaid diagrams with the workbench's chart
+    // stroke, and VS Code's default for it is a steel blue no theme here chose.
+    // Nodes fill with the widget background, so on a near-black editor the
+    // stroke is most of what the eye gets; it takes the accent the theme
+    // already puts on its widget borders, which is what the preview would fall
+    // back to if the default were not in the way.
+    "chart.line": primary,
     "editorBracketMatch.background": withAlpha(secondary, "20"),
     "editorBracketMatch.border": primary,
     "editorError.foreground": error,

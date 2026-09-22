@@ -24,6 +24,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 
 - Active editor tabs show their top and bottom borders under VS Code's Modern UI.
+- Mermaid diagrams in the markdown preview draw their edges and node borders in the theme's accent instead of VS Code's steel-blue default, which all but vanished on the darker themes.
 
 ## [0.2.0]
 
