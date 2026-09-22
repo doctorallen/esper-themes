@@ -71,6 +71,7 @@
     "editorSuggestWidget.highlightForeground": "#FCC19F",
     "editorHoverWidget.background": "#2F3749",
     "editorHoverWidget.border": "#41C4F7",
+    "chart.line": "#41C4F7",
     "editorBracketMatch.background": "#895129",
     "editorBracketMatch.border": "#EDB378",
     "editorError.foreground": "#FF2200",
