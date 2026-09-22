@@ -2,7 +2,7 @@
   "name": "esper-themes",
   "displayName": "Esper Themes",
   "publisher": "esperinnovations",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "High-contrast, film-inspired themes for Visual Studio Code: LCARS, Replicant, Oblivion, Synthwave, Tomcat, Fellowship, Cooper, Bluey, Bluey Night, and a generated accessibility-aware Q theme.",
   "main": "./extension.js",
   "repository": {
