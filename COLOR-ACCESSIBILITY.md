@@ -33,26 +33,38 @@ mapping Q uses, so the film themes and Q stay aligned as roles are added.
 Replicant's syntax palette is the one exception to that sourcing, and the one
 exception to the contrast target. Its workbench surfaces and accents still come
 from Deckard and still meet AA; its token colors are measured off the 1982 film
-and are held to 2.4:1 instead.
+and are held to 2.9:1 instead.
 
-The hues come from three sources. Quantizing the palette strip of 46
-frame-by-frame analyzed shots and clustering the results splits the film into
-five looks; Replicant takes the darkest and most saturated of them, the night
-exteriors and searchlights (`#08828E`, `#0B8B9D`, `#0F3B4F`). The window
-Deckard reads his paper against supplies the signage (`#38D3C5` turquoise,
-`#E4AFC3` pink, `#8B5682` orchid, `#341B39` violet), and a palette board taken
-off the eye, Zhora's smoke and Rachael in Tyrell's office supplies the coral
-`#CB494B` and cream `#E9D9C2`. Structure is petrol and cyan, literals are lit
-like signage, and the window's violet runs underneath as a cast on comments,
-punctuation and library calls.
+Quantizing the palette strip of 46 frame-by-frame analyzed shots and clustering
+the results splits the film into five looks. Replicant took the darkest of them
+until 0.6.0 — the night exteriors and searchlights (`#08828E`, `#0B8B9D`,
+`#0F3B4F`) — and ran the violet from the window Deckard reads his paper against
+(`#8B5682` orchid, `#341B39` violet) underneath as a cast on comments,
+punctuation and library calls. That cast reached too far: nine of the fourteen
+syntax roles landed in the purple and pink family, strings loudest among them,
+and a file read as signage end to end.
+
+It now takes a warmer look from the same clustering, Tyrell's office at golden
+hour. Gold `#FFB000` leads and carries the keywords, bone `#D6D2C6` carries the
+prose, the searchlight cyan `#4FC7DC` is the counterweight rather than the
+subject, sea glass off the window glass `#9FD0C4` takes the strings, and coral
+off Zhora's coat `#E86A4E` takes the numbers. No syntax color sits between hue
+250 and 345; the theme declares that band in `forbiddenSyntaxHues` and the
+build fails rather than write a file that re-enters it.
+
+The regrade is confined to the editor. Replicant's workbench surfaces and
+accents are unchanged — the same cool near-black ground and the same Deckard
+accents it has always had — and all 210 generated workbench colors are
+identical to 0.5.0.
 
 The relaxed floor is deliberate and narrow. The film is graded dark; a palette
 that clears 4.5:1 on every surface cannot be. Only the comment color uses the
-headroom — `#5B5878`, at 3:1 on the editor background and 2.46:1 on the
-bracket-match tint. Every other token clears 5.85:1, and every workbench pair
-is still held to 4.5:1 by the same build that writes the file. A theme opts in
-by setting `syntaxContrast` in its palette; without it the syntax colors are
-held to AA like everything else.
+headroom — `#6E6757`, at 3.61:1 on the editor background, 3.44:1 on the line
+highlight and 2.96:1 on the bracket-match tint. The markdown block-quote color
+`#8F8876` is next at 4.71:1, every other token clears 5.23:1, and every
+workbench pair is still held to 4.5:1 by the same build that writes the file. A
+theme opts in by setting `syntaxContrast` in its palette; without it the syntax
+colors are held to AA like everything else.
 
 A color that misses the target is darkened (or lightened) in HSL with its
 saturation held, rather than blended toward the theme's foreground: blending
@@ -64,7 +76,7 @@ text reads at 4.5:1 or better on every workbench surface; each accent fill
 gets a foreground that reaches 4.5:1 on it; and every syntax color reaches
 4.5:1 on the editor background, the line highlight, and the secondary-accent
 bracket-match tint, except where a theme sets its own syntax floor — today
-only Replicant, at 2.4:1, and only its comments use the headroom. A Deckard color that misses is blended toward the theme's
+only Replicant, at 2.9:1, and only its comments use the headroom. A Deckard color that misses is blended toward the theme's
 foreground until it passes, which is why Fellowship's accents are darker than
 their Deckard originals. The build fails rather than write a theme with a
 pair below the target.

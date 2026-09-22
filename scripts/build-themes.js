@@ -36,9 +36,26 @@ const TEMPLATE = JSON.parse(
  */
 const THEMES = [
   {
-    // Deckard's default: amber readouts and cyan telemetry on a near-black ground.
+    // Los Angeles, November 2019 — but the pyramid, not the street.
+    //
+    // Clustering the palettes of 46 analyzed frames splits the film into five
+    // looks. The theme used to take the darkest of them, the night exteriors
+    // and searchlights, and ran the window's violet (#8B5682 orchid, #341B39
+    // violet) underneath as a cast on comments, punctuation and library calls.
+    // That cast reached too far: nine of fourteen roles landed in the purple
+    // and pink family, strings loudest among them, and a file read as signage
+    // end to end.
+    //
+    // So this is Tyrell's office at golden hour instead. Gold (#FFB000) leads
+    // and carries the keywords, the ground warms to match it, bone (#D6D2C6)
+    // carries the prose, and the searchlight cyan (#4FC7DC) is the
+    // counterweight rather than the subject. Sea glass off the window glass
+    // (#9FD0C4) takes the strings, coral off Zhora's coat (#E86A4E) takes the
+    // numbers, and nothing in the editor is purple.
     name: "Replicant",
     type: "dark",
+    // The workbench is unchanged: the same cool near-black ground, the same
+    // Deckard accents. Only the editor's syntax was regraded.
     surfaces: {
       editor: "#050608",
       activity: "#080A0E",
@@ -59,60 +76,56 @@ const THEMES = [
     warning: "#FF5500",
     success: "#33FF33",
     info: "#00E5FF",
-    // Los Angeles, November 2019. The hues are measured, not remembered.
-    // Clustering the palettes of 46 analyzed frames splits the film into five
-    // looks; this is the darkest and most saturated of them — the night
-    // exteriors and searchlights (#08828E, #0B8B9D, #0F3B4F) — crossed with
-    // the window Deckard reads his paper against (#38D3C5 turquoise, #E4AFC3
-    // pink, #8B5682 orchid, #341B39 violet) and a palette board off the eye
-    // and Zhora's smoke (#CB494B coral, #E9D9C2 cream).
-    //
-    // The structure is petrol and cyan, everything the code states outright is
-    // lit like signage, and the window's violet runs underneath as a cast on
-    // the parts nobody reads as color. No amber: the workbench keeps Tyrell's
-    // gold, and the editor leaves it to the chrome.
     syntax: {
-      // Pale steel off the night exteriors.
-      text: "#C6D6DA",
-      // The window's deepest violet, brought up just far enough to read.
-      comment: "#5B5878",
-      // The searchlight, hard and close.
-      keyword: "#16B8D4",
-      // The same violet, drained: punctuation stays where the eye is not.
-      operator: "#8A86A8",
-      // Orchid-pink neon — the thing the eye goes to on the street.
-      string: "#F2A0D0",
-      // Coral off the palette board.
-      number: "#FF7189",
-      // The violet lifted to a lilac, so literals read as one family.
-      constant: "#E8B8FF",
-      variable: "#C6D6DA",
-      // Wet steel under a searchlight.
-      property: "#7FB8C8",
-      // Cream: the brightest thing in the frame, and no longer the warmest.
-      function: "#F2EAD2",
-      libraryFunction: "#CBBCE0",
-      // The turquoise in the glass.
-      type: "#2ED9C0",
-      // The signage itself.
-      markup: "#FF6FA8",
-      // The signage fading back behind him.
-      decorator: "#C96FA8",
+      // Bone, warmed to the room.
+      text: "#D6D2C6",
+      comment: "#6E6757",
+      // The gold is the signage here.
+      keyword: "#FFB000",
+      operator: "#98917F",
+      // Sea glass, cool against the gold.
+      string: "#9FD0C4",
+      // Zhora's coat under the neon.
+      number: "#E86A4E",
+      constant: "#F0C97A",
+      variable: "#D6D2C6",
+      property: "#C4BCA6",
+      // The searchlight, reduced to a supporting part.
+      function: "#4FC7DC",
+      libraryFunction: "#95B6C0",
+      type: "#38D3C5",
+      markup: "#FFB000",
+      decorator: "#D08B5E",
       // Blood on Roy Batty's hand.
-      invalid: "#FF4A4A",
+      invalid: "#FF5A4A",
+    },
+    // Headings step from the gold down to the bone, so an outline reads as one
+    // ladder rather than as a second palette.
+    markdown: {
+      heading1: "#FFB000",
+      heading2: "#EFC16A",
+      heading3: "#D6C49B",
+      headingDeep: "#B4AD9A",
+      list: "#E86A4E",
+      link: "#4FC7DC",
+      linkText: "#9FD0C4",
+      code: "#9FD0C4",
+      quote: "#8F8876",
     },
     // A tag, its attributes and its punctuation would otherwise be three
-    // shades of the same blue, so attributes take the lilac.
+    // shades of the same blue, so attributes take the drained steel.
     tokenOverrides: {
-      "Attribute names": "#E8B8FF",
+      "Attribute names": "#95B6C0",
     },
+    // The violet cast reached nine of fourteen roles before 0.6.0, and a
+    // palette is easier to keep honest with the constraint written down than
+    // by eye. Nothing in the syntax may land between these hues.
+    forbiddenSyntaxHues: [[250, 345]],
     // The film is graded dark, and a palette that clears 4.5:1 everywhere
-    // cannot be. Comments sit at 3:1 on the editor and 2.46:1 on the
-    // bracket-match tint, which is the point of them: they are the smog, not
-    // the signage. The floor is set just under that so the palette ships as
-    // chosen rather than nudged. Syntax only — every workbench pair still
-    // meets AA.
-    syntaxContrast: 2.4,
+    // cannot be. The floor is set just under the comment color so the palette
+    // ships as chosen rather than nudged, and no lower, so the build still
+    // catches a hue that drifts. Syntax only — every workbench pair meets AA.
+    syntaxContrast: 2.9,
   },
   {
     // The film's light table: steel frames, cyan readouts, orange for alerts.
@@ -770,6 +783,21 @@ function buildTheme(spec) {
     [colors["tab.hoverForeground"], tabHover[1]],
     [DEBUGGING_STATUS_FOREGROUND, DEBUGGING_STATUS_BACKGROUND],
   ];
+  // Saturation gates the test: a near-grey carries no hue worth ruling out.
+  const strayed = Object.entries(syntax).flatMap(([role, color]) => {
+    const { hue, saturation } = toHsl(color);
+    const degrees = ((hue % 360) + 360) % 360;
+    return saturation > 0.12 &&
+      (spec.forbiddenSyntaxHues ?? []).some(([low, high]) => degrees >= low && degrees <= high)
+      ? [`${role} ${color} (hue ${Math.round(degrees)})`]
+      : [];
+  });
+  if (strayed.length > 0) {
+    throw new Error(
+      `${spec.name} puts syntax in a hue band it rules out: ${strayed.join(", ")}`
+    );
+  }
+
   const failures = [
     ...pairs
       .filter(([fg, bg]) => contrastRatio(fg, bg) < MIN_TEXT_CONTRAST)
