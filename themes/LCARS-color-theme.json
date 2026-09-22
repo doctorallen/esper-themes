@@ -180,9 +180,7 @@
     "terminal.ansiBrightWhite": "#F3F4F7",
     "gitDecoration.modifiedResourceForeground": "#EA9C72",
     "gitDecoration.deletedResourceForeground": "#FF977B",
-    "gitDecoration.untrackedResourceForeground": "#D29B7F",
-    "diffEditor.insertedTextBorder": "#37A6D1",
-    "diffEditor.removedTextBorder": "#E7442A"
+    "gitDecoration.untrackedResourceForeground": "#D29B7F"
   },
   "tokenColors": [
     {

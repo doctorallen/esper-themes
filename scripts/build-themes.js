@@ -633,6 +633,9 @@ function buildTheme(spec) {
   const warningPair = accentPair(accentText(spec.warning), onAccent, deepen);
   const infoPair = accentPair(accentText(spec.info), onAccent, deepen);
   const success = accentText(spec.success);
+  // Success is the one accent without a pair: it is a text color everywhere
+  // else, and only the inline-edit gutter badge ever fills with it.
+  const successForeground = pickForeground([success], onAccent);
 
   const primary = primaryPair.background;
   const secondary = secondaryPair.background;
@@ -673,6 +676,7 @@ function buildTheme(spec) {
     warning: warningPair.background,
     warningForeground: warningPair.foreground,
     success,
+    successForeground,
     info: infoPair.background,
     infoForeground: infoPair.foreground,
     selectionForeground: pickForeground(selectionBackgrounds, hoverCandidates),
@@ -685,6 +689,11 @@ function buildTheme(spec) {
     s.editor,
     alphaComposite(s.raised, s.editor, "80"),
     alphaComposite(secondary, s.editor, "20"),
+    // Real code sits on the diff and inline-edit washes, so they count as
+    // backgrounds the syntax has to read on. The changed-text tint is the
+    // heaviest of them; clearing it clears the line tint too.
+    alphaComposite(success, s.editor, "1F"),
+    alphaComposite(errorPair.background, s.editor, "1F"),
   ];
   // A theme may state a lower floor for its syntax colors; the workbench roles
   // below are held to AA regardless.
