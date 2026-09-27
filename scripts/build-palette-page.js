@@ -32,15 +32,23 @@ const KNOWN_NAMES = {
   "#75A6BE": "Steel Blue", "#D2EBFD": "Pale Blue", "#FFF9D8": "Cream",
   "#EDCE74": "Muzzle Gold", "#FFB070": "Bandit Orange", "#E37A3B": "Bingo Orange",
   "#9B5E33": "Chilli Brown", "#C9504F": "Tongue Red", "#FFD08D": "Light Gold",
-  // Film themes, from Deckard's webview palettes
-  "#FFB000": "Amber", "#00E5FF": "Cyan", "#33FF33": "Toxic Green",
-  "#D23C28": "Signal Red", "#FF5500": "Warning Orange", "#3FB6C9": "Readout Cyan",
+  // Film themes, from Deckard's webview palettes as regraded in September 2026
+  "#FFB000": "Amber", "#3ED4E8": "Cyan", "#66E066": "Toxic Green",
+  "#E05232": "Signal Red", "#FF5500": "Warning Orange", "#3FB6C9": "Readout Cyan",
   "#5FD3E4": "Bright Cyan", "#E8562A": "Alert Orange", "#CDBE95": "Bone",
-  "#FF3CA6": "Hot Pink", "#5FF7FF": "Neon Cyan", "#8F75FF": "Violet",
-  "#FF8B55": "Sunset Orange", "#62F5FF": "Ice", "#54DB51": "Phosphor Green",
-  "#76FF63": "Bright Phosphor", "#F0BF47": "Amber Alert", "#D89D31": "Dark Amber",
+  "#F25AA9": "Hot Pink", "#F2559E": "Neon Pink", "#3FD8EA": "Grid Cyan",
+  "#7CE6F0": "Neon Cyan", "#8F75FF": "Violet",
+  "#FF8B55": "Sunset Orange", "#7CE3EC": "Ice", "#6FD96C": "Phosphor Green",
+  "#8CE87C": "Bright Phosphor", "#F0BF47": "Amber Alert", "#D89D31": "Dark Amber",
+  "#4A6A32": "Olive", "#664317": "Aged Gold", "#354A1F": "Deep Olive",
+  "#9A4530": "Ink Red", "#545C3C": "Moss", "#9C9A5C": "Parchment Line",
   "#DCA24A": "Gargantua Gold", "#9FBFD4": "Instrument Blue", "#F3C46E": "Warm Gold",
   "#B5CFA5": "Pale Olive", "#D9673B": "Rust", "#A7AFB4": "Steel",
+  // Helix, from the 2020 Sublime Text theme
+  "#448AA9": "Steel Blue", "#AF8787": "Dusty Rose", "#748096": "Helix Slate",
+  "#FF8147": "Helix Orange", "#BD93F9": "Lavender", "#A2A797": "Bracket Grey",
+  "#D7875F": "Copper", "#80E045": "Library Green", "#A5E3D0": "Mint",
+  "#A6E22E": "Diff Green", "#E61F44": "Gutter Red", "#F7B83D": "Gutter Amber",
 };
 
 const HUES = [

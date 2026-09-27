@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 // Builds the fixed themes from curated palettes: the film themes from Deckard's
-// webview themes (~/projects/deckard/src/ui/webview/themes.ts), and the two
-// Bluey themes from colors sampled out of the Heeler family artwork. Every color
+// webview themes (~/projects/deckard/src/ui/webview/themes.ts, with the base
+// palette in components.ts), the two Bluey themes from colors sampled out of
+// the Heeler family artwork, and Helix from a 2020 Sublime Text theme.
+//
+// Deckard's palettes were regraded in September 2026 around its contrast
+// suite: the fully saturated cyans and greens that bloomed around thin text
+// on near-black were softened a step with their hues kept, and Fellowship's
+// inks were deepened so they read on its parchment. The film themes follow
+// those values, so the editor and Deckard's pages agree on what a color is. Every color
 // role comes from the shared Q mapping; only the palette differs. Text colors
 // that miss WCAG AA on their surfaces are nudged toward the theme's foreground
 // until they pass.
@@ -54,8 +61,9 @@ const THEMES = [
     // numbers, and nothing in the editor is purple.
     name: "Replicant",
     type: "dark",
-    // The workbench is unchanged: the same cool near-black ground, the same
-    // Deckard accents. Only the editor's syntax was regraded.
+    // The workbench is Deckard's: the same cool near-black ground, and the
+    // accents as Deckard now grades them, with the cyan, green and red
+    // softened a step. The editor's syntax is measured off the film instead.
     surfaces: {
       editor: "#050608",
       activity: "#080A0E",
@@ -71,11 +79,11 @@ const THEMES = [
     foreground: "#D9E0E4",
     muted: "#7D8792",
     primary: "#FFB000",
-    secondary: "#00E5FF",
-    error: "#D23C28",
+    secondary: "#3ED4E8",
+    error: "#E05232",
     warning: "#FF5500",
-    success: "#33FF33",
-    info: "#00E5FF",
+    success: "#66E066",
+    info: "#3ED4E8",
     syntax: {
       // Bone, warmed to the room.
       text: "#D6D2C6",
@@ -133,7 +141,7 @@ const THEMES = [
     type: "dark",
     surfaces: {
       editor: "#04080B",
-      activity: "#020608",
+      activity: "#04080B",
       sidebar: "#081115",
       panel: "#081115",
       status: "#081115",
@@ -170,7 +178,8 @@ const THEMES = [
     },
   },
   {
-    // Neon grid: cyan and hot pink over violet night.
+    // Neon grid: cyan and hot pink over violet night. The neon is a step
+    // below full saturation, as Deckard grades it, so it does not bloom.
     name: "Synthwave",
     type: "dark",
     surfaces: {
@@ -187,17 +196,17 @@ const THEMES = [
     },
     foreground: "#E7E8FF",
     muted: "#8E8BB3",
-    primary: "#00E5FF",
-    secondary: "#FF3CA6",
-    error: "#FF2D95",
+    primary: "#3FD8EA",
+    secondary: "#F25AA9",
+    error: "#F2559E",
     warning: "#FF8B55",
-    success: "#62F5FF",
+    success: "#7CE3EC",
     info: "#8F75FF",
     // Hand-tuned after the generated mapping: the activity bar sits on the
     // raised surface with pink icons, and a few token roles were reassigned.
     colorOverrides: {
       "activityBar.background": "#211748",
-      "activityBar.foreground": "#FF2D95",
+      "activityBar.foreground": "#F2559E",
       "list.activeSelectionForeground": "#33295E",
       "modernTab.activeForeground": "#211748",
     },
@@ -205,7 +214,7 @@ const THEMES = [
       "Numbers and constants": "#FF647E",
       Variables: "#FF8B55",
       "Object properties": "#8F75FF",
-      Decorators: "#00E5FF",
+      Decorators: "#3FD8EA",
     },
     semanticOverrides: {
       number: "#FF647E",
@@ -213,24 +222,24 @@ const THEMES = [
       property: "#8F75FF",
       member: "#8F75FF",
       "property.readonly": "#8F75FF",
-      decorator: "#00E5FF",
+      decorator: "#3FD8EA",
     },
     syntax: {
       text: "#E7E8FF",
       comment: "#8E8BB3",
-      keyword: "#FF3CA6",
-      operator: "#5FF7FF",
+      keyword: "#F25AA9",
+      operator: "#7CE6F0",
       string: "#FF8B55",
       number: "#8F75FF",
-      constant: mixHex("#FF8B55", "#FF3CA6", 0.5),
+      constant: mixHex("#FF8B55", "#F25AA9", 0.5),
       variable: "#E7E8FF",
-      property: mixHex("#E7E8FF", "#5FF7FF", 0.3),
-      function: "#00E5FF",
-      libraryFunction: mixHex("#00E5FF", "#E7E8FF", 0.5),
+      property: mixHex("#E7E8FF", "#7CE6F0", 0.3),
+      function: "#3FD8EA",
+      libraryFunction: mixHex("#3FD8EA", "#E7E8FF", 0.5),
       type: mixHex("#8F75FF", "#E7E8FF", 0.35),
-      markup: "#5FF7FF",
-      decorator: "#FF3CA6",
-      invalid: "#FF2D95",
+      markup: "#7CE6F0",
+      decorator: "#F25AA9",
+      invalid: "#F2559E",
     },
   },
   {
@@ -251,32 +260,34 @@ const THEMES = [
     },
     foreground: "#CCFA7B",
     muted: "#82AA51",
-    primary: "#54DB51",
+    primary: "#6FD96C",
     secondary: "#D89D31",
     error: "#E24B26",
     warning: "#F0BF47",
-    success: "#76FF63",
-    info: "#76FF63",
+    success: "#8CE87C",
+    info: "#8CE87C",
     syntax: {
       text: "#CCFA7B",
       comment: mixHex("#278A31", "#82AA51", 0.4),
-      keyword: "#76FF63",
+      keyword: "#8CE87C",
       operator: mixHex("#82AA51", "#CCFA7B", 0.4),
       string: "#F0BF47",
       number: "#D89D31",
       constant: mixHex("#D89D31", "#E24B26", 0.4),
       variable: "#CCFA7B",
       property: mixHex("#CCFA7B", "#82AA51", 0.3),
-      function: mixHex("#76FF63", "#CCFA7B", 0.5),
+      function: mixHex("#8CE87C", "#CCFA7B", 0.5),
       libraryFunction: mixHex("#F0BF47", "#CCFA7B", 0.5),
-      type: "#54DB51",
+      type: "#6FD96C",
       markup: "#F0BF47",
       decorator: "#D89D31",
       invalid: "#E24B26",
     },
   },
   {
-    // Parchment and ink: olive greens and aged gold on a light page.
+    // Parchment and ink: olive greens and aged gold on a light page. The inks
+    // are the deeper ones Deckard moved to when its contrast suite found the
+    // originals could not carry text on the parchment.
     name: "Fellowship",
     type: "light",
     surfaces: {
@@ -289,32 +300,34 @@ const THEMES = [
       raised: "#FAF1D4",
       tabActive: "#F1E8C8",
       tabInactive: "#E6DEB9",
-      border: "#C5B980",
+      // Deckard's hairline, --line. Its --panel-deep, which the border used
+      // to borrow, is the control ground now and no longer a line color.
+      border: "#9C9A5C",
     },
     foreground: "#29341D",
-    muted: "#66704B",
-    primary: "#587A3D",
-    secondary: "#9B6B2B",
-    error: "#A94D35",
-    warning: "#9B6B2B",
-    success: "#587A3D",
-    info: "#55713D",
+    muted: "#545C3C",
+    primary: "#4A6A32",
+    secondary: "#664317",
+    error: "#9A4530",
+    warning: "#664317",
+    success: "#4A6A32",
+    info: "#354A1F",
     syntax: {
       text: "#29341D",
-      comment: "#66704B",
-      keyword: "#55713D",
+      comment: "#545C3C",
+      keyword: "#354A1F",
       operator: mixHex("#7D8750", "#29341D", 0.3),
-      string: "#9B6B2B",
-      number: "#A94D35",
+      string: "#664317",
+      number: "#9A4530",
       constant: "#6F542A",
       variable: "#29341D",
       property: "#3D4D28",
       function: "#C28A32",
       libraryFunction: "#6F542A",
-      type: mixHex("#587A3D", "#6F542A", 0.5),
-      markup: "#55713D",
-      decorator: "#A94D35",
-      invalid: "#A94D35",
+      type: mixHex("#4A6A32", "#6F542A", 0.5),
+      markup: "#354A1F",
+      decorator: "#9A4530",
+      invalid: "#9A4530",
     },
   },
   {
@@ -457,6 +470,91 @@ const THEMES = [
       markup: "#FFB070",
       decorator: mixHex("#403F65", "#D2EBFD", 0.45),
       invalid: "#C9504F",
+    },
+  },
+  // Helix: the Sublime Text theme David wrote in 2020, carried over into VS
+  // Code and lived in for years. The syntax colors are the tmTheme's own:
+  // steel blue (#448AA9) for anything that holds a value, dusty rose (#AF8787)
+  // for keywords and library calls, slate (#748096) for types and tags, orange
+  // (#FF8147) for strings, lavender (#BD93F9) for functions and the explorer,
+  // and a warm grey (#A2A797) for brackets and markdown punctuation. The
+  // workbench is Replicant's: the same cool near-black ground, so the two
+  // themes sit side by side, with the orange carrying the chrome where
+  // Replicant's gold does. The greys the tmTheme kept near-invisible
+  // (comments at 2.3:1) are the only colors the build has to lift far.
+  {
+    name: "Helix",
+    type: "dark",
+    surfaces: {
+      editor: "#050608",
+      activity: "#080A0E",
+      sidebar: "#0D1017",
+      panel: "#0D1017",
+      status: "#0D1017",
+      widget: "#121620",
+      raised: "#121620",
+      tabActive: "#121620",
+      tabInactive: "#0D1017",
+      border: "#212936",
+    },
+    foreground: "#E3EDFF",
+    // The inactive tab text.
+    muted: "#6272A4",
+    // The string orange, on the activity bar, tab strokes and selections.
+    primary: "#FF8147",
+    // The lavender of the explorer and the function names.
+    secondary: "#BD93F9",
+    // GitGutter's deleted mark.
+    error: "#E61F44",
+    // GitGutter's changed mark.
+    warning: "#F7B83D",
+    // The diff's inserted green.
+    success: "#A6E22E",
+    info: "#448AA9",
+    syntax: {
+      text: "#E3EDFF",
+      comment: "#4E4E4E",
+      keyword: "#AF8787",
+      operator: "#A2A797",
+      string: "#FF8147",
+      number: "#448AA9",
+      constant: "#448AA9",
+      variable: "#448AA9",
+      property: "#E3EDFF",
+      function: "#BD93F9",
+      libraryFunction: "#AF8787",
+      type: "#748096",
+      markup: "#748096",
+      // The tmTheme's own foreground, which nothing in VS Code ever reached.
+      decorator: "#D7875F",
+      invalid: "#E61F44",
+    },
+    // The tmTheme kept its markdown quiet: emphasis, links and their
+    // punctuation all in the bracket grey, inline code in mint.
+    markdown: {
+      bold: "#A2A797",
+      italic: "#A2A797",
+      link: "#A2A797",
+      linkText: "#A2A797",
+      code: "#A5E3D0",
+    },
+    // The tmTheme split `storage` (blue) from `storage.type` (red) and gave
+    // HTML attributes the value blue; the shared matcher folds those into
+    // keyword and property. These are the tmTheme colors lifted to the same
+    // floor the build applies to everything else.
+    tokenOverrides: {
+      Storage: "#4591B2",
+      "Storage modifiers": "#4591B2",
+      "PHP visibility and storage modifiers": "#4591B2",
+      "Storage types": "#CC6868",
+      "PHP function declarations": "#CC6868",
+      "TypeScript class keywords": "#CC6868",
+      "Attribute names": "#4591B2",
+      "Library constants and variables": "#80E045",
+    },
+    // The explorer read in lavender.
+    colorOverrides: {
+      "sideBar.foreground": "#BD93F9",
     },
   },
 ];

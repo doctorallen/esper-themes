@@ -12,9 +12,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - README screenshots of every theme, regenerated with `npm run capture:screenshots`.
 - Bluey and Bluey Night themes, built from colors sampled out of the Heeler family artwork.
 - `theme-palettes.html` covers every theme, each with its own named palette.
+- Helix theme, the 2020 Sublime Text theme's syntax palette on Replicant's workbench.
 
 ### Changed
 
+- Replicant, Oblivion, Synthwave, Tomcat, and Fellowship follow Deckard's regraded palettes: the fully saturated cyans and greens are softened a step with their hues kept, Fellowship's inks are deepened, and Oblivion's activity bar shares the editor's ground.
 - Renamed the extension from LCARS (`esper-lcars`) to Esper Themes (`esper-themes`); commands are now `esperThemes.*`.
 
 ### Removed
