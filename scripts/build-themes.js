@@ -459,6 +459,91 @@ const THEMES = [
       invalid: "#C9504F",
     },
   },
+  // Helix: the Sublime Text theme David wrote in 2020, carried over into VS
+  // Code and lived in for years. The syntax colors are the tmTheme's own:
+  // steel blue (#448AA9) for anything that holds a value, dusty rose (#AF8787)
+  // for keywords and library calls, slate (#748096) for types and tags, orange
+  // (#FF8147) for strings, lavender (#BD93F9) for functions and the explorer,
+  // and a warm grey (#A2A797) for brackets and markdown punctuation. The
+  // workbench is Replicant's: the same cool near-black ground, so the two
+  // themes sit side by side, with the orange carrying the chrome where
+  // Replicant's gold does. The greys the tmTheme kept near-invisible
+  // (comments at 2.3:1) are the only colors the build has to lift far.
+  {
+    name: "Helix",
+    type: "dark",
+    surfaces: {
+      editor: "#050608",
+      activity: "#080A0E",
+      sidebar: "#0D1017",
+      panel: "#0D1017",
+      status: "#0D1017",
+      widget: "#121620",
+      raised: "#121620",
+      tabActive: "#121620",
+      tabInactive: "#0D1017",
+      border: "#212936",
+    },
+    foreground: "#E3EDFF",
+    // The inactive tab text.
+    muted: "#6272A4",
+    // The string orange, on the activity bar, tab strokes and selections.
+    primary: "#FF8147",
+    // The lavender of the explorer and the function names.
+    secondary: "#BD93F9",
+    // GitGutter's deleted mark.
+    error: "#E61F44",
+    // GitGutter's changed mark.
+    warning: "#F7B83D",
+    // The diff's inserted green.
+    success: "#A6E22E",
+    info: "#448AA9",
+    syntax: {
+      text: "#E3EDFF",
+      comment: "#4E4E4E",
+      keyword: "#AF8787",
+      operator: "#A2A797",
+      string: "#FF8147",
+      number: "#448AA9",
+      constant: "#448AA9",
+      variable: "#448AA9",
+      property: "#E3EDFF",
+      function: "#BD93F9",
+      libraryFunction: "#AF8787",
+      type: "#748096",
+      markup: "#748096",
+      // The tmTheme's own foreground, which nothing in VS Code ever reached.
+      decorator: "#D7875F",
+      invalid: "#E61F44",
+    },
+    // The tmTheme kept its markdown quiet: emphasis, links and their
+    // punctuation all in the bracket grey, inline code in mint.
+    markdown: {
+      bold: "#A2A797",
+      italic: "#A2A797",
+      link: "#A2A797",
+      linkText: "#A2A797",
+      code: "#A5E3D0",
+    },
+    // The tmTheme split `storage` (blue) from `storage.type` (red) and gave
+    // HTML attributes the value blue; the shared matcher folds those into
+    // keyword and property. These are the tmTheme colors lifted to the same
+    // floor the build applies to everything else.
+    tokenOverrides: {
+      Storage: "#4591B2",
+      "Storage modifiers": "#4591B2",
+      "PHP visibility and storage modifiers": "#4591B2",
+      "Storage types": "#CC6868",
+      "PHP function declarations": "#CC6868",
+      "TypeScript class keywords": "#CC6868",
+      "Attribute names": "#4591B2",
+      "Library constants and variables": "#80E045",
+    },
+    // The explorer read in lavender.
+    colorOverrides: {
+      "sideBar.foreground": "#BD93F9",
+    },
+  },
 ];
 
 // Markdown is a first-class grammar here: prose has as many roles as code, and

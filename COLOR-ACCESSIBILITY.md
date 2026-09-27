@@ -107,6 +107,41 @@ Bluey blue activity bar and status bar. Its accents are the artwork's darker
 colors, since the pastels cannot carry text on cream — the build darkens each
 one only as far as 4.5:1 requires.
 
+## Helix
+
+Helix is carried over from the Sublime Text theme of the same name
+(`~/dotfiles/vscode/colors/helix-theme`). Its syntax palette is that file's;
+its workbench is Replicant's, the same cool near-black surfaces (editor
+`#050608`, activity bar `#080A0E`, side bar `#0D1017`, widgets and active tab
+`#121620`, border `#212936`), so the two themes share a ground and differ in
+what is painted on it. The string orange `#FF8147` is the primary accent where
+Replicant has gold, and the lavender `#BD93F9` is the secondary.
+
+Syntax keeps the tmTheme's assignments: steel blue `#448AA9` for variables,
+parameters, numbers, constants, `storage` and HTML attributes; dusty rose
+`#AF8787` for keywords and library functions; red `#BF5656` for `storage.type`;
+slate `#748096` for types, classes, namespaces, tags and headings; orange
+`#FF8147` for strings; lavender `#BD93F9` for functions; warm grey `#A2A797`
+for operators, tag punctuation and markdown punctuation, emphasis and links;
+green `#80E045` for library constants; mint `#A5E3D0` for markdown code. The
+tmTheme's foreground `#D7875F`, which VS Code never reached because every scope
+matched something else, takes the decorators. GitGutter's marks supply the
+diagnostics: red `#E61F44` for errors and removed lines, amber `#F7B83D` for
+warnings and modified files, and the diff's green `#A6E22E` for insertions.
+
+The build holds Helix to the same AA floor as every other theme, and the lifts
+it makes are these. Comments were `#4E4E4E`, 2.44:1 on the editor; they ship as
+`#868686`. Steel blue was 4.31:1 on the changed-text wash and ships as
+`#4591B2`; slate was 4.17:1 and ships as `#7F8AA0`; the `storage.type` red was
+3.70:1 and ships as `#CC6868`; the inactive-tab blue `#6272A4` reads at 4.31:1
+on the editor and ships as the muted `#7382B2` so it also clears the side bar.
+The `storage` split and the attribute blue are written as token overrides,
+since the shared matcher folds them into keyword and property, and those
+overrides carry the same lifted values so they meet the same floor.
+
+The explorer text is set to lavender `#BD93F9` as a color override, the way
+the old theme had it; at 7.9:1 on the side bar it clears AA on its own.
+
 ## Q generated theme
 
 Q is a runtime-generated exception to the fixed approved palette above. Its

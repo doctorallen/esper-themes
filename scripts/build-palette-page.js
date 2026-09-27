@@ -41,6 +41,11 @@ const KNOWN_NAMES = {
   "#76FF63": "Bright Phosphor", "#F0BF47": "Amber Alert", "#D89D31": "Dark Amber",
   "#DCA24A": "Gargantua Gold", "#9FBFD4": "Instrument Blue", "#F3C46E": "Warm Gold",
   "#B5CFA5": "Pale Olive", "#D9673B": "Rust", "#A7AFB4": "Steel",
+  // Helix, from the 2020 Sublime Text theme
+  "#448AA9": "Steel Blue", "#AF8787": "Dusty Rose", "#748096": "Helix Slate",
+  "#FF8147": "Helix Orange", "#BD93F9": "Lavender", "#A2A797": "Bracket Grey",
+  "#D7875F": "Copper", "#80E045": "Library Green", "#A5E3D0": "Mint",
+  "#A6E22E": "Diff Green", "#E61F44": "Gutter Red", "#F7B83D": "Gutter Amber",
 };
 
 const HUES = [
