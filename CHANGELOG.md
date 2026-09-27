@@ -16,6 +16,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
+- Replicant, Oblivion, Synthwave, Tomcat, and Fellowship follow Deckard's regraded palettes: the fully saturated cyans and greens are softened a step with their hues kept, Fellowship's inks are deepened, and Oblivion's activity bar shares the editor's ground.
 - Renamed the extension from LCARS (`esper-lcars`) to Esper Themes (`esper-themes`); commands are now `esperThemes.*`.
 
 ### Removed

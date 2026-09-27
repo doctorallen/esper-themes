@@ -102,6 +102,10 @@ The script maps each palette onto the same workbench roles the Q generator
 uses, and adjusts any text color that falls short of WCAG AA (4.5:1) on its
 surfaces before writing the theme.
 
+The palettes track Deckard's September 2026 regrade, which softened the fully
+saturated cyans and greens a step and deepened Fellowship's inks so every text
+pair in Deckard's own pages reads at 4.5:1.
+
 ## Bluey themes
 
 Bluey (light) and Bluey Night (dark) are built from the characters' own colors,
