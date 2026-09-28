@@ -27,6 +27,20 @@ const imageDirectory = join(repositoryRoot, 'docs', 'images', 'themes');
 const readmePath = join(repositoryRoot, 'README.md');
 const README_START = '<!-- theme-screenshots:start -->';
 const README_END = '<!-- theme-screenshots:end -->';
+// One line under each theme heading in the README.
+const TAGLINES = {
+  LCARS: 'Starfleet console panels.',
+  Q: 'A new accessible palette, generated on demand.',
+  Replicant: 'Near-black night exteriors: petrol and cyan structure, neon signage for the literals.',
+  Oblivion: 'Steel frames and cyan readouts, with orange kept for alerts.',
+  Synthwave: 'Neon cyan and hot pink on violet night.',
+  Tomcat: 'Green phosphor cockpit display with amber warnings.',
+  Fellowship: 'Light. Parchment with olive greens and aged gold.',
+  Cooper: 'White-on-black instrument readouts and Gargantua\'s gold.',
+  Bluey: 'Light. Heeler-family daylight: cream paper, pale blue chrome.',
+  'Bluey Night': 'The same palette after bedtime, on Bluey\'s navy.',
+  Helix: 'Steel blue, dusty rose and lavender on Replicant\'s near-black. A custom theme that has been my friend through many dangers.',
+};
 const WIDTH = 1920;
 const HEIGHT = 1080;
 const Q_THEME = 'Q';
@@ -536,7 +550,12 @@ function updateReadme() {
     .filter((theme) => existsSync(join(imageDirectory, `${slug(theme.label)}.png`)))
     .map((theme) => {
       const image = relative(repositoryRoot, join(imageDirectory, `${slug(theme.label)}.png`));
-      return `### ${theme.label}\n\n![${theme.label} theme](${image})`;
+      const mark = `images/logos/mark-${slug(theme.label)}.png`;
+      const heading = existsSync(join(repositoryRoot, mark))
+        ? `### <img src="${mark}" width="28" height="28" alt=""> ${theme.label}`
+        : `### ${theme.label}`;
+      const tagline = TAGLINES[theme.label];
+      return `${heading}\n\n${tagline ? `${tagline}\n\n` : ''}![${theme.label} theme](${image})`;
     });
   const block = `${README_START}\n\n${sections.join('\n\n')}\n\n${README_END}`;
   writeFileSync(readmePath, readme.slice(0, start) + block + readme.slice(end + README_END.length));

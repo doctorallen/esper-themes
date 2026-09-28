@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Synthwave theme mark" fill="none" stroke="#3FD8EA" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+  <rect width="200" height="200" rx="28" fill="#100C20" stroke="none"/>
+  <path d="M40,110 A60,60 0 0 1 160,110"/><line x1="48" y1="80" x2="152" y2="80" stroke="#F25AA9"/><line x1="42.8" y1="92" x2="157.2" y2="92" stroke="#F25AA9"/><line x1="40.5" y1="102" x2="159.5" y2="102" stroke="#F25AA9"/><line x1="14" y1="110" x2="186" y2="110"/><line x1="100" y1="110" x2="20" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="60" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="100" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="140" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="180" y2="182" stroke="#AE9DFF"/><line x1="48" y1="130" x2="152" y2="130" stroke="#AE9DFF"/><line x1="30" y1="156" x2="170" y2="156" stroke="#AE9DFF"/>
+</svg>
