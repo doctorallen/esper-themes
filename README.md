@@ -1,224 +1,94 @@
+<p align="center"><img src="images/icon.png" width="180" alt="Esper Themes"></p>
+
 # Esper Themes
 
-High-contrast color themes for Visual Studio Code: the LCARS-inspired LCARS
-theme, six film themes carried over from Deckard's webview themes, two Bluey
-themes, Helix, and a generated Q theme.
+High-contrast, film-inspired color themes for Visual Studio Code.
 
-| | Theme | Type | Look |
-| --- | --- | --- | --- |
-| <img src="images/logos/mark-lcars.svg" width="40" height="40" alt=""> | LCARS | Dark | Starfleet console panels. |
-| <img src="images/logos/mark-replicant.svg" width="40" height="40" alt=""> | Replicant | Dark | Near-black night exteriors, with syntax keyed to the 1982 film's own grade: petrol and cyan structure, neon signage for the literals. |
-| <img src="images/logos/mark-oblivion.svg" width="40" height="40" alt=""> | Oblivion | Dark | Steel frames and cyan readouts, with orange kept for alerts. |
-| <img src="images/logos/mark-synthwave.svg" width="40" height="40" alt=""> | Synthwave | Dark | Neon cyan and hot pink on violet night. |
-| <img src="images/logos/mark-tomcat.svg" width="40" height="40" alt=""> | Tomcat | Dark | Green phosphor cockpit display with amber warnings. |
-| <img src="images/logos/mark-fellowship.svg" width="40" height="40" alt=""> | Fellowship | Light | Parchment with olive greens and aged gold. |
-| <img src="images/logos/mark-cooper.svg" width="40" height="40" alt=""> | Cooper | Dark | White-on-black instrument readouts and Gargantua's gold. |
-| <img src="images/logos/mark-bluey.svg" width="40" height="40" alt=""> | Bluey | Light | Heeler-family daylight: cream paper, pale blue chrome. |
-| <img src="images/logos/mark-bluey-night.svg" width="40" height="40" alt=""> | Bluey Night | Dark | The same palette after bedtime, on Bluey's navy. |
-| <img src="images/logos/mark-helix.svg" width="40" height="40" alt=""> | Helix | Dark | Steel blue, dusty rose and lavender on Replicant's near-black ground. A custom theme that has been my friend through many dangers. |
-| <img src="images/logos/mark-q.svg" width="40" height="40" alt=""> | Q | Dark | A new accessible palette generated on demand. |
-
-The root `COLOR-ACCESSIBILITY.md` file records the approved palette, its theme
-roles, and the accessibility rationale for each assignment.
-
-The Problems, Output, Debug Console, Ports, and related panel content use the
-same dark surface as the editor and terminal. Panel section headers retain
-each theme's identity color through the supported
-`panelSectionHeader.*` roles; VS Code's Modern UI top panel strip shares the
-native `panel.background` role.
-
-VS Code's Modern UI (`workbench.experimental.modernUI`) draws the active
-editor tab's top and bottom strokes only from `workbench.colorCustomizations`,
-not from theme files. While Modern UI is on, the extension adds the active
-theme's tab border colors to that setting under the theme's scope, without
-replacing values you have set yourself.
-
-## Screenshots
-
-Regenerate these with `npm run capture:screenshots` (or name themes, as in
-`npm run capture:screenshots -- Replicant Q`). Each capture opens the sample
-code in an isolated VS Code Extension Development Host.
+Install **Esper Themes** from the Marketplace, then pick a theme under **Preferences: Color Theme**.
 
 <!-- theme-screenshots:start -->
 
-### LCARS
+### <img src="images/logos/mark-lcars.png" width="28" height="28" alt=""> LCARS
+
+Starfleet console panels.
 
 ![LCARS theme](docs/images/themes/lcars.png)
 
-### Q
+### <img src="images/logos/mark-q.png" width="28" height="28" alt=""> Q
+
+A new accessible palette, generated on demand.
 
 ![Q theme](docs/images/themes/q.png)
 
-### Replicant
+### <img src="images/logos/mark-replicant.png" width="28" height="28" alt=""> Replicant
+
+Near-black night exteriors: petrol and cyan structure, neon signage for the literals.
 
 ![Replicant theme](docs/images/themes/replicant.png)
 
-### Oblivion
+### <img src="images/logos/mark-oblivion.png" width="28" height="28" alt=""> Oblivion
+
+Steel frames and cyan readouts, with orange kept for alerts.
 
 ![Oblivion theme](docs/images/themes/oblivion.png)
 
-### Synthwave
+### <img src="images/logos/mark-synthwave.png" width="28" height="28" alt=""> Synthwave
+
+Neon cyan and hot pink on violet night.
 
 ![Synthwave theme](docs/images/themes/synthwave.png)
 
-### Tomcat
+### <img src="images/logos/mark-tomcat.png" width="28" height="28" alt=""> Tomcat
+
+Green phosphor cockpit display with amber warnings.
 
 ![Tomcat theme](docs/images/themes/tomcat.png)
 
-### Fellowship
+### <img src="images/logos/mark-fellowship.png" width="28" height="28" alt=""> Fellowship
+
+Light. Parchment with olive greens and aged gold.
 
 ![Fellowship theme](docs/images/themes/fellowship.png)
 
-### Cooper
+### <img src="images/logos/mark-cooper.png" width="28" height="28" alt=""> Cooper
+
+White-on-black instrument readouts and Gargantua's gold.
 
 ![Cooper theme](docs/images/themes/cooper.png)
 
-### Bluey
+### <img src="images/logos/mark-bluey.png" width="28" height="28" alt=""> Bluey
+
+Light. Heeler-family daylight: cream paper, pale blue chrome.
 
 ![Bluey theme](docs/images/themes/bluey.png)
 
-### Bluey Night
+### <img src="images/logos/mark-bluey-night.png" width="28" height="28" alt=""> Bluey Night
+
+The same palette after bedtime, on Bluey's navy.
 
 ![Bluey Night theme](docs/images/themes/bluey-night.png)
 
-### Helix
+### <img src="images/logos/mark-helix.png" width="28" height="28" alt=""> Helix
+
+Steel blue, dusty rose and lavender on Replicant's near-black. A custom theme that has been my friend through many dangers.
 
 ![Helix theme](docs/images/themes/helix.png)
 
 <!-- theme-screenshots:end -->
 
-## Film themes
+## Q
 
-Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are generated
-from the palettes of the matching Deckard webview themes. The palettes live in
-`scripts/build-themes.js`; after changing one, rebuild the theme files
-with:
+Q deals a new dark palette on request. Every text pair it generates meets WCAG AA (4.5:1).
 
-```sh
-npm run build:themes
-```
-
-The script maps each palette onto the same workbench roles the Q generator
-uses, and adjusts any text color that falls short of WCAG AA (4.5:1) on its
-surfaces before writing the theme.
-
-The palettes track Deckard's September 2026 regrade, which softened the fully
-saturated cyans and greens a step and deepened Fellowship's inks so every text
-pair in Deckard's own pages reads at 4.5:1.
-
-## Bluey themes
-
-Bluey (light) and Bluey Night (dark) are built from the characters' own colors,
-sampled from the family artwork: navy `#040620`, purple-navy `#403F65`, Bluey
-blue `#83BBE3`, steel `#75A6BE`, pale blue `#D2EBFD`, cream `#FFF9D8`, gold
-`#EDCE74`, Bandit orange `#FFB070`, Bingo orange `#E37A3B`, Chilli's brown
-`#9B5E33`, and the tongue red `#C9504F`.
-
-Colors are paired the way the artwork paints them. Measuring which colors
-actually touch on the characters gives blue with steel, navy with purple-navy,
-pale blue with steel, blue with pale blue, cream with orange, brown with
-orange, brown with gold, and gold with pale blue. The themes follow those
-pairings: the workbench runs along the navy and purple-navy of Bluey's head,
-code structure (keywords, operators, variables) takes the blues of his body,
-and literals (strings, numbers, constants, types) take the warm family shared
-by the muzzles, Chilli and Bingo.
-
-Both are generated by `npm run build:themes`, so their text colors are
-darkened or lightened only as far as WCAG AA requires.
-
-## Helix
-
-Helix is a custom theme that has been my friend through many dangers, carried
-over to VS Code from the editors that came before it. Its syntax colors are
-the original's: steel blue
-`#448AA9` for anything that holds a value (variables, parameters, numbers,
-constants, `storage` keywords and HTML attributes), dusty rose `#AF8787` for
-keywords and library calls, red `#BF5656` for `storage.type`, slate `#748096`
-for types, classes, tags and markdown headings, orange `#FF8147` for strings,
-lavender `#BD93F9` for functions and the explorer, warm grey `#A2A797` for
-brackets and markdown punctuation, and mint `#A5E3D0` for inline code.
-
-The workbench is Replicant's, the same cool near-black ground, so the two
-themes sit side by side; the string orange carries the activity bar, tab
-strokes and selections where Replicant's gold does, and the lavender takes
-the badges. The build lifts only what cannot be read: the comment grey, the
-steel blue and slate by a step, and the `storage.type` red.
-
-Like the other fixed themes, it is generated by `npm run build:themes`.
-
-## Theme palette reference
-
-`theme-palettes.html` is a self-contained page (open it directly in a browser)
-with an interactive mock VS Code window for every theme, its palette, and a
-live WCAG contrast table. Regenerate its embedded data after changing a theme:
-
-```sh
-npm run build:palette-page
-```
-
-## Q generated theme
-
-Select **Q** from **Preferences: Color Theme** to enable the runtime-generated
-theme. The extension creates a new dark workbench palette and readable code
-foregrounds; every generated text pair is required to meet WCAG AA contrast
-of at least 4.5:1, including the composited backgrounds used by selections
-and hover states.
-
-While Q is active, click **Mon Capitan** in the status bar to generate another
-palette. The same action is available in the Command Palette as
-**Esper Themes: Generate Q Theme**. The generated values are stored as Q-scoped VS
-Code color customizations, so the fixed LCARS
-theme is not changed.
-
-## Saving generated Q themes
-
-While Q is active, run **Esper Themes: Save Current Q Theme** from the Command Palette
-and give the palette a name. Run **Esper Themes: Pick Saved Q Theme** later to restore
-any saved workbench and syntax palette; saved snapshots are kept in the
-extension's global storage and do not create separate theme files.
-
-## Logo
-
-The Marketplace icon (`images/icon.svg`, rasterised to `images/icon.png`) is a
-folded-paper prism splitting one line into three colours, above the Esper
-wordmark, with the prism in Synthwave's palette and the wordmark in Esper amber. `images/logos/` carries the same icon
-(`esper-themes-<theme>.svg`) and the prism on its own (`prism-<theme>.svg`)
-in every theme's background, focus, and token colours.
-
-Each theme also has its own mark (`images/logos/mark-<theme>.svg`), drawn in
-the same thin line from the theme's source material and coloured with its
-palette: the Enterprise-D for LCARS, the eye for Replicant, the drone for
-Oblivion, the sunset grid for Synthwave, the F-14 for Tomcat, Bag End for
-Fellowship, Gargantua for Cooper, a paw for Bluey and Bluey Night, a double
-helix for Helix, and a Q dealt in scrambled colours for the generated theme.
-They appear in the table at the top of this file.
-
-The logos folder is left out of the packaged extension.
+- Pick **Q** as your color theme.
+- Click **Mon Capitan** in the status bar, or run **Esper Themes: Generate Q Theme**, for a new palette.
+- **Esper Themes: Save Current Q Theme** keeps the one you have. **Esper Themes: Pick Saved Q Theme** brings a saved one back.
 
 ## Development
 
-Open this folder in VS Code and press `F5` to launch an Extension Development
-Host. In that window, use **Preferences: Color Theme** and select **LCARS**.
+- `npm run build:themes` rebuilds the fixed themes from the palettes in `scripts/build-themes.js`.
+- `npm run capture:screenshots` retakes the screenshots above.
+- `npm run build:palette-page` regenerates `theme-palettes.html`, a palette and contrast page for every theme.
+- `npm run package:vsix` builds the extension. A push to `master` publishes a release.
 
-The generated `.vscode/launch.json` starts the theme with the same
-Extension Host development-path pattern used by Deckard:
-
-```text
---extensionDevelopmentPath=${workspaceFolder}
-```
-
-## Packaging
-
-Package the extension with:
-
-```sh
-npm ci
-npm run package:vsix
-```
-
-Install the resulting VSIX through **Extensions: Install from VSIX...**.
-
-Pull requests and pushes to `master` are validated and packaged by GitHub
-Actions. A push to `master` creates a GitHub Release and attaches the VSIX
-when the version in `package.json` has not been released before.
-
+Palette choices and the contrast rationale behind them are in `COLOR-ACCESSIBILITY.md`.
