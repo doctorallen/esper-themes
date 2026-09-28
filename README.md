@@ -180,7 +180,7 @@ extension's global storage and do not create separate theme files.
 
 The Marketplace icon (`images/icon.svg`, rasterised to `images/icon.png`) is a
 folded-paper prism splitting one line into three colours, above the Esper
-wordmark, drawn in Replicant's palette. `images/logos/` carries the same icon
+wordmark, drawn in Synthwave's palette. `images/logos/` carries the same icon
 (`esper-themes-<theme>.svg`) and the prism on its own (`prism-<theme>.svg`)
 in every theme's background, focus, and token colours. The logos folder is
 left out of the packaged extension.
