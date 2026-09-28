@@ -176,6 +176,15 @@ and give the palette a name. Run **Esper Themes: Pick Saved Q Theme** later to r
 any saved workbench and syntax palette; saved snapshots are kept in the
 extension's global storage and do not create separate theme files.
 
+## Logo
+
+The Marketplace icon (`images/icon.svg`, rasterised to `images/icon.png`) is a
+folded-paper prism splitting one line into three colours, above the Esper
+wordmark, drawn in Replicant's palette. `images/logos/` carries the same icon
+(`esper-themes-<theme>.svg`) and the prism on its own (`prism-<theme>.svg`)
+in every theme's background, focus, and token colours. The logos folder is
+left out of the packaged extension.
+
 ## Development
 
 Open this folder in VS Code and press `F5` to launch an Extension Development
