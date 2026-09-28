@@ -4,19 +4,19 @@ High-contrast color themes for Visual Studio Code: the LCARS-inspired LCARS
 theme, six film themes carried over from Deckard's webview themes, two Bluey
 themes, Helix, and a generated Q theme.
 
-| Theme | Type | Look |
-| --- | --- | --- |
-| LCARS | Dark | Starfleet console panels. |
-| Replicant | Dark | Near-black night exteriors, with syntax keyed to the 1982 film's own grade: petrol and cyan structure, neon signage for the literals. |
-| Oblivion | Dark | Steel frames and cyan readouts, with orange kept for alerts. |
-| Synthwave | Dark | Neon cyan and hot pink on violet night. |
-| Tomcat | Dark | Green phosphor cockpit display with amber warnings. |
-| Fellowship | Light | Parchment with olive greens and aged gold. |
-| Cooper | Dark | White-on-black instrument readouts and Gargantua's gold. |
-| Bluey | Light | Heeler-family daylight: cream paper, pale blue chrome. |
-| Bluey Night | Dark | The same palette after bedtime, on Bluey's navy. |
-| Helix | Dark | Steel blue, dusty rose and lavender on Replicant's near-black ground, from a 2020 Sublime Text theme. |
-| Q | Dark | A new accessible palette generated on demand. |
+| | Theme | Type | Look |
+| --- | --- | --- | --- |
+| <img src="images/logos/mark-lcars.svg" width="40" height="40" alt=""> | LCARS | Dark | Starfleet console panels. |
+| <img src="images/logos/mark-replicant.svg" width="40" height="40" alt=""> | Replicant | Dark | Near-black night exteriors, with syntax keyed to the 1982 film's own grade: petrol and cyan structure, neon signage for the literals. |
+| <img src="images/logos/mark-oblivion.svg" width="40" height="40" alt=""> | Oblivion | Dark | Steel frames and cyan readouts, with orange kept for alerts. |
+| <img src="images/logos/mark-synthwave.svg" width="40" height="40" alt=""> | Synthwave | Dark | Neon cyan and hot pink on violet night. |
+| <img src="images/logos/mark-tomcat.svg" width="40" height="40" alt=""> | Tomcat | Dark | Green phosphor cockpit display with amber warnings. |
+| <img src="images/logos/mark-fellowship.svg" width="40" height="40" alt=""> | Fellowship | Light | Parchment with olive greens and aged gold. |
+| <img src="images/logos/mark-cooper.svg" width="40" height="40" alt=""> | Cooper | Dark | White-on-black instrument readouts and Gargantua's gold. |
+| <img src="images/logos/mark-bluey.svg" width="40" height="40" alt=""> | Bluey | Light | Heeler-family daylight: cream paper, pale blue chrome. |
+| <img src="images/logos/mark-bluey-night.svg" width="40" height="40" alt=""> | Bluey Night | Dark | The same palette after bedtime, on Bluey's navy. |
+| <img src="images/logos/mark-helix.svg" width="40" height="40" alt=""> | Helix | Dark | Steel blue, dusty rose and lavender on Replicant's near-black ground. A custom theme that has been my friend through many dangers. |
+| <img src="images/logos/mark-q.svg" width="40" height="40" alt=""> | Q | Dark | A new accessible palette generated on demand. |
 
 The root `COLOR-ACCESSIBILITY.md` file records the approved palette, its theme
 roles, and the accessibility rationale for each assignment.
@@ -128,8 +128,9 @@ darkened or lightened only as far as WCAG AA requires.
 
 ## Helix
 
-Helix is the Sublime Text theme David wrote in 2020, carried over to VS Code
-and lived in for years. Its syntax colors are the tmTheme's: steel blue
+Helix is a custom theme that has been my friend through many dangers, carried
+over to VS Code from the editors that came before it. Its syntax colors are
+the original's: steel blue
 `#448AA9` for anything that holds a value (variables, parameters, numbers,
 constants, `storage` keywords and HTML attributes), dusty rose `#AF8787` for
 keywords and library calls, red `#BF5656` for `storage.type`, slate `#748096`
@@ -182,8 +183,17 @@ The Marketplace icon (`images/icon.svg`, rasterised to `images/icon.png`) is a
 folded-paper prism splitting one line into three colours, above the Esper
 wordmark, with the prism in Synthwave's palette and the wordmark in Esper amber. `images/logos/` carries the same icon
 (`esper-themes-<theme>.svg`) and the prism on its own (`prism-<theme>.svg`)
-in every theme's background, focus, and token colours. The logos folder is
-left out of the packaged extension.
+in every theme's background, focus, and token colours.
+
+Each theme also has its own mark (`images/logos/mark-<theme>.svg`), drawn in
+the same thin line from the theme's source material and coloured with its
+palette: the Enterprise-D for LCARS, the eye for Replicant, the drone for
+Oblivion, the sunset grid for Synthwave, the F-14 for Tomcat, Bag End for
+Fellowship, Gargantua for Cooper, a paw for Bluey and Bluey Night, a double
+helix for Helix, and a Q dealt in scrambled colours for the generated theme.
+They appear in the table at the top of this file.
+
+The logos folder is left out of the packaged extension.
 
 ## Development
 

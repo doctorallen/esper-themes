@@ -12,7 +12,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - README screenshots of every theme, regenerated with `npm run capture:screenshots`.
 - Bluey and Bluey Night themes, built from colors sampled out of the Heeler family artwork.
 - `theme-palettes.html` covers every theme, each with its own named palette.
-- Helix theme, the 2020 Sublime Text theme's syntax palette on Replicant's workbench.
+- Helix theme, a long-lived custom syntax palette on Replicant's workbench.
+- A mark for every theme (`images/logos/mark-<theme>.svg`), drawn from its source material in its own colours and shown in the README table.
 
 ### Changed
 
