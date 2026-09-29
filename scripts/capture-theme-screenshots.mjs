@@ -40,6 +40,7 @@ const TAGLINES = {
   Bluey: 'Light. Heeler-family daylight: cream paper, pale blue chrome.',
   'Bluey Night': 'The same palette after bedtime, on Bluey\'s navy.',
   Helix: 'Steel blue, dusty rose and lavender on Replicant\'s near-black. A custom theme that has been my friend through many dangers.',
+  Mix: 'Any theme\'s workbench around any other\'s editor colors. Shown as it ships: Helix around LCARS.',
 };
 const WIDTH = 1920;
 const HEIGHT = 1080;

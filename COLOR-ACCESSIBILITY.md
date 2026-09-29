@@ -159,6 +159,26 @@ overrides carry the same lifted values so they meet the same floor.
 The explorer text is set to lavender `#BD93F9` as a color override, the way
 the old theme had it; at 7.9:1 on the side bar it clears AA on its own.
 
+## Mix
+
+Mix (`themes/Mix-color-theme.json`) is a slot, the way Q is: the file ships as
+Helix's workbench around LCARS's syntax, and the **Esper Themes: Mix Themes**
+command writes whatever pair is chosen into the `[Mix]` scope of
+`workbench.colorCustomizations`, `editor.tokenColorCustomizations` and
+`editor.semanticTokenColorCustomizations`. Every color key, the editor
+background included, comes from the workbench theme; every token rule comes
+from the editor theme.
+
+A theme's syntax colors were chosen against its own editor and washes, so
+`composeThemes` in `q-theme.js` lifts each one against the new ground with the
+same `readable` pass the build uses. The floor for a color is the lower of AA
+(4.5:1) and the contrast it had at home, on its own theme's editor, current
+line, bracket match and changed-text washes. A palette tuned for a near-black
+editor is therefore lifted on parchment, and Replicant's syntax, built to a
+2.9:1 floor by choice, keeps that floor rather than being pulled to AA on a
+ground no darker than its own. Workbench pairs are not re-checked; they are
+taken whole from a theme that already meets AA.
+
 ## Q generated theme
 
 Q is a runtime-generated exception to the fixed approved palette above. Its

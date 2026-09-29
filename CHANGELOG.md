@@ -14,9 +14,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - `theme-palettes.html` covers every theme, each with its own named palette.
 - Helix theme, a long-lived custom syntax palette on Replicant's workbench.
 - A mark for every theme (`images/logos/mark-<theme>.svg`), drawn from its source material in its own colours and shown in the README table.
+- Mix theme and the **Esper Themes: Mix Themes** command: one theme's workbench, editor background included, around another theme's syntax colours, each colour lifted until it reads on the new ground as well as it read on its own.
 
 ### Changed
 
+- The LCARS mark is redrawn from the Enterprise-D blueprints: the phaser strip rings the saucer, the dome section is an egg, the hull flares to a squared stern, the nacelles taper to their bussard caps, and the pylons sweep from the hull's rear flanks.
 - New Marketplace icon: a folded-paper prism splitting one line into three theme colours, above the Esper wordmark; the prism takes Synthwave's palette and the wordmark stays Esper amber. `images/logos/` holds the same icon and the prism alone in every theme's colours.
 - Replicant, Oblivion, Synthwave, Tomcat, and Fellowship follow Deckard's regraded palettes: the fully saturated cyans and greens are softened a step with their hues kept, Fellowship's inks are deepened, and Oblivion's activity bar shares the editor's ground.
 - Renamed the extension from LCARS (`esper-lcars`) to Esper Themes (`esper-themes`); commands are now `esperThemes.*`.

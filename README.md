@@ -74,6 +74,12 @@ Steel blue, dusty rose and lavender on Replicant's near-black. A custom theme th
 
 ![Helix theme](docs/images/themes/helix.png)
 
+### <img src="images/logos/mark-mix.png" width="28" height="28" alt=""> Mix
+
+Any theme's workbench around any other's editor colors. Shown as it ships: Helix around LCARS.
+
+![Mix theme](docs/images/themes/mix.png)
+
 <!-- theme-screenshots:end -->
 
 ## Q
@@ -83,6 +89,14 @@ Q deals a new dark palette on request. Every text pair it generates meets WCAG A
 - Pick **Q** as your color theme.
 - Click **Mon Capitan** in the status bar, or run **Esper Themes: Generate Q Theme**, for a new palette.
 - **Esper Themes: Save Current Q Theme** keeps the one you have. **Esper Themes: Pick Saved Q Theme** brings a saved one back.
+
+## Mix
+
+Mix wears one theme's workbench around another theme's editor colors.
+
+- Pick **Mix** as your color theme. As shipped it is Helix's workbench around LCARS's syntax.
+- Run **Esper Themes: Mix Themes**, or click the pair in the status bar, and choose the theme for the workbench and the theme for the editor colors. The editor background counts as workbench.
+- Syntax colors are lifted where the new ground needs it, so a palette tuned for a near-black editor still reads on parchment.
 
 ## Development
 
