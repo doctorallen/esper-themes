@@ -23,12 +23,14 @@ const {
   MIN_TEXT_CONTRAST,
   alphaComposite,
   buildWorkbenchColors,
+  composeThemes,
   contrastRatio,
-  hslToHex,
   mixHex,
-  relativeLuminance,
+  passes,
+  readable,
   syntaxRoleForSemanticToken,
   syntaxRoleForToken,
+  toHsl,
 } = require("../q-theme");
 
 const ROOT = path.join(__dirname, "..");
@@ -626,61 +628,6 @@ const TOKEN_ROLE_OVERRIDES = {
 };
 const SEMANTIC_ROLE_OVERRIDES = { typeParameter: "type" };
 
-function passes(color, backgrounds, floor = MIN_TEXT_CONTRAST) {
-  return backgrounds.every(background => contrastRatio(color, background) >= floor);
-}
-
-function toHsl(color) {
-  const [red, green, blue] = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16) / 255);
-  const max = Math.max(red, green, blue);
-  const min = Math.min(red, green, blue);
-  const lightness = (max + min) / 2;
-  const span = max - min;
-  if (span === 0) {
-    return { hue: 0, saturation: 0, lightness };
-  }
-  const saturation = span / (1 - Math.abs(2 * lightness - 1));
-  const hue =
-    max === red
-      ? 60 * (((green - blue) / span) % 6)
-      : max === green
-        ? 60 * ((blue - red) / span + 2)
-        : 60 * ((red - green) / span + 4);
-  return { hue, saturation, lightness };
-}
-
-/**
- * Darkens (or lightens) `color` until it reads on every background, keeping its
- * hue and holding on to its saturation. Blending toward the theme's foreground
- * instead would pull every hue to the same washed-out dark, which is what makes
- * a pastel palette unreadable as syntax colors on a light ground.
- */
-function readable(color, backgrounds, target, floor = MIN_TEXT_CONTRAST) {
-  if (passes(color, backgrounds, floor)) {
-    return color.toUpperCase();
-  }
-  const { hue, saturation, lightness } = toHsl(color);
-  const towardDark = relativeLuminance(target) < relativeLuminance(color);
-  for (let step = 1; step <= 48; step += 1) {
-    const nextLightness = towardDark ? lightness - step * 0.02 : lightness + step * 0.02;
-    if (nextLightness <= 0.04 || nextLightness >= 0.97) {
-      break;
-    }
-    // Saturation rises as the color darkens, so the hue stays recognizable.
-    const candidate = hslToHex(hue, Math.min(1, saturation * (1 + step * 0.03)), nextLightness);
-    if (passes(candidate, backgrounds, floor)) {
-      return candidate.toUpperCase();
-    }
-  }
-  for (let step = 0; step <= 20; step += 1) {
-    const candidate = mixHex(color, target, step / 20);
-    if (passes(candidate, backgrounds, floor)) {
-      return candidate.toUpperCase();
-    }
-  }
-  throw new Error(`No readable variant of ${color} on ${backgrounds.join(", ")}.`);
-}
-
 /** The first candidate that reads on every background, else the strongest. */
 function pickForeground(backgrounds, candidates) {
   const found = candidates.find(candidate => passes(candidate, backgrounds));
@@ -939,9 +886,18 @@ function uppercaseColors(colors) {
   );
 }
 
+const built = {};
 for (const spec of THEMES) {
   const theme = buildTheme(spec);
+  built[spec.name] = theme;
   const file = path.join(ROOT, "themes", `${spec.name.replace(/\s+/g, "-")}-color-theme.json`);
   fs.writeFileSync(file, `${JSON.stringify(theme, null, 2)}\n`);
   console.log(`wrote ${path.relative(ROOT, file)}`);
 }
+
+// Mix ships as Helix's workbench around LCARS's syntax; the extension's Mix
+// Themes command replaces it at runtime with whatever pair is chosen.
+const mix = composeThemes(built.Helix, TEMPLATE, "Mix");
+const mixFile = path.join(ROOT, "themes", "Mix-color-theme.json");
+fs.writeFileSync(mixFile, `${JSON.stringify(mix, null, 2)}\n`);
+console.log(`wrote ${path.relative(ROOT, mixFile)}`);
