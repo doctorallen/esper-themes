@@ -2,7 +2,7 @@
 
 const path = require("path");
 const vscode = require("vscode");
-const { generateQTheme } = require("./q-theme");
+const { composeThemes, generateQTheme } = require("./q-theme");
 const manifest = require("./package.json");
 const qThemeTemplate = require("./themes/Q-color-theme.json");
 
@@ -16,6 +16,14 @@ const GENERATED_TOKEN_RULE_PREFIX = "Esper Themes Q generated token ";
 // Rules written before the extension was renamed from LCARS still need cleanup.
 const LEGACY_GENERATED_TOKEN_RULE_PREFIX = "LCARS Q generated token ";
 const SAVED_Q_THEMES_KEY = "savedQThemes";
+// Mix wears one theme's workbench around another theme's editor colors. Like
+// Q, its theme file is only a starting point; the chosen pair is written into
+// its settings scope.
+const MIX_COMMAND = "esperThemes.mixThemes";
+const MIX_THEME_NAME = "Mix";
+const MIX_SCOPE = "[Mix]";
+const MIX_TOKEN_RULE_PREFIX = "Esper Themes Mix token ";
+const LAST_MIX_KEY = "lastMix";
 // VS Code's Modern UI draws the active editor tab's top and bottom strokes only
 // from workbench.colorCustomizations, never from a theme file, so the fixed
 // themes copy these roles into their theme-scoped settings.
@@ -28,6 +36,9 @@ const MODERN_TAB_BORDER_KEYS = [
   "tab.selectedBorderTop",
 ];
 const FIXED_THEMES = manifest.contributes.themes.filter(theme => theme.label !== "Q");
+// What a mix can draw on: every contributed theme but Mix itself. Q counts,
+// and contributes whatever palette it is currently showing.
+const MIX_SOURCES = manifest.contributes.themes.filter(theme => theme.label !== MIX_THEME_NAME);
 const MAX_SAVED_Q_THEMES = 50;
 const Q_GENERATION_MESSAGES = [
   "The trial never ends.",
@@ -43,6 +54,7 @@ const Q_GENERATION_MESSAGES = [
 ];
 
 let statusBarItem;
+let mixStatusBarItem;
 let generationInProgress = false;
 let generationPromise;
 let extensionContext;
@@ -52,6 +64,10 @@ function isGeneratedTokenRuleName(name) {
     name.startsWith(GENERATED_TOKEN_RULE_PREFIX) ||
     name.startsWith(LEGACY_GENERATED_TOKEN_RULE_PREFIX)
   );
+}
+
+function isMixTokenRuleName(name) {
+  return name.startsWith(MIX_TOKEN_RULE_PREFIX);
 }
 
 function isRecord(value) {
@@ -67,6 +83,14 @@ function isQThemeActive() {
   return (
     themeName === THEME_NAME ||
     (typeof themeName === "string" && /(?:^|[/\\])Q-color-theme\.json$/i.test(themeName))
+  );
+}
+
+function isMixThemeActive() {
+  const themeName = vscode.workspace.getConfiguration("workbench").get("colorTheme");
+  return (
+    themeName === MIX_THEME_NAME ||
+    (typeof themeName === "string" && /(?:^|[/\\])Mix-color-theme\.json$/i.test(themeName))
   );
 }
 
@@ -140,42 +164,48 @@ function getCurrentQTheme() {
   };
 }
 
-async function updateThemeScopedSetting(section, overrides) {
+/**
+ * Writes `overrides` into one theme's scope of a customization setting. Q
+ * merges over what is there; Mix replaces the scope, since a new pair may have
+ * a different set of keys from the last.
+ */
+async function updateThemeScopedSetting(section, overrides, scope = THEME_SCOPE, replace = false) {
   const customizations = getGlobalSetting(section);
-  const currentScope = isRecord(customizations[THEME_SCOPE]) ? customizations[THEME_SCOPE] : {};
-  customizations[THEME_SCOPE] = { ...currentScope, ...overrides };
+  const currentScope = !replace && isRecord(customizations[scope]) ? customizations[scope] : {};
+  customizations[scope] = { ...currentScope, ...overrides };
   await vscode.workspace
     .getConfiguration()
     .update(section, customizations, vscode.ConfigurationTarget.Global);
 }
 
-function tokenColorOverrides(generated) {
+function tokenColorOverrides(generated, prefix = GENERATED_TOKEN_RULE_PREFIX) {
   return generated.tokenColors
     .filter(entry => entry.settings && typeof entry.settings.foreground === "string")
     .map((entry, index) => ({
-      name: `${GENERATED_TOKEN_RULE_PREFIX}${index}`,
+      name: `${prefix}${index}`,
       scope: entry.scope,
       settings: { foreground: entry.settings.foreground },
     }));
 }
 
-async function updateTokenColors(generated) {
+/** Replaces the rules this extension wrote into a theme's scope, keeping the user's own. */
+async function updateTokenColors(
+  generated,
+  scope = THEME_SCOPE,
+  prefix = GENERATED_TOKEN_RULE_PREFIX,
+  isOwnRule = isGeneratedTokenRuleName
+) {
   const customizations = getGlobalSetting("editor.tokenColorCustomizations");
-  const currentScope = isRecord(customizations[THEME_SCOPE]) ? customizations[THEME_SCOPE] : {};
+  const currentScope = isRecord(customizations[scope]) ? customizations[scope] : {};
   const existingRules = Array.isArray(currentScope.textMateRules)
     ? currentScope.textMateRules.filter(
-        rule =>
-          !(
-            isRecord(rule) &&
-            typeof rule.name === "string" &&
-            isGeneratedTokenRuleName(rule.name)
-          )
+        rule => !(isRecord(rule) && typeof rule.name === "string" && isOwnRule(rule.name))
       )
     : [];
 
-  customizations[THEME_SCOPE] = {
+  customizations[scope] = {
     ...currentScope,
-    textMateRules: [...existingRules, ...tokenColorOverrides(generated)],
+    textMateRules: [...existingRules, ...tokenColorOverrides(generated, prefix)],
   };
   await vscode.workspace
     .getConfiguration()
@@ -186,12 +216,12 @@ async function updateTokenColors(generated) {
     );
 }
 
-async function updateSemanticTokenColors(generated) {
+async function updateSemanticTokenColors(generated, scope = THEME_SCOPE, replace = false) {
   const customizations = getGlobalSetting("editor.semanticTokenColorCustomizations");
-  const currentScope = isRecord(customizations[THEME_SCOPE]) ? customizations[THEME_SCOPE] : {};
-  const currentRules = isRecord(currentScope.rules) ? currentScope.rules : {};
+  const currentScope = isRecord(customizations[scope]) ? customizations[scope] : {};
+  const currentRules = !replace && isRecord(currentScope.rules) ? currentScope.rules : {};
 
-  customizations[THEME_SCOPE] = {
+  customizations[scope] = {
     ...currentScope,
     rules: { ...currentRules, ...generated.semanticTokenColors },
   };
@@ -204,24 +234,21 @@ async function updateSemanticTokenColors(generated) {
     );
 }
 
-async function setActiveQTheme() {
+async function setActiveTheme(name) {
   await vscode.workspace
     .getConfiguration("workbench")
-    .update("colorTheme", THEME_NAME, vscode.ConfigurationTarget.Global);
+    .update("colorTheme", name, vscode.ConfigurationTarget.Global);
 }
 
-async function refreshActiveQTheme() {
+/** VS Code only re-reads a theme's customizations on a theme change, so step away and back. */
+async function refreshActiveTheme(name) {
   const workbenchConfiguration = vscode.workspace.getConfiguration("workbench");
   await workbenchConfiguration.update(
     "colorTheme",
     THEME_REFRESH_FALLBACK,
     vscode.ConfigurationTarget.Global
   );
-  await workbenchConfiguration.update(
-    "colorTheme",
-    THEME_NAME,
-    vscode.ConfigurationTarget.Global
-  );
+  await workbenchConfiguration.update("colorTheme", name, vscode.ConfigurationTarget.Global);
 }
 
 async function applyQTheme(generated, switchToQ) {
@@ -230,9 +257,117 @@ async function applyQTheme(generated, switchToQ) {
   await updateSemanticTokenColors(generated);
 
   if (switchToQ && !isQThemeActive()) {
-    await setActiveQTheme();
+    await setActiveTheme(THEME_NAME);
   } else if (isQThemeActive()) {
-    await refreshActiveQTheme();
+    await refreshActiveTheme(THEME_NAME);
+  }
+}
+
+/** A theme as a mix source: its file, or for Q the palette it is showing now. */
+function loadMixSource(theme) {
+  if (theme.label === THEME_NAME) {
+    return getCurrentQTheme() || clone(qThemeTemplate);
+  }
+  return require(path.join(__dirname, theme.path));
+}
+
+function getLastMix() {
+  const last = extensionContext ? extensionContext.globalState.get(LAST_MIX_KEY) : undefined;
+  return isRecord(last) && typeof last.workbench === "string" && typeof last.editor === "string"
+    ? last
+    : undefined;
+}
+
+async function applyMix(workbenchTheme, editorTheme) {
+  const mixed = composeThemes(
+    loadMixSource(workbenchTheme),
+    loadMixSource(editorTheme),
+    MIX_THEME_NAME
+  );
+  await updateThemeScopedSetting("workbench.colorCustomizations", mixed.colors, MIX_SCOPE, true);
+  await updateTokenColors(mixed, MIX_SCOPE, MIX_TOKEN_RULE_PREFIX, isMixTokenRuleName);
+  await updateSemanticTokenColors(mixed, MIX_SCOPE, true);
+  if (extensionContext) {
+    await extensionContext.globalState.update(LAST_MIX_KEY, {
+      workbench: workbenchTheme.label,
+      editor: editorTheme.label,
+    });
+  }
+
+  if (isMixThemeActive()) {
+    await refreshActiveTheme(MIX_THEME_NAME);
+  } else {
+    await setActiveTheme(MIX_THEME_NAME);
+  }
+  updateMixStatusBar();
+}
+
+async function pickMixSource(part, label, lastLabel) {
+  if (typeof label === "string") {
+    const theme = MIX_SOURCES.find(candidate => candidate.label === label);
+    if (!theme) {
+      throw new Error(`Unknown theme "${label}".`);
+    }
+    return theme;
+  }
+  const selected = await vscode.window.showQuickPick(
+    MIX_SOURCES.map(theme => ({
+      label: theme.label,
+      description: theme.label === lastLabel ? "last used" : undefined,
+      theme,
+    })),
+    {
+      title: part === "workbench" ? "Mix Themes: workbench" : "Mix Themes: editor colors",
+      placeHolder:
+        part === "workbench"
+          ? "Which theme's workbench? (chrome, panels and the editor background)"
+          : "Which theme's editor colors? (syntax for code and markdown)",
+    }
+  );
+  return selected ? selected.theme : undefined;
+}
+
+function updateMixStatusBar() {
+  if (!mixStatusBarItem) {
+    return;
+  }
+  if (!isMixThemeActive()) {
+    mixStatusBarItem.hide();
+    return;
+  }
+  // Before the first mix, the theme file is Helix's workbench around LCARS.
+  const last = getLastMix() || { workbench: "Helix", editor: "LCARS" };
+  mixStatusBarItem.text = `${last.workbench} ⨯ ${last.editor}`;
+  mixStatusBarItem.tooltip = "Workbench ⨯ editor colors. Click to mix two themes.";
+  mixStatusBarItem.show();
+}
+
+function reportMixError(error) {
+  const message = error instanceof Error ? error.message : String(error);
+  void vscode.window.showErrorMessage(`Unable to mix themes: ${message}`);
+}
+
+/** Two picks, or two labels when run programmatically. */
+async function runMixCommand(workbenchLabel, editorLabel) {
+  try {
+    if (generationPromise) {
+      await generationPromise;
+    }
+    const last = getLastMix();
+    const workbenchTheme = await pickMixSource("workbench", workbenchLabel, last && last.workbench);
+    if (!workbenchTheme) {
+      return;
+    }
+    const editorTheme = await pickMixSource("editor", editorLabel, last && last.editor);
+    if (!editorTheme) {
+      return;
+    }
+    await applyMix(workbenchTheme, editorTheme);
+    await vscode.window.showInformationMessage(
+      `Mix applied: ${workbenchTheme.label}'s workbench around ${editorTheme.label}'s editor colors.`
+    );
+  } catch (error) {
+    reportMixError(error);
   }
 }
 
@@ -245,6 +380,7 @@ function updateStatusBarVisibility() {
   } else {
     statusBarItem.hide();
   }
+  updateMixStatusBar();
 }
 
 function randomQGenerationMessage() {
@@ -444,9 +580,20 @@ async function activate(context) {
     role: "button",
   };
 
+  mixStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 99);
+  mixStatusBarItem.name = "Mix Themes";
+  mixStatusBarItem.command = MIX_COMMAND;
+  mixStatusBarItem.accessibilityInformation = {
+    label: "Mix themes",
+    role: "button",
+  };
+
+  extensionContext = context;
   context.subscriptions.push(
     statusBarItem,
+    mixStatusBarItem,
     vscode.commands.registerCommand(COMMAND, runGenerateCommand),
+    vscode.commands.registerCommand(MIX_COMMAND, runMixCommand),
     vscode.commands.registerCommand(SAVE_COMMAND, runSaveQThemeCommand),
     vscode.commands.registerCommand(PICK_COMMAND, runPickSavedQThemeCommand),
     vscode.window.onDidChangeActiveColorTheme(() => synchronizeThemes()),
@@ -461,7 +608,6 @@ async function activate(context) {
     })
   );
 
-  extensionContext = context;
   synchronizeThemes();
 }
 

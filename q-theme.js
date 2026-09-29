@@ -949,6 +949,128 @@ function generateQTheme(template, random = Math.random) {
   };
 }
 
+function passes(color, backgrounds, floor = MIN_TEXT_CONTRAST) {
+  return backgrounds.every(background => contrastRatio(color, background) >= floor);
+}
+
+function toHsl(color) {
+  const [red, green, blue] = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16) / 255);
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  const lightness = (max + min) / 2;
+  const span = max - min;
+  if (span === 0) {
+    return { hue: 0, saturation: 0, lightness };
+  }
+  const saturation = span / (1 - Math.abs(2 * lightness - 1));
+  const hue =
+    max === red
+      ? 60 * (((green - blue) / span) % 6)
+      : max === green
+        ? 60 * ((blue - red) / span + 2)
+        : 60 * ((red - green) / span + 4);
+  return { hue, saturation, lightness };
+}
+
+/**
+ * Darkens (or lightens) `color` until it reads on every background, keeping its
+ * hue and holding on to its saturation. Blending toward the theme's foreground
+ * instead would pull every hue to the same washed-out dark, which is what makes
+ * a pastel palette unreadable as syntax colors on a light ground.
+ */
+function readable(color, backgrounds, target, floor = MIN_TEXT_CONTRAST) {
+  if (passes(color, backgrounds, floor)) {
+    return color.toUpperCase();
+  }
+  const { hue, saturation, lightness } = toHsl(color);
+  const towardDark = relativeLuminance(target) < relativeLuminance(color);
+  for (let step = 1; step <= 48; step += 1) {
+    const nextLightness = towardDark ? lightness - step * 0.02 : lightness + step * 0.02;
+    if (nextLightness <= 0.04 || nextLightness >= 0.97) {
+      break;
+    }
+    // Saturation rises as the color darkens, so the hue stays recognizable.
+    const candidate = hslToHex(hue, Math.min(1, saturation * (1 + step * 0.03)), nextLightness);
+    if (passes(candidate, backgrounds, floor)) {
+      return candidate.toUpperCase();
+    }
+  }
+  for (let step = 0; step <= 20; step += 1) {
+    const candidate = mixHex(color, target, step / 20);
+    if (passes(candidate, backgrounds, floor)) {
+      return candidate.toUpperCase();
+    }
+  }
+  throw new Error(`No readable variant of ${color} on ${backgrounds.join(", ")}.`);
+}
+
+// The washes real code sits on: the current line, a matched bracket, and the
+// changed text of a diff or an inline edit. Each is composited onto the editor
+// so syntax colors can be held to a contrast on it.
+const SYNTAX_WASH_KEYS = [
+  "editor.lineHighlightBackground",
+  "editorBracketMatch.background",
+  "diffEditor.insertedTextBackground",
+  "diffEditor.removedTextBackground",
+  "inlineEdit.modifiedChangedTextBackground",
+  "inlineEdit.originalChangedTextBackground",
+];
+
+/** The editor background and every wash a theme paints over it, as opaque colors. */
+function syntaxBackgrounds(colors) {
+  const editor = colors["editor.background"];
+  const washes = SYNTAX_WASH_KEYS.map(key => colors[key])
+    .filter(value => typeof value === "string" && /^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(value))
+    .map(value =>
+      value.length === 9 ? alphaComposite(value.slice(0, 7), editor, value.slice(7)) : value
+    );
+  return [editor, ...washes].map(color => color.toUpperCase());
+}
+
+/**
+ * One theme's workbench under another theme's syntax. Every color key comes
+ * from `workbench`, including the editor background; every token rule comes
+ * from `editor`. Each syntax color is then lifted until it reads on the new
+ * ground at least as well as it read on its own, up to AA, so a palette tuned
+ * for a near-black editor survives a move onto parchment, and a theme that
+ * chose a lower floor for itself keeps it.
+ */
+function composeThemes(workbench, editor, name = "Mix") {
+  const colors = clone(workbench.colors);
+  const backgrounds = syntaxBackgrounds(colors);
+  const home = syntaxBackgrounds(editor.colors);
+  const target = colors["editor.foreground"] || colors.foreground;
+  const lift = color => {
+    const atHome = Math.min(...home.map(background => contrastRatio(color, background)));
+    const floor = Math.min(MIN_TEXT_CONTRAST, atHome);
+    try {
+      return readable(color, backgrounds, target, floor);
+    } catch {
+      return target;
+    }
+  };
+  const tokenColors = clone(editor.tokenColors || []).map(rule => {
+    if (rule.settings && typeof rule.settings.foreground === "string") {
+      rule.settings.foreground = lift(rule.settings.foreground);
+    }
+    return rule;
+  });
+  const semanticTokenColors = Object.fromEntries(
+    Object.entries(editor.semanticTokenColors || {}).map(([key, value]) => [
+      key,
+      typeof value === "string" ? lift(value) : clone(value),
+    ])
+  );
+  return {
+    name,
+    type: workbench.type || "dark",
+    semanticHighlighting: true,
+    colors,
+    tokenColors,
+    semanticTokenColors,
+  };
+}
+
 module.exports = {
   DEBUGGING_STATUS_BACKGROUND,
   DEBUGGING_STATUS_FOREGROUND,
@@ -956,8 +1078,13 @@ module.exports = {
   alphaComposite,
   buildWorkbenchColors,
   contrastRatio,
+  composeThemes,
   generateQTheme,
   mixHex,
+  passes,
+  readable,
+  syntaxBackgrounds,
+  toHsl,
   syntaxRoleForSemanticToken,
   syntaxRoleForToken,
   withAlpha,
