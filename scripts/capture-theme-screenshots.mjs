@@ -553,7 +553,7 @@ function updateReadme() {
       const image = relative(repositoryRoot, join(imageDirectory, `${slug(theme.label)}.png`));
       const mark = `images/logos/mark-${slug(theme.label)}.png`;
       const heading = existsSync(join(repositoryRoot, mark))
-        ? `### <img src="${mark}" width="28" height="28" alt=""> ${theme.label}`
+        ? `### <img src="${mark}" width="64" height="64" alt=""> ${theme.label}`
         : `### ${theme.label}`;
       const tagline = TAGLINES[theme.label];
       return `${heading}\n\n${tagline ? `${tagline}\n\n` : ''}![${theme.label} theme](${image})`;
