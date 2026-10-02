@@ -136,6 +136,21 @@ function quietTo(color, background, target) {
   return quiet;
 }
 
+/**
+ * The "bright" step of a terminal color: moved toward the foreground until it
+ * reads as a different color from the normal one, so emphasis in CLI output
+ * survives. On a dark ground that is lighter; on a light ground, deeper.
+ */
+function brighterStep(color, foreground) {
+  for (let step = 5; step <= 12; step += 1) {
+    const candidate = mixHex(color, foreground, step / 20);
+    if (colorDistance(color, candidate) >= 8) {
+      return candidate;
+    }
+  }
+  return mixHex(color, foreground, 0.6);
+}
+
 /** OKLab coordinates of a hex color, for perceptual distance between roles. */
 function toOklab(color) {
   const { red, green, blue } = parseHex(color);
@@ -148,6 +163,35 @@ function toOklab(color) {
     1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
     0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
   ];
+}
+
+// Machado, Oliveira and Fernandes (2009), full severity, applied in linear RGB:
+// how a color reads to a viewer without working long (protan) or medium
+// (deutan) cones, the two common forms of red-green color blindness.
+const CVD_MATRICES = {
+  protanopia: [
+    [0.152286, 1.052583, -0.204868],
+    [0.114503, 0.786281, 0.099216],
+    [-0.003882, -0.048116, 1.051998],
+  ],
+  deuteranopia: [
+    [0.367322, 0.860646, -0.227968],
+    [0.280085, 0.672501, 0.047413],
+    [-0.01182, 0.04294, 0.968881],
+  ],
+};
+
+/** `color` as a viewer with the given color-vision deficiency sees it. */
+function simulateCvd(color, kind) {
+  const { red, green, blue } = parseHex(color);
+  const linear = [red, green, blue].map(channelLuminance);
+  return `#${CVD_MATRICES[kind]
+    .map(row => {
+      const c = Math.max(0, Math.min(1, row[0] * linear[0] + row[1] * linear[1] + row[2] * linear[2]));
+      const encoded = c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+      return Math.round(encoded * 255).toString(16).padStart(2, "0");
+    })
+    .join("")}`;
 }
 
 /** Perceptual distance between two colors, OKLab ΔE × 100. */
@@ -826,20 +870,23 @@ function buildWorkbenchColors(templateColors, palette) {
     "terminal.background": editorBackground,
     "terminal.foreground": foreground,
     "terminalCursor.foreground": primary,
+    // Git, test runners and `ls` mark emphasis with the bright half of the
+    // palette, so each bright color is a visible step toward the foreground
+    // rather than a repeat of the normal one.
     "terminal.ansiBlack": mutedForeground,
-    "terminal.ansiBrightBlack": mutedForeground,
+    "terminal.ansiBrightBlack": brighterStep(mutedForeground, foreground),
     "terminal.ansiRed": error,
-    "terminal.ansiBrightRed": error,
+    "terminal.ansiBrightRed": brighterStep(error, foreground),
     "terminal.ansiGreen": success,
-    "terminal.ansiBrightGreen": success,
+    "terminal.ansiBrightGreen": brighterStep(success, foreground),
     "terminal.ansiYellow": warning,
-    "terminal.ansiBrightYellow": warning,
+    "terminal.ansiBrightYellow": brighterStep(warning, foreground),
     "terminal.ansiBlue": info,
-    "terminal.ansiBrightBlue": info,
+    "terminal.ansiBrightBlue": brighterStep(info, foreground),
     "terminal.ansiMagenta": secondary,
-    "terminal.ansiBrightMagenta": secondary,
+    "terminal.ansiBrightMagenta": brighterStep(secondary, foreground),
     "terminal.ansiCyan": primary,
-    "terminal.ansiBrightCyan": primary,
+    "terminal.ansiBrightCyan": brighterStep(primary, foreground),
     "terminal.ansiWhite": mutedForeground,
     "terminal.ansiBrightWhite": foreground,
     // Changed code reads as a wash, not as an outline. Bordering every changed
@@ -889,6 +936,67 @@ function buildWorkbenchColors(templateColors, palette) {
     "gitDecoration.modifiedResourceForeground": warning,
     "gitDecoration.deletedResourceForeground": error,
     "gitDecoration.untrackedResourceForeground": success,
+    "gitDecoration.ignoredResourceForeground": mutedForeground,
+    "gitDecoration.conflictingResourceForeground": error,
+
+    // Every key below is one VS Code would otherwise fill with its own stock
+    // blues and oranges, which belong to no palette here.
+    // Matched characters in Quick Open, the Explorer filter and every list.
+    "list.highlightForeground": secondary,
+    "list.focusHighlightForeground": primaryForeground,
+    // Search and symbol washes sit under code, so they stay light and the
+    // build holds syntax colors to their floor over each of them.
+    "editor.findMatchBackground": withAlpha(secondary, "40"),
+    "editor.findMatchBorder": secondary,
+    "editor.findMatchHighlightBackground": withAlpha(secondary, "26"),
+    "editor.findRangeHighlightBackground": withAlpha(raisedBackground, "80"),
+    "editor.selectionHighlightBackground": withAlpha(primary, "1F"),
+    "editor.wordHighlightBackground": withAlpha(info, "1F"),
+    "editor.wordHighlightStrongBackground": withAlpha(secondary, "1F"),
+    "editor.hoverHighlightBackground": withAlpha(info, "1F"),
+    "editor.rangeHighlightBackground": withAlpha(raisedBackground, "80"),
+    // Peek views open an editor inside the editor; its code sits on the
+    // theme's own editor ground so the syntax keeps its guarantee.
+    "peekView.border": primary,
+    "peekViewTitle.background": raisedBackground,
+    "peekViewTitleLabel.foreground": foreground,
+    "peekViewTitleDescription.foreground": mutedForeground,
+    "peekViewEditor.background": editorBackground,
+    "peekViewEditorGutter.background": editorBackground,
+    "peekViewEditor.matchHighlightBackground": withAlpha(secondary, "26"),
+    "peekViewResult.background": sidebarBackground,
+    "peekViewResult.fileForeground": foreground,
+    "peekViewResult.lineForeground": mutedForeground,
+    "peekViewResult.selectionBackground": withAlpha(primary, "40"),
+    "peekViewResult.selectionForeground": listHoverForeground,
+    "peekViewResult.matchHighlightBackground": withAlpha(secondary, "26"),
+    // The modified mark joins the added and deleted ones the gutter already had.
+    "editorGutter.modifiedBackground": warning,
+    "minimapGutter.addedBackground": success,
+    "minimapGutter.modifiedBackground": warning,
+    "minimapGutter.deletedBackground": error,
+    "editorInlayHint.foreground": mutedForeground,
+    "editorInlayHint.background": raisedBackground,
+    // Merge conflicts read like a diff: the current side takes the added
+    // color, the incoming side the info color, both as washes.
+    "merge.currentHeaderBackground": withAlpha(success, "33"),
+    "merge.currentContentBackground": withAlpha(success, "14"),
+    "merge.incomingHeaderBackground": withAlpha(info, "33"),
+    "merge.incomingContentBackground": withAlpha(info, "14"),
+    "merge.border": structuralBorder,
+    "editorOverviewRuler.currentContentForeground": success,
+    "editorOverviewRuler.incomingContentForeground": info,
+    "progressBar.background": primary,
+    "scrollbarSlider.background": withAlpha(mutedForeground, "33"),
+    "scrollbarSlider.hoverBackground": withAlpha(mutedForeground, "55"),
+    "scrollbarSlider.activeBackground": withAlpha(primary, "66"),
+    "editorGroup.border": structuralBorder,
+    "inputValidation.errorBorder": error,
+    "inputValidation.errorBackground": widgetBackground,
+    "inputValidation.warningBorder": warning,
+    "inputValidation.warningBackground": widgetBackground,
+    "inputValidation.infoBorder": info,
+    "inputValidation.infoBackground": widgetBackground,
   });
 
   return colors;
@@ -1131,6 +1239,12 @@ function readable(color, backgrounds, target, floor = MIN_TEXT_CONTRAST) {
 const SYNTAX_WASH_KEYS = [
   "editor.lineHighlightBackground",
   "editorBracketMatch.background",
+  "editor.findMatchHighlightBackground",
+  "editor.selectionHighlightBackground",
+  "editor.wordHighlightBackground",
+  "editor.wordHighlightStrongBackground",
+  "merge.currentContentBackground",
+  "merge.incomingContentBackground",
   "diffEditor.insertedTextBackground",
   "diffEditor.removedTextBackground",
   "inlineEdit.modifiedChangedTextBackground",
@@ -1201,12 +1315,14 @@ module.exports = {
   colorDistance,
   contrastRatio,
   composeThemes,
+  CVD_MATRICES,
   derivedSyntaxRoles,
   generateQTheme,
   mixHex,
   passes,
   quietTo,
   readable,
+  simulateCvd,
   syntaxBackgrounds,
   toHsl,
   toOklab,

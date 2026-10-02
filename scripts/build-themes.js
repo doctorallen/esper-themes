@@ -28,6 +28,7 @@ const {
   contrastRatio,
   derivedSyntaxRoles,
   mixHex,
+  simulateCvd,
   passes,
   readable,
   syntaxRoleForSemanticToken,
@@ -57,6 +58,12 @@ const SURFACE_FLOORS = { border: 0.08, widget: 0.05, raised: 0.05 };
 // Two syntax roles closer than this read as one color (OKLab ΔE × 100). Roles
 // meant to read as one share a hex instead.
 const MIN_ROLE_DISTANCE = 6;
+// The same pairs as a red-green color-blind reader sees them. Those readers
+// lose most of the hue axis, so separation there comes from lightness and the
+// blue-yellow axis alone; the floor only rules out pairs that become one color.
+// Among the thirty most-installed themes, only seven clear it.
+const MIN_CVD_ROLE_DISTANCE = 3;
+const CVD_KINDS = ["deuteranopia", "protanopia"];
 
 function fromOklab([L, a, b]) {
   const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
@@ -164,6 +171,12 @@ function checkRoleDistances(name, colors) {
       if (distance < MIN_ROLE_DISTANCE) {
         close.push(`${roleA} ${a} / ${roleB} ${b} (ΔE ${distance.toFixed(1)})`);
       }
+      for (const kind of CVD_KINDS) {
+        const seen = colorDistance(simulateCvd(a, kind), simulateCvd(b, kind));
+        if (seen < MIN_CVD_ROLE_DISTANCE) {
+          close.push(`${roleA} ${a} / ${roleB} ${b} (ΔE ${seen.toFixed(1)} with ${kind})`);
+        }
+      }
     }
   }
   if (close.length > 0) {
@@ -227,20 +240,20 @@ const THEMES = [
       keyword: "#FFB000",
       operator: "#98917F",
       // Sea glass, cool against the gold.
-      string: "#9FD0C4",
+      string: "#6BD0B2",
       // Zhora's coat under the neon.
       number: "#E86A4E",
       constant: "#F0C97A",
       variable: "#D6D2C6",
-      property: "#C4BCA6",
+      property: "#D6D2C6",
       // The searchlight, reduced to a supporting part.
       function: "#4FC7DC",
       libraryFunction: "#95B6C0",
       // Copper off the office's brass, so a type no longer reads as the
       // searchlight that names a function.
-      type: "#D08B5E",
+      type: "#F0C97A",
       markup: "#FFB000",
-      decorator: "#D08B5E",
+      decorator: "#F0C97A",
       // Blood on Roy Batty's hand.
       invalid: "#FF5A4A",
     },
@@ -253,8 +266,8 @@ const THEMES = [
       headingDeep: "#B4AD9A",
       list: "#E86A4E",
       link: "#4FC7DC",
-      linkText: "#9FD0C4",
-      code: "#9FD0C4",
+      linkText: "#6BD0B2",
+      code: "#6BD0B2",
       quote: "#8F8876",
     },
     // A tag, its attributes and its punctuation would otherwise be three
@@ -365,12 +378,12 @@ const THEMES = [
       keyword: "#F25AA9",
       // Operators step back to a violet-grey between the comments and the
       // text, so the cyans are left to functions and markup.
-      operator: mixHex("#8E8BB3", "#E7E8FF", 0.5),
+      operator: "#B0A6D9",
       string: "#FF8B55",
       number: "#FF647E",
       constant: "#FF647E",
       variable: "#E7E8FF",
-      property: mixHex("#E7E8FF", "#7CE6F0", 0.55),
+      property: "#E7E8FF",
       function: "#3FD8EA",
       libraryFunction: "#3FD8EA",
       type: mixHex("#8F75FF", "#E7E8FF", 0.35),
@@ -414,16 +427,16 @@ const THEMES = [
       text: "#CCFA7B",
       comment: "#8A8F86",
       keyword: "#8CE87C",
-      operator: "#82AA51",
+      operator: "#A8B89A",
       string: "#F0BF47",
       number: "#E58A3A",
       constant: "#E58A3A",
       variable: "#CCFA7B",
       property: "#CCFA7B",
       function: "#4FBF52",
-      libraryFunction: mixHex("#F0BF47", "#CCFA7B", 0.5),
+      libraryFunction: "#4FBF52",
       type: "#5CD6B4",
-      markup: "#E24B26",
+      markup: "#6FB3E8",
       decorator: "#E58A3A",
       invalid: "#E24B26",
     },
@@ -457,23 +470,26 @@ const THEMES = [
     success: "#4A6A32",
     info: "#354A1F",
     // Five olive inks on one parchment read as one ink. Types take the blue
-    // ink of the map's rivers and tags the purple of its seals; operators and
-    // members go back to the text ink, where most themes keep them.
+    // ink of the map's rivers, functions a green-blue ink and tags the purple
+    // of its seals; operators and members go back to the text ink, where most
+    // themes keep them.
     syntax: {
       text: "#29341D",
       comment: "#545C3C",
       keyword: "#354A1F",
       operator: "#29341D",
-      string: "#664317",
-      number: "#9A4530",
-      constant: "#6A3F6E",
+      string: "#6E4A10",
+      number: "#A3283A",
+      constant: "#7B3F8F",
       variable: "#29341D",
       property: "#29341D",
-      function: "#C28A32",
-      libraryFunction: "#C28A32",
+      // Functions take a green-blue ink: the gold they had darkens into the
+      // aged-gold strings once it is held to AA over the search washes.
+      function: "#1F6E63",
+      libraryFunction: "#1F6E63",
       type: "#2D4F6E",
-      markup: "#6A3F6E",
-      decorator: "#9A4530",
+      markup: "#7B3F8F",
+      decorator: "#A3283A",
       invalid: "#9A4530",
     },
   },
@@ -570,16 +586,16 @@ const THEMES = [
       string: "#9B5E33",
       // The backyard grass carries the numbers: Bingo's orange and the muzzle
       // gold both darken into Chilli's brown strings on cream.
-      number: "#3B7D3B",
-      constant: "#3B7D3B",
+      number: "#83BBE3",
+      constant: "#83BBE3",
       variable: "#040620",
       property: "#040620",
-      function: "#C9504F",
-      libraryFunction: "#C9504F",
+      function: "#D04A80",
+      libraryFunction: "#D04A80",
       // Types take the steel of Bluey's coat.
       type: "#75A6BE",
-      markup: "#C9504F",
-      decorator: mixHex("#403F65", "#C9504F", 0.5),
+      markup: "#D04A80",
+      decorator: "#403F65",
       invalid: "#C9504F",
     },
   },
@@ -717,9 +733,13 @@ const THEMES = [
       "Attribute names": "number",
       "Library constants and variables": "#80E045",
     },
-    // The explorer read in lavender.
+    // The explorer read in lavender. The active tab is stroked the way LCARS
+    // strokes its own: the steel blue on top and the orange underneath.
     colorOverrides: {
       "sideBar.foreground": "#BD93F9",
+      "tab.activeBorderTop": "#448AA9",
+      "tab.unfocusedActiveBorderTop": "#448AA9",
+      "tab.selectedBorderTop": "#448AA9",
     },
   },
 ];
@@ -915,6 +935,13 @@ function buildTheme(sourceSpec) {
     // heaviest of them; clearing it clears the line tint too.
     alphaComposite(success, s.editor, "1F"),
     alphaComposite(errorPair.background, s.editor, "1F"),
+    // Search and symbol highlights sit under code while it is being read. The
+    // current find match, like the selection, is one transient spot with a
+    // border of its own, so it is not held to the floor.
+    alphaComposite(secondary, s.editor, "26"),
+    alphaComposite(primary, s.editor, "1F"),
+    alphaComposite(infoPair.background, s.editor, "1F"),
+    alphaComposite(infoPair.background, s.editor, "14"),
   ];
   // A theme may state a lower floor for its syntax colors; the workbench roles
   // below are held to AA regardless.
@@ -1100,6 +1127,40 @@ for (const spec of THEMES) {
   fs.writeFileSync(file, `${JSON.stringify(theme, null, 2)}\n`);
   console.log(`wrote ${path.relative(ROOT, file)}`);
 }
+
+// LCARS is written by hand rather than built, so its syntax is held to the
+// same distances here, read off the template's own rules.
+const LCARS_ROLE_RULES = {
+  comment: "Comments",
+  keyword: "Keywords",
+  operator: "Operators",
+  storageType: "Storage types",
+  string: "Strings",
+  escape: "String escapes",
+  regex: "Regular expressions",
+  number: "Numbers and constants",
+  constant: "Named constants and enum members",
+  variable: "Variables",
+  property: "Object properties",
+  function: "Functions",
+  libraryFunction: "Library functions",
+  type: "Types",
+  className: "Class names and library classes",
+  tag: "Tag names",
+  attribute: "Attribute names",
+};
+checkRoleDistances(
+  "LCARS",
+  Object.fromEntries(
+    Object.entries(LCARS_ROLE_RULES).map(([role, name]) => {
+      const rule = TEMPLATE.tokenColors.find(entry => entry.name === name);
+      if (!rule) {
+        throw new Error(`LCARS has no token rule "${name}".`);
+      }
+      return [role, rule.settings.foreground];
+    })
+  )
+);
 
 // Mix ships as Helix's workbench around LCARS's syntax; the extension's Mix
 // Themes command replaces it at runtime with whatever pair is chosen.
