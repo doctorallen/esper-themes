@@ -12,6 +12,64 @@ When debugging is active, every theme uses the approved lavender `#BAA4E5`
 status-bar background with dark-blue `#1C3C55` foreground text, which has a
 5.22:1 contrast ratio.
 
+## October 2026 regrade
+
+A study of the thirty most-installed color themes on the Marketplace, measured
+from their shipped JSON, set Esper against the field and found eight places to
+change. All of them are in this release.
+
+**Lighter dark grounds.** Esper's film editors sat at OKLCH lightness
+0.12-0.17, darker than every one of the 143 dark variants the thirty
+most-installed theme extensions ship except an experimental OLED variant and
+JellyFish, with body text at 15-19:1 where thin bright text blooms. Every
+built dark theme's editor now sits at L 0.19, where GitHub Dark (0.176), Ayu
+Dark (0.191), Bearded's black variants (0.19) and Omni (0.210) put theirs, its
+hue and chroma kept (`DARK_EDITOR_LIGHTNESS` in `scripts/build-themes.js`), and
+body text lands at 13.8-17.5:1. The rest of the workbench moves with it. The chrome stays a
+step brighter than the code, which is the Esper look, but the step is capped
+at 0.03 (`MAX_CHROME_STEP`; it reached +0.16 in Bluey Night), with floors that
+keep borders and widgets visible. LCARS's editor stays on its deep dark blue
+`#09131A` (L 0.181), already inside that band. Q's generator draws its
+surfaces around the same lightness.
+
+**No two roles a shade apart.** Every theme had pairs of syntax roles with
+different hex values that read as one color (OKLab ΔE under 6): Fellowship
+had 17, Tomcat 13, Cooper 11. The build now fails on any such pair
+(`checkRoleDistances`); roles meant to read as one share a hex instead. Each
+palette was regraded until it passed, which also widened the hue range: the
+field uses a median of 7 hue families across fourteen core roles, and Esper's
+fixed themes now use 6 or 7 (LCARS, Fellowship and Cooper 7; the rest 6),
+up from a median of 5. Tomcat stays phosphor-led but types take a radar teal,
+numbers the caution amber and tags the master-warning red; Fellowship's types
+take a blue ink and its tags a purple seal ink; Oblivion's types take the sky
+above the Sky Tower; Cooper's types take Miller's ocean.
+
+**Variables read as text.** Plain variables and parameters were colored in 7
+of 11 themes; in LCARS one cyan covered variables, parameters, numbers,
+operators, modifiers and tags. They now take the foreground, as 19 of the top
+30 themes do, and color is spent on declarations, calls and literals.
+
+**Bracket pairs.** No theme set `editorBracketHighlight.*`, so every theme
+showed VS Code's default gold, orchid and blue. Each now cycles three of its
+own accents, chosen at least ΔE 10 apart, with the error color for an
+unexpected bracket.
+
+**Diff markup.** `markup.inserted`, `markup.deleted` and `markup.changed` now
+take each theme's git colors and diff headers the comment color, so `.diff`
+and `.patch` files read like the Source Control view.
+
+**A quieter gutter.** Line numbers sat at a median 6.6:1 (Bluey Night 11.7:1)
+against 2.7:1 in the field. They now sit just over AA, at 4.6:1
+(`LINE_NUMBER_CONTRAST` in `q-theme.js`); the current line's number keeps its
+accent. LCARS reaches it with light gray at 73% opacity, `#9EA5BABB`.
+
+**Font style as a second channel.** HTML attribute names and `this`/`self`
+are italic and generic markup headings are bold, alongside the italic
+comments and the bold markdown headings already shipped.
+
+**Escapes and patterns.** String escapes and regular expressions have their
+own roles instead of sharing the number and string colors.
+
 ## Film themes
 
 Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are outside the
@@ -153,8 +211,9 @@ it makes are these. Comments were `#4E4E4E`, 2.44:1 on the editor; they ship as
 3.70:1 and ships as `#CC6868`; the inactive-tab blue `#6272A4` reads at 4.31:1
 on the editor and ships as the muted `#7382B2` so it also clears the side bar.
 The `storage` split and the attribute blue are written as token overrides,
-since the shared matcher folds them into keyword and property, and those
-overrides carry the same lifted values so they meet the same floor.
+since the shared matcher folds them into keyword and property. The steel-blue
+overrides name the number role rather than a hex, so they follow its lift onto
+whatever ground the build puts under them.
 
 The explorer text is set to lavender `#BD93F9` as a color override, the way
 the old theme had it; at 7.9:1 on the side bar it clears AA on its own.
@@ -454,6 +513,16 @@ accent. No new colors or grammar injections were added.
 | HTML/XML attribute values | Ghost gray `#D2D5DF` | Almond creme `#FCC19F` | Restores a visible value accent after the neutral assignment made Angular templates too monochrome; attribute names remain African violet. |
 | Primary button text/background | Dark blue `#1C3C55` / bright blue `#41C4F7` | Starlight `#F3F4F7` / dark blue `#1C3C55` | VS Code applies 40% opacity to disabled buttons; a light foreground remains more readable while the bright-blue border preserves focus and LCARS emphasis. |
 | Active editor selection | African violet `#BAA4E5` with dark-blue text `#1C3C55` | Dirty mauve `#7A506D` at 25% opacity with starlight text `#F3F4F7` | Makes the lavender selection more visible while allowing the bright syntax colors to remain readable; the resulting starlight contrast is approximately 9.3:1 on the editor surface. |
+| Active editor selection | Dirty mauve `#7A506D` at 25% opacity | Dirty mauve `#7A506D` at 50% opacity (`#7A506D80`) | At 25% the selection composited to 1.21:1 against the editor, as faint as the faintest in the top 30. At 50% it reaches 1.57:1, just above the field median of 1.52, and every approved syntax color inside it still reads at 3.96:1 or better. |
+| Variables and parameters | Bright blue `#41C4F7` | Starlight `#F3F4F7` | Bright blue also carried numbers, operators, modifiers and tags, so six roles read as one color. Plain identifiers now read as text. |
+| Numbers and language constants | Bright blue `#41C4F7` | True mauve `#C082A9` | Separates numbers from operators; true mauve reads at 6.26:1 on the editor, where it failed only on dark blue. |
+| Function and method tokens | African violet `#BAA4E5` | Bluey `#8899FF` | Functions shared the keyword violet; Bluey reads at 7.19:1 and sits ΔE 8.9 from it. |
+| Type tokens | Barley `#EDB378` | Almond `#D29B7F` | Barley sat ΔE 5.7 from the almond-creme strings. Almond is ΔE 12.1 from strings and 8.1 from barley, which keeps constants and library symbols. |
+| String escapes | Bright blue `#41C4F7` | Orange `#EB943A` | An escape now stands out from the string around it. |
+| Regular expressions | Almond creme `#FCC19F` | Blue `#37A6D1` | A pattern now stands out from ordinary strings. |
+| Diff lines | Unstyled | Inserted blue `#37A6D1`, deleted pale orange-red `#FF977B`, changed butterscotch `#EA9C72`, headers light gray `#9EA5BA` | The same colors as the inserted-diff border and the deleted and modified Git decorations. |
+| Bracket pairs | VS Code defaults | Bright blue `#41C4F7`, African violet `#BAA4E5`, barley `#EDB378`; unexpected pale orange-red `#FF977B` | The defaults are colors outside the approved palette. |
+| Inactive line numbers | Light gray `#9EA5BA` | Light gray at 73% opacity, `#9EA5BABB` | 4.60:1 on the editor instead of 7.63:1, so the gutter stays below the code. |
 | Active Explorer selection icons | Bright blue `#41C4F7` | Dark blue `#1C3C55` | Aligns file-type icons with the active filename and provides 5.22:1 contrast on the African-violet selection background. |
 | Active Explorer selection | African violet `#BAA4E5` with dark-blue text `#1C3C55` | Dark blue `#1C3C55` with starlight text `#F3F4F7` | Replaces the lower-contrast lavender row with an AAA text treatment; the focused file remains distinct from the dark-gray sidebar. |
 | Active Explorer selection icons | Dark blue `#1C3C55` | Bright blue `#41C4F7` | Restores a visible file-type accent on the dark active row while retaining 5.73:1 contrast. |
@@ -487,35 +556,35 @@ cannot assign an individual color to either action.
 | Dark blue `#1C3C55` | Bright blue `#41C4F7` | 5.73:1 | AA |
 | Barley `#EDB378` | Dark gray `#2F3749` | 6.42:1 | AA |
 | Starlight `#F3F4F7` | 25% barley `#EDB378` over dark gray `#2F3749` | approximately 6.48:1 | AA |
-| Starlight `#F3F4F7` | 25% dirty mauve `#7A506D` over dark blue `#1C3C55` | approximately 9.3:1 | AAA |
+| Starlight `#F3F4F7` | 50% dirty mauve `#7A506D` over deep dark blue `#09131A` | approximately 10.8:1 | AAA |
 
 ## Approved palette and usage
 
 | Color | Hex | Current usage |
 | --- | --- | --- |
 | African violet | `#BAA4E5` | Active selections, suggestion selections, secondary buttons, keywords, function/method tokens, decorators, PHP visibility/storage modifiers, TypeScript/JavaScript class keywords, HTML/XML attribute names, terminal magenta. |
-| Almond | `#D29B7F` | Terminal green and untracked Git decorations. |
-| Almond creme | `#FCC19F` | Hovered primary and secondary buttons, active line numbers, HTML/XML attribute values, string and regular-expression tokens, bright terminal green. |
-| Barley | `#EDB378` | Activity-bar icons, sidebar and panel headings, type tokens, named constants, enum members, library functions/constants/variables, labels, LCARS tab modified borders, 25% translucent Explorer hover background, and bright terminal yellow. |
-| Bluey | `#8899FF` | Word-highlight overview-ruler marker. |
+| Almond | `#D29B7F` | Type tokens, terminal green and untracked Git decorations. |
+| Almond creme | `#FCC19F` | Hovered primary and secondary buttons, active line numbers, HTML/XML attribute values, string tokens, bright terminal green. |
+| Barley | `#EDB378` | Activity-bar icons, sidebar and panel headings, the third bracket-pair level, named constants, enum members, library functions/constants/variables, labels, LCARS tab modified borders, 25% translucent Explorer hover background, and bright terminal yellow. |
+| Bluey | `#8899FF` | Function and method tokens, and the word-highlight overview-ruler marker. |
 | Brown | `#895129` | Bracket-match background. |
 | Butterscotch | `#EA9C72` | Modified Git decorations and warning squiggle. |
-| Dirty mauve | `#7A506D` | 25% opacity active editor selection overlay and find-match overview-ruler marker. |
+| Dirty mauve | `#7A506D` | 50% opacity active editor selection overlay and find-match overview-ruler marker. |
 | Dusty mauve | `#9D698A` | Selection-highlight overview-ruler marker. |
 | Lilac | `#8A72A7` | Strong word-highlight overview-ruler marker and hint squiggle. |
 | Mars | `#FF2200` | Error squiggle and error indicator only; never normal text. |
-| Orange | `#EB943A` | Active links, the base active-tab stripe, and terminal yellow. |
+| Orange | `#EB943A` | Active links, the base active-tab stripe, string escapes, and terminal yellow. |
 | Red | `#CF4F4F` | Approved palette color reserved for future diagnostic or decorative use; not assigned to a current tab role. |
 | Subdued sienna | `#C47D69` | Modified overview-ruler marker. |
-| True mauve | `#C082A9` | Badge backgrounds with dark-blue foreground text. |
-| Blue | `#37A6D1` | Informational squiggle and inserted-diff border. |
-| Bright blue | `#41C4F7` | Focus rings, links, input/widget borders, primary-button borders, active Explorer selection icons, operators, storage/modifier/variable/parameter tokens, export and PHP function keywords, numeric constants, HTML/XML tag names, terminal blue, and terminal cyan. |
+| True mauve | `#C082A9` | Number and language-constant tokens, and badge backgrounds with dark-blue foreground text. |
+| Blue | `#37A6D1` | Regular-expression tokens, inserted diff lines, the informational squiggle and the inserted-diff border. |
+| Bright blue | `#41C4F7` | Focus rings, links, input/widget borders, primary-button borders, active Explorer selection icons, operators, storage/modifier tokens, export and PHP function keywords, HTML/XML tag names, the first bracket-pair level, terminal blue, and terminal cyan. |
 | Dark blue | `#1C3C55` | Activity bar, panel, title-bar, inactive-tab, primary-button, and active Explorer selection backgrounds. |
 | Dark gray | `#2F3749` | Status bar, widgets, inputs, dropdowns, and line-highlight backgrounds. |
 | Deep dark blue | `#09131A` | Editor, terminal, and editor tab-strip backgrounds (dark blue darkened ~69%). |
 | Deep dark gray | `#212633` | LCARS sidebar background (dark gray darkened ~30%). |
 | Ghost gray | `#D2D5DF` | Secondary text, inactive labels, language variables, namespaces/modules, class names, library types/classes, HTML/XML tag punctuation, terminal white, and inactive tabs. |
-| Light gray | `#9EA5BA` | Comments, placeholders, and inactive line numbers. |
+| Light gray | `#9EA5BA` | Comments, diff headers, placeholders, and inactive line numbers at 73% opacity. |
 | Light orange-red | `#FF6753` | Added-line gutter indicator only; never normal text. |
 | Medium dark blue | `#2A7193` | Minimap background and hovered primary buttons. |
 | Medium dark gray | `#52596E` | Hover states, section headers, inactive selections, and indent guides. |

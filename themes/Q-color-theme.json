@@ -51,10 +51,10 @@
     "list.focusOutline": "#41C4F7",
     "editor.background": "#09131A",
     "editor.foreground": "#F3F4F7",
-    "editorLineNumber.foreground": "#9EA5BA",
+    "editorLineNumber.foreground": "#9EA5BABB",
     "editorLineNumber.activeForeground": "#FCC19F",
     "editorCursor.foreground": "#FF977B",
-    "editor.selectionBackground": "#7A506D40",
+    "editor.selectionBackground": "#7A506D80",
     "editor.selectionForeground": "#F3F4F7",
     "editor.inactiveSelectionBackground": "#52596E",
     "editor.lineHighlightBackground": "#2F3749",
@@ -74,6 +74,13 @@
     "chart.line": "#41C4F7",
     "editorBracketMatch.background": "#895129",
     "editorBracketMatch.border": "#EDB378",
+    "editorBracketHighlight.foreground1": "#41C4F7",
+    "editorBracketHighlight.foreground2": "#BAA4E5",
+    "editorBracketHighlight.foreground3": "#EDB378",
+    "editorBracketHighlight.foreground4": "#41C4F7",
+    "editorBracketHighlight.foreground5": "#BAA4E5",
+    "editorBracketHighlight.foreground6": "#EDB378",
+    "editorBracketHighlight.unexpectedBracket.foreground": "#FF977B",
     "editorError.foreground": "#FF2200",
     "editorWarning.foreground": "#EA9C72",
     "editorInfo.foreground": "#37A6D1",
@@ -179,11 +186,11 @@
     "terminal.ansiBrightCyan": "#41C4F7",
     "terminal.ansiWhite": "#D2D5DF",
     "terminal.ansiBrightWhite": "#F3F4F7",
-    "diffEditor.insertedTextBorder": "#37A6D1",
-    "diffEditor.removedTextBorder": "#E7442A",
     "gitDecoration.modifiedResourceForeground": "#EA9C72",
     "gitDecoration.deletedResourceForeground": "#FF977B",
-    "gitDecoration.untrackedResourceForeground": "#D29B7F"
+    "gitDecoration.untrackedResourceForeground": "#D29B7F",
+    "diffEditor.insertedTextBorder": "#37A6D1",
+    "diffEditor.removedTextBorder": "#E7442A"
   },
   "tokenColors": [
     {
@@ -304,7 +311,6 @@
       "scope": [
         "string",
         "constant.other.symbol",
-        "constant.regexp",
         "markup.quoted"
       ],
       "settings": {
@@ -312,16 +318,34 @@
       }
     },
     {
-      "name": "Numbers and constants",
+      "name": "String escapes",
       "scope": [
-        "constant.numeric",
-        "constant.language",
-        "constant.character",
         "constant.character.escape",
         "constant.escape"
       ],
       "settings": {
-        "foreground": "#41C4F7"
+        "foreground": "#EB943A"
+      }
+    },
+    {
+      "name": "Regular expressions",
+      "scope": [
+        "string.regexp",
+        "constant.regexp"
+      ],
+      "settings": {
+        "foreground": "#37A6D1"
+      }
+    },
+    {
+      "name": "Numbers and constants",
+      "scope": [
+        "constant.numeric",
+        "constant.language",
+        "constant.character"
+      ],
+      "settings": {
+        "foreground": "#C082A9"
       }
     },
     {
@@ -345,7 +369,7 @@
         "variable.instance"
       ],
       "settings": {
-        "foreground": "#41C4F7"
+        "foreground": "#F3F4F7"
       }
     },
     {
@@ -357,6 +381,7 @@
         "variable.language.super"
       ],
       "settings": {
+        "fontStyle": "italic",
         "foreground": "#D2D5DF"
       }
     },
@@ -369,7 +394,7 @@
         "function.parameter"
       ],
       "settings": {
-        "foreground": "#41C4F7"
+        "foreground": "#F3F4F7"
       }
     },
     {
@@ -395,7 +420,7 @@
         "variable.function"
       ],
       "settings": {
-        "foreground": "#BAA4E5"
+        "foreground": "#8899FF"
       }
     },
     {
@@ -440,7 +465,7 @@
         "support.type.primitive"
       ],
       "settings": {
-        "foreground": "#EDB378"
+        "foreground": "#D29B7F"
       }
     },
     {
@@ -460,7 +485,9 @@
       "name": "Namespaces and modules",
       "scope": [
         "entity.name.namespace",
-        "entity.name.type.module"
+        "entity.name.type.module",
+        "entity.name.import.go",
+        "entity.name.package.go"
       ],
       "settings": {
         "foreground": "#D2D5DF"
@@ -488,6 +515,7 @@
         "entity.other.attribute-name.class"
       ],
       "settings": {
+        "fontStyle": "italic",
         "foreground": "#BAA4E5"
       }
     },
@@ -520,7 +548,300 @@
         "entity.name.section"
       ],
       "settings": {
+        "fontStyle": "bold",
         "foreground": "#FF977B"
+      }
+    },
+    {
+      "name": "Markdown heading 1",
+      "scope": [
+        "heading.1.markdown entity.name.section",
+        "markup.heading.setext.1.markdown"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#FF977B"
+      }
+    },
+    {
+      "name": "Markdown heading 2",
+      "scope": [
+        "heading.2.markdown entity.name.section",
+        "markup.heading.setext.2.markdown"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#f4a794"
+      }
+    },
+    {
+      "name": "Markdown heading 3",
+      "scope": [
+        "heading.3.markdown entity.name.section"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#e9b6ad"
+      }
+    },
+    {
+      "name": "Markdown deep headings",
+      "scope": [
+        "heading.4.markdown entity.name.section",
+        "heading.5.markdown entity.name.section",
+        "heading.6.markdown entity.name.section"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#e0c2c1"
+      }
+    },
+    {
+      "name": "Markdown heading markers",
+      "scope": [
+        "punctuation.definition.heading.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown bold",
+      "scope": [
+        "markup.bold",
+        "markup.bold.markdown"
+      ],
+      "settings": {
+        "fontStyle": "bold",
+        "foreground": "#D2D5DF"
+      }
+    },
+    {
+      "name": "Markdown italic",
+      "scope": [
+        "markup.italic",
+        "markup.italic.markdown"
+      ],
+      "settings": {
+        "fontStyle": "italic",
+        "foreground": "#D2D5DF"
+      }
+    },
+    {
+      "name": "Markdown strikethrough",
+      "scope": [
+        "markup.strikethrough",
+        "markup.strikethrough.markdown"
+      ],
+      "settings": {
+        "fontStyle": "strikethrough",
+        "foreground": "#9EA5BA"
+      }
+    },
+    {
+      "name": "Markdown emphasis markers",
+      "scope": [
+        "punctuation.definition.bold.markdown",
+        "punctuation.definition.italic.markdown",
+        "punctuation.definition.strikethrough.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown block quotes",
+      "scope": [
+        "markup.quote",
+        "markup.quote.markdown"
+      ],
+      "settings": {
+        "fontStyle": "italic",
+        "foreground": "#b0b6c7"
+      }
+    },
+    {
+      "name": "Markdown block quote markers",
+      "scope": [
+        "punctuation.definition.quote.begin.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown list markers",
+      "scope": [
+        "punctuation.definition.list.begin.markdown",
+        "beginning.punctuation.definition.list.markdown"
+      ],
+      "settings": {
+        "foreground": "#BAA4E5"
+      }
+    },
+    {
+      "name": "Markdown link text",
+      "scope": [
+        "string.other.link.title.markdown",
+        "string.other.link.description.markdown",
+        "string.other.link.description.title.markdown"
+      ],
+      "settings": {
+        "foreground": "#FCC19F"
+      }
+    },
+    {
+      "name": "Markdown link destinations",
+      "scope": [
+        "markup.underline.link",
+        "markup.underline.link.markdown",
+        "markup.underline.link.image.markdown"
+      ],
+      "settings": {
+        "fontStyle": "underline",
+        "foreground": "#EDB378"
+      }
+    },
+    {
+      "name": "Markdown link references",
+      "scope": [
+        "constant.other.reference.link.markdown"
+      ],
+      "settings": {
+        "foreground": "#EDB378"
+      }
+    },
+    {
+      "name": "Markdown link punctuation",
+      "scope": [
+        "punctuation.definition.link.markdown",
+        "punctuation.definition.link.title.begin.markdown",
+        "punctuation.definition.link.title.end.markdown",
+        "punctuation.definition.link.description.begin.markdown",
+        "punctuation.definition.link.description.end.markdown",
+        "punctuation.definition.string.begin.markdown",
+        "punctuation.definition.string.end.markdown",
+        "punctuation.definition.constant.markdown",
+        "punctuation.definition.constant.begin.markdown",
+        "punctuation.definition.constant.end.markdown",
+        "punctuation.definition.metadata.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown inline code",
+      "scope": [
+        "markup.inline.raw",
+        "markup.inline.raw.string.markdown"
+      ],
+      "settings": {
+        "foreground": "#FCC19F"
+      }
+    },
+    {
+      "name": "Markdown fenced code",
+      "scope": [
+        "markup.fenced_code.block.markdown",
+        "markup.raw.block.markdown"
+      ],
+      "settings": {
+        "foreground": "#FCC19F"
+      }
+    },
+    {
+      "name": "Markdown code fence markers",
+      "scope": [
+        "punctuation.definition.raw.markdown",
+        "punctuation.definition.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown code fence language",
+      "scope": [
+        "fenced_code.block.language",
+        "fenced_code.block.language.markdown",
+        "fenced_code.block.language.attributes.markdown"
+      ],
+      "settings": {
+        "foreground": "#EDB378"
+      }
+    },
+    {
+      "name": "Markdown separators",
+      "scope": [
+        "meta.separator.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown table punctuation",
+      "scope": [
+        "punctuation.definition.table.markdown",
+        "punctuation.separator.table.markdown"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Markdown frontmatter delimiters",
+      "scope": [
+        "punctuation.definition.begin.frontmatter",
+        "punctuation.definition.end.frontmatter",
+        "comment.frontmatter"
+      ],
+      "settings": {
+        "foreground": "#41C4F7"
+      }
+    },
+    {
+      "name": "Diff inserted lines",
+      "scope": [
+        "markup.inserted",
+        "markup.inserted.diff"
+      ],
+      "settings": {
+        "foreground": "#37A6D1"
+      }
+    },
+    {
+      "name": "Diff deleted lines",
+      "scope": [
+        "markup.deleted",
+        "markup.deleted.diff"
+      ],
+      "settings": {
+        "foreground": "#FF977B"
+      }
+    },
+    {
+      "name": "Diff changed lines",
+      "scope": [
+        "markup.changed",
+        "markup.changed.diff"
+      ],
+      "settings": {
+        "foreground": "#EA9C72"
+      }
+    },
+    {
+      "name": "Diff headers",
+      "scope": [
+        "meta.diff.header",
+        "meta.diff.range",
+        "meta.diff.index",
+        "meta.diff.header.from-file",
+        "meta.diff.header.to-file"
+      ],
+      "settings": {
+        "foreground": "#9EA5BA"
       }
     },
     {
@@ -538,12 +859,12 @@
   "semanticTokenColors": {
     "comment": "#9EA5BA",
     "string": "#FCC19F",
-    "number": "#41C4F7",
-    "regexp": "#FCC19F",
+    "number": "#C082A9",
+    "regexp": "#37A6D1",
     "operator": "#41C4F7",
-    "function": "#BAA4E5",
+    "function": "#8899FF",
     "function.defaultLibrary": "#EDB378",
-    "method": "#BAA4E5",
+    "method": "#8899FF",
     "decorator": "#BAA4E5",
     "macro": "#BAA4E5",
     "keyword": "#BAA4E5",
@@ -551,22 +872,22 @@
     "label": "#EDB378",
     "event": "#BAA4E5",
     "namespace": "#D2D5DF",
-    "type": "#EDB378",
+    "type": "#D29B7F",
     "type.defaultLibrary": "#EDB378",
     "class": "#D2D5DF",
     "class.defaultLibrary": "#D2D5DF",
-    "interface": "#EDB378",
+    "interface": "#D29B7F",
     "enum": "#EDB378",
     "enumMember": "#EDB378",
-    "typeParameter": "#EDB378",
-    "variable": "#41C4F7",
+    "typeParameter": "#D29B7F",
+    "variable": "#F3F4F7",
     "variable.defaultLibrary": "#EDB378",
     "variable.constant": "#EDB378",
-    "variable.readonly": "#41C4F7",
+    "variable.readonly": "#F3F4F7",
     "property": "#F3F4F7",
     "property.readonly": "#F3F4F7",
     "member": "#F3F4F7",
-    "parameter": "#41C4F7",
+    "parameter": "#F3F4F7",
     "method.defaultLibrary": "#EDB378"
   }
 }

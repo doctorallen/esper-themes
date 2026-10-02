@@ -23,20 +23,153 @@ const {
   MIN_TEXT_CONTRAST,
   alphaComposite,
   buildWorkbenchColors,
+  colorDistance,
   composeThemes,
   contrastRatio,
+  derivedSyntaxRoles,
   mixHex,
   passes,
   readable,
   syntaxRoleForSemanticToken,
   syntaxRoleForToken,
   toHsl,
+  toOklab,
 } = require("../q-theme");
 
 const ROOT = path.join(__dirname, "..");
 const TEMPLATE = JSON.parse(
   fs.readFileSync(path.join(ROOT, "themes", "LCARS-color-theme.json"), "utf8")
 );
+
+// The film palettes were cut against near-black (OKLCH lightness 0.12 to
+// 0.17), darker than every popular dark theme but an experimental OLED variant
+// and JellyFish, and paired with body text at 15-19:1, where thin bright text
+// blooms. Every dark theme's editor now sits where GitHub Dark, Ayu Dark,
+// Bearded's black variants and Omni put theirs, its hue and chroma kept, and
+// the rest of the workbench moves with it.
+const DARK_EDITOR_LIGHTNESS = 0.19;
+// The chrome stays a step brighter than the code, which is the Esper look, but
+// a small one: the sidebar sits at most this far above the editor.
+const MAX_CHROME_STEP = 0.03;
+// Floors that keep a surface's job visible once the ladder is compressed:
+// borders still separate panes and widgets still float over the code.
+const SURFACE_FLOORS = { border: 0.08, widget: 0.05, raised: 0.05 };
+// Two syntax roles closer than this read as one color (OKLab ΔE × 100). Roles
+// meant to read as one share a hex instead.
+const MIN_ROLE_DISTANCE = 6;
+
+function fromOklab([L, a, b]) {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  const linear = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ];
+  if (linear.some(channel => channel < -0.0005 || channel > 1.0005)) {
+    return null;
+  }
+  return `#${linear
+    .map(channel => {
+      const c = Math.max(0, Math.min(1, channel));
+      const encoded = c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+      return Math.round(encoded * 255).toString(16).padStart(2, "0");
+    })
+    .join("")}`.toUpperCase();
+}
+
+/** `color` moved to OKLCH lightness `L`, its hue kept and its chroma kept where the gamut allows. */
+function atLightness(color, L) {
+  const [, a, b] = toOklab(color);
+  for (let scale = 1; scale >= 0; scale -= 0.05) {
+    const moved = fromOklab([L, a * scale, b * scale]);
+    if (moved) {
+      return moved;
+    }
+  }
+  return fromOklab([L, 0, 0]);
+}
+
+/**
+ * Raises a dark theme's editor to DARK_EDITOR_LIGHTNESS and carries every other
+ * surface with it, compressing the ladder so the sidebar sits no more than
+ * MAX_CHROME_STEP above the editor. Hand-tuned colors that named an old surface
+ * follow it to its new value.
+ */
+function liftSurfaces(spec) {
+  if (spec.type !== "dark") {
+    return spec;
+  }
+  const s = spec.surfaces;
+  const editorL = toOklab(s.editor)[0];
+  const sidebarStep = toOklab(s.sidebar)[0] - editorL;
+  const squeeze = sidebarStep > MAX_CHROME_STEP ? MAX_CHROME_STEP / sidebarStep : 1;
+  const moved = {};
+  const surfaces = Object.fromEntries(
+    Object.entries(s).map(([name, color]) => {
+      const step = toOklab(color)[0] - editorL;
+      const floor = Math.min(Math.abs(step), SURFACE_FLOORS[name] ?? 0);
+      const newStep = Math.sign(step) * Math.max(Math.abs(step) * squeeze, floor);
+      const lifted = name === "editor"
+        ? atLightness(color, DARK_EDITOR_LIGHTNESS)
+        : atLightness(color, DARK_EDITOR_LIGHTNESS + newStep);
+      moved[color.toUpperCase()] = lifted;
+      return [name, lifted];
+    })
+  );
+  const follow = value =>
+    typeof value === "string" && moved[value.toUpperCase()] ? moved[value.toUpperCase()] : value;
+  return {
+    ...spec,
+    surfaces,
+    colorOverrides: Object.fromEntries(
+      Object.entries(spec.colorOverrides ?? {}).map(([key, value]) => [key, follow(value)])
+    ),
+  };
+}
+
+/**
+ * Three accents for the bracket-pair levels, in the order offered, skipping any
+ * that would read as a neighbor's color.
+ */
+function bracketColors(candidates) {
+  const chosen = [];
+  for (const candidate of candidates) {
+    if (chosen.every(color => colorDistance(color, candidate) >= 10)) {
+      chosen.push(candidate);
+    }
+    if (chosen.length === 3) {
+      return chosen;
+    }
+  }
+  throw new Error(`No three distinct bracket colors among ${candidates.join(", ")}.`);
+}
+
+/**
+ * Throws when two syntax colors are different hex values that read as the same
+ * color: either they are meant to be one role and should share a hex, or they
+ * are meant to differ and need more distance than this.
+ */
+function checkRoleDistances(name, colors) {
+  const entries = Object.entries(colors);
+  const close = [];
+  for (let i = 0; i < entries.length; i += 1) {
+    for (let j = i + 1; j < entries.length; j += 1) {
+      const [[roleA, a], [roleB, b]] = [entries[i], entries[j]];
+      if (a.toUpperCase() === b.toUpperCase()) {
+        continue;
+      }
+      const distance = colorDistance(a, b);
+      if (distance < MIN_ROLE_DISTANCE) {
+        close.push(`${roleA} ${a} / ${roleB} ${b} (ΔE ${distance.toFixed(1)})`);
+      }
+    }
+  }
+  if (close.length > 0) {
+    throw new Error(`${name} has syntax roles that read as one color: ${close.join("; ")}`);
+  }
+}
 
 /**
  * Surfaces and accents per theme. `surfaces` follow Deckard's tokens:
@@ -103,7 +236,9 @@ const THEMES = [
       // The searchlight, reduced to a supporting part.
       function: "#4FC7DC",
       libraryFunction: "#95B6C0",
-      type: "#38D3C5",
+      // Copper off the office's brass, so a type no longer reads as the
+      // searchlight that names a function.
+      type: "#D08B5E",
       markup: "#FFB000",
       decorator: "#D08B5E",
       // Blood on Roy Batty's hand.
@@ -165,16 +300,20 @@ const THEMES = [
       text: "#DCE6EA",
       comment: "#6F8A95",
       keyword: "#5FD3E4",
-      operator: mixHex("#3F8296", "#DCE6EA", 0.35),
+      // Operators and members read as text; the steel-cyan they used to share
+      // with comments and types made three roles one color.
+      operator: mixHex("#DCE6EA", "#6F8A95", 0.35),
       string: "#CDBE95",
       number: "#FF9A3C",
-      constant: "#FF6A35",
+      constant: "#E8562A",
       variable: "#DCE6EA",
-      property: mixHex("#DCE6EA", "#5FD3E4", 0.25),
+      property: "#DCE6EA",
       function: "#3FB6C9",
-      libraryFunction: mixHex("#3FB6C9", "#DCE6EA", 0.5),
-      type: mixHex("#3F8296", "#DCE6EA", 0.15),
-      markup: "#5FD3E4",
+      libraryFunction: "#3FB6C9",
+      // The sky above the Sky Tower, so types leave the cyan family.
+      type: "#8DB4E8",
+      // Tags take the alert orange.
+      markup: "#E8562A",
       decorator: "#E8562A",
       invalid: "#FF5A30",
     },
@@ -208,38 +347,37 @@ const THEMES = [
     // raised surface with pink icons, and a few token roles were reassigned.
     colorOverrides: {
       "activityBar.background": "#211748",
-      "activityBar.foreground": "#F2559E",
+      // Lifted a step from the neon pink so the icons clear AA on the raised
+      // surface once the workbench moved off near-black.
+      "activityBar.foreground": "#F46DAE",
       "list.activeSelectionForeground": "#33295E",
       "modernTab.activeForeground": "#211748",
     },
     tokenOverrides: {
-      "Numbers and constants": "#FF647E",
-      Variables: "#FF8B55",
-      "Object properties": "#8F75FF",
       Decorators: "#3FD8EA",
     },
     semanticOverrides: {
-      number: "#FF647E",
-      variable: "#FF8B55",
-      property: "#8F75FF",
-      member: "#8F75FF",
-      "property.readonly": "#8F75FF",
       decorator: "#3FD8EA",
     },
     syntax: {
       text: "#E7E8FF",
       comment: "#8E8BB3",
       keyword: "#F25AA9",
-      operator: "#7CE6F0",
+      // Operators step back to a violet-grey between the comments and the
+      // text, so the cyans are left to functions and markup.
+      operator: mixHex("#8E8BB3", "#E7E8FF", 0.5),
       string: "#FF8B55",
-      number: "#8F75FF",
-      constant: mixHex("#FF8B55", "#F25AA9", 0.5),
+      number: "#FF647E",
+      constant: "#FF647E",
       variable: "#E7E8FF",
-      property: mixHex("#E7E8FF", "#7CE6F0", 0.3),
+      property: mixHex("#E7E8FF", "#7CE6F0", 0.55),
       function: "#3FD8EA",
-      libraryFunction: mixHex("#3FD8EA", "#E7E8FF", 0.5),
+      libraryFunction: "#3FD8EA",
       type: mixHex("#8F75FF", "#E7E8FF", 0.35),
-      markup: "#7CE6F0",
+      // Tags take the hot pink, as most themes color them, and patterns the
+      // number red, so neither sits a shade off the function cyan.
+      markup: "#F25AA9",
+      regex: "#FF647E",
       decorator: "#F25AA9",
       invalid: "#F2559E",
     },
@@ -268,21 +406,25 @@ const THEMES = [
     warning: "#F0BF47",
     success: "#8CE87C",
     info: "#8CE87C",
+    // Green still leads, but a display with fourteen roles in two hues reads
+    // by lightness alone. Types take the teal of the radar sweep, numbers the
+    // amber caution lamp, tags the master-warning red, and comments the grey
+    // of an unlit segment.
     syntax: {
       text: "#CCFA7B",
-      comment: mixHex("#278A31", "#82AA51", 0.4),
+      comment: "#8A8F86",
       keyword: "#8CE87C",
-      operator: mixHex("#82AA51", "#CCFA7B", 0.4),
+      operator: "#82AA51",
       string: "#F0BF47",
-      number: "#D89D31",
-      constant: mixHex("#D89D31", "#E24B26", 0.4),
+      number: "#E58A3A",
+      constant: "#E58A3A",
       variable: "#CCFA7B",
-      property: mixHex("#CCFA7B", "#82AA51", 0.3),
-      function: mixHex("#8CE87C", "#CCFA7B", 0.5),
+      property: "#CCFA7B",
+      function: "#4FBF52",
       libraryFunction: mixHex("#F0BF47", "#CCFA7B", 0.5),
-      type: "#6FD96C",
-      markup: "#F0BF47",
-      decorator: "#D89D31",
+      type: "#5CD6B4",
+      markup: "#E24B26",
+      decorator: "#E58A3A",
       invalid: "#E24B26",
     },
   },
@@ -314,20 +456,23 @@ const THEMES = [
     warning: "#664317",
     success: "#4A6A32",
     info: "#354A1F",
+    // Five olive inks on one parchment read as one ink. Types take the blue
+    // ink of the map's rivers and tags the purple of its seals; operators and
+    // members go back to the text ink, where most themes keep them.
     syntax: {
       text: "#29341D",
       comment: "#545C3C",
       keyword: "#354A1F",
-      operator: mixHex("#7D8750", "#29341D", 0.3),
+      operator: "#29341D",
       string: "#664317",
       number: "#9A4530",
-      constant: "#6F542A",
+      constant: "#6A3F6E",
       variable: "#29341D",
-      property: "#3D4D28",
+      property: "#29341D",
       function: "#C28A32",
-      libraryFunction: "#6F542A",
-      type: mixHex("#4A6A32", "#6F542A", 0.5),
-      markup: "#354A1F",
+      libraryFunction: "#C28A32",
+      type: "#2D4F6E",
+      markup: "#6A3F6E",
       decorator: "#9A4530",
       invalid: "#9A4530",
     },
@@ -360,17 +505,22 @@ const THEMES = [
       text: "#EBE8E1",
       comment: "#8F959A",
       keyword: "#DCA24A",
-      operator: "#A7AFB4",
+      // A warm instrument grey, clear of the blue the functions take.
+      operator: mixHex("#EBE8E1", "#8F959A", 0.4),
       string: "#B5CFA5",
       number: "#E27D3C",
       constant: "#F3C46E",
       variable: "#EBE8E1",
-      property: "#D6E4EE",
+      property: "#EBE8E1",
       function: "#9FBFD4",
-      libraryFunction: mixHex("#DCA24A", "#EBE8E1", 0.5),
-      type: mixHex("#9FBFD4", "#B5CFA5", 0.5),
-      markup: "#F3C46E",
-      decorator: mixHex("#DCA24A", "#D9673B", 0.5),
+      libraryFunction: "#F3C46E",
+      // Miller's ocean, where a blue-green mix of the function and string
+      // colors used to sit between them and read as both.
+      type: "#6FC2B5",
+      // Tags take the Endurance's warning red; the dust-storm rust sat on top
+      // of the numbers once the ground lifted.
+      markup: "#E86767",
+      decorator: "#E27D3C",
       invalid: "#D9673B",
     },
   },
@@ -418,14 +568,17 @@ const THEMES = [
       keyword: "#403F65",
       operator: mixHex("#403F65", "#040620", 0.45),
       string: "#9B5E33",
-      number: "#E37A3B",
-      constant: "#EDCE74",
-      variable: "#83BBE3",
+      // The backyard grass carries the numbers: Bingo's orange and the muzzle
+      // gold both darken into Chilli's brown strings on cream.
+      number: "#3B7D3B",
+      constant: "#3B7D3B",
+      variable: "#040620",
       property: "#040620",
       function: "#C9504F",
-      libraryFunction: mixHex("#9B5E33", "#403F65", 0.4),
-      type: mixHex("#EDCE74", "#9B5E33", 0.5),
-      markup: "#E37A3B",
+      libraryFunction: "#C9504F",
+      // Types take the steel of Bluey's coat.
+      type: "#75A6BE",
+      markup: "#C9504F",
       decorator: mixHex("#403F65", "#C9504F", 0.5),
       invalid: "#C9504F",
     },
@@ -462,15 +615,18 @@ const THEMES = [
       keyword: "#83BBE3",
       operator: mixHex("#83BBE3", "#D2EBFD", 0.5),
       string: "#EDCE74",
-      number: "#FFD08D",
+      // The tongue red, so numbers no longer sit beside the gold strings.
+      number: "#C9504F",
       constant: "#FFB070",
-      variable: "#D2EBFD",
+      variable: "#FFF9D8",
       property: "#FFF9D8",
       function: "#E37A3B",
-      libraryFunction: "#9B5E33",
-      type: mixHex("#EDCE74", "#9B5E33", 0.4),
+      libraryFunction: "#E37A3B",
+      // A lavender off the purple-navy, bright enough to leave the steel
+      // comments behind.
+      type: "#B59CE6",
       markup: "#FFB070",
-      decorator: mixHex("#403F65", "#D2EBFD", 0.45),
+      decorator: "#B59CE6",
       invalid: "#C9504F",
     },
   },
@@ -515,18 +671,24 @@ const THEMES = [
     info: "#448AA9",
     syntax: {
       text: "#E3EDFF",
-      comment: "#4E4E4E",
+      // The tmTheme's comment grey cannot clear AA on the lifted ground without
+      // landing on the bracket grey, so comments take the bracket grey outright
+      // and italic tells them apart.
+      comment: "#A2A797",
       keyword: "#AF8787",
       operator: "#A2A797",
       string: "#FF8147",
       number: "#448AA9",
       constant: "#448AA9",
-      variable: "#448AA9",
+      // Variables read as text; the steel blue stays on literals and constants.
+      variable: "#E3EDFF",
       property: "#E3EDFF",
       function: "#BD93F9",
       libraryFunction: "#AF8787",
-      type: "#748096",
-      markup: "#748096",
+      // The tmTheme's slate, lightened and cooled so it leaves both the
+      // comment grey and the steel-blue literals.
+      type: "#A5B4DB",
+      markup: "#A5B4DB",
       // The tmTheme's own foreground, which nothing in VS Code ever reached.
       decorator: "#D7875F",
       invalid: "#E61F44",
@@ -542,16 +704,17 @@ const THEMES = [
     },
     // The tmTheme split `storage` (blue) from `storage.type` (red) and gave
     // HTML attributes the value blue; the shared matcher folds those into
-    // keyword and property. These are the tmTheme colors lifted to the same
-    // floor the build applies to everything else.
+    // keyword and property. The blue is the number role's steel, named rather
+    // than written out so it follows the build's lift; the red is the tmTheme
+    // color lifted to the same floor the build applies to everything else.
     tokenOverrides: {
-      Storage: "#4591B2",
-      "Storage modifiers": "#4591B2",
-      "PHP visibility and storage modifiers": "#4591B2",
+      Storage: "number",
+      "Storage modifiers": "number",
+      "PHP visibility and storage modifiers": "number",
       "Storage types": "#CC6868",
       "PHP function declarations": "#CC6868",
       "TypeScript class keywords": "#CC6868",
-      "Attribute names": "#4591B2",
+      "Attribute names": "number",
       "Library constants and variables": "#80E045",
     },
     // The explorer read in lavender.
@@ -651,7 +814,8 @@ function accentPair(accent, candidates, deepen) {
   throw new Error(`No readable text for accent ${accent}.`);
 }
 
-function buildTheme(spec) {
+function buildTheme(sourceSpec) {
+  const spec = liftSurfaces(sourceSpec);
   const s = spec.surfaces;
   const isLight = spec.type === "light";
   const ink = isLight ? "#000000" : "#FFFFFF";
@@ -728,6 +892,18 @@ function buildTheme(spec) {
     listHoverForeground: pickForeground(listHover, hoverCandidates),
     tabHoverForeground: pickForeground(tabHover, hoverCandidates),
     modernTabHoverForeground: pickForeground(modernTabHover, hoverCandidates),
+    bracketColors: bracketColors(
+      [
+        accentText(spec.primary),
+        accentText(spec.secondary),
+        spec.syntax.function,
+        spec.syntax.type,
+        spec.syntax.keyword,
+        spec.syntax.string,
+        spec.syntax.number,
+        spec.syntax.markup,
+      ].map(color => readable(color, [s.editor], foreground))
+    ),
   });
 
   const syntaxBackgrounds = [
@@ -749,6 +925,16 @@ function buildTheme(spec) {
       readable(color, syntaxBackgrounds, foreground, syntaxFloor),
     ])
   );
+  const derived = derivedSyntaxRoles(
+    spec.syntax,
+    { success, error: accentText(spec.error), warning: accentText(spec.warning) },
+    syntaxBackgrounds,
+    foreground,
+    syntaxFloor
+  );
+  for (const [role, color] of Object.entries(derived)) {
+    syntax[role] = readable(color, syntaxBackgrounds, foreground, syntaxFloor);
+  }
   const markdown = { ...markdownPalette(spec.syntax), ...(spec.markdown ?? {}) };
   for (const [role, color] of Object.entries(markdown)) {
     if (!(role in markdownPalette(spec.syntax))) {
@@ -774,12 +960,15 @@ function buildTheme(spec) {
   );
 
   Object.assign(colors, spec.colorOverrides ?? {});
+  // An override may name a syntax role instead of a color, so a rule that is
+  // meant to match a role keeps matching it wherever the build lifts it.
+  const resolve = color => syntax[color] ?? color;
   for (const [name, color] of Object.entries(spec.tokenOverrides ?? {})) {
     const rule = tokenColors.find(entry => entry.name === name);
     if (!rule) {
       throw new Error(`${spec.name} overrides unknown token rule "${name}".`);
     }
-    rule.settings.foreground = color;
+    rule.settings.foreground = resolve(color);
   }
   for (const [key, color] of Object.entries(spec.semanticOverrides ?? {})) {
     if (!(key in semanticTokenColors)) {
@@ -851,6 +1040,23 @@ function buildTheme(spec) {
       `${spec.name} puts syntax in a hue band it rules out: ${strayed.join(", ")}`
     );
   }
+
+  // The roles code is read in, plus any color a theme set by hand. Markdown's
+  // heading ladder steps between roles on purpose, and diff lines never share
+  // a line with code, so neither is held to the distance.
+  checkRoleDistances(spec.name, {
+    ...Object.fromEntries(
+      Object.entries(syntax).filter(
+        ([role]) => !role.startsWith("markdown.") && !["inserted", "deleted", "changed", "invalid"].includes(role)
+      )
+    ),
+    ...Object.fromEntries(
+      Object.entries(spec.tokenOverrides ?? {}).map(([rule, color]) => [`"${rule}"`, resolve(color)])
+    ),
+    ...Object.fromEntries(
+      Object.entries(spec.semanticOverrides ?? {}).map(([key, color]) => [`semantic ${key}`, color])
+    ),
+  });
 
   const failures = [
     ...pairs

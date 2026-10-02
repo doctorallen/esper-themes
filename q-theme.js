@@ -2,6 +2,8 @@
 
 const MIN_TEXT_CONTRAST = 4.5;
 const MIN_SELECTION_CONTRAST = 1.6;
+// Just over AA: readable, and quieter than any syntax role.
+const LINE_NUMBER_CONTRAST = 4.6;
 const DEFAULT_LIGHT_FOREGROUND = "#F3F4F7";
 const DEFAULT_DARK_FOREGROUND = "#14202B";
 const DEBUGGING_STATUS_BACKGROUND = "#BAA4E5";
@@ -112,6 +114,46 @@ function mixHex(first, second, weight) {
       .padStart(2, "0")
   );
   return `#${channels.join("")}`;
+}
+
+/**
+ * Mixes `color` toward `background` until it sits just above `target` contrast,
+ * for text that should read without competing (the gutter's line numbers). A
+ * color already at or under the target is left alone.
+ */
+function quietTo(color, background, target) {
+  if (contrastRatio(color, background) <= target) {
+    return color;
+  }
+  let quiet = color;
+  for (let step = 1; step <= 40; step += 1) {
+    const candidate = mixHex(color, background, step / 40);
+    if (contrastRatio(candidate, background) < target) {
+      break;
+    }
+    quiet = candidate;
+  }
+  return quiet;
+}
+
+/** OKLab coordinates of a hex color, for perceptual distance between roles. */
+function toOklab(color) {
+  const { red, green, blue } = parseHex(color);
+  const [r, g, b] = [red, green, blue].map(channelLuminance);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ];
+}
+
+/** Perceptual distance between two colors, OKLab ΔE × 100. */
+function colorDistance(first, second) {
+  const [a, b] = [toOklab(first), toOklab(second)];
+  return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) * 100;
 }
 
 function withAlpha(color, alpha) {
@@ -320,8 +362,30 @@ function syntaxRoleForToken(entry) {
       return "text";
     }
   }
+  // Diff markup reads like the Source Control view: added, removed and changed
+  // lines take the theme's own git colors, and the hunk headers recede.
+  if (text.includes("markup.inserted")) {
+    return "inserted";
+  }
+  if (text.includes("markup.deleted")) {
+    return "deleted";
+  }
+  if (text.includes("markup.changed")) {
+    return "changed";
+  }
+  if (text.includes("meta.diff")) {
+    return "comment";
+  }
   if (text.includes("comment")) {
     return "comment";
+  }
+  // An escape or a pattern inside a string is the part worth finding, so it
+  // takes its own role rather than the string's.
+  if (text.includes("escape")) {
+    return "escape";
+  }
+  if (text.includes("regexp") || text.includes("regular expression")) {
+    return "regex";
   }
   if (text.includes("invalid")) {
     return "invalid";
@@ -380,7 +444,10 @@ function syntaxRoleForSemanticToken(key) {
   if (text === "comment") {
     return "comment";
   }
-  if (text.includes("string") || text.includes("regexp")) {
+  if (text.includes("regexp")) {
+    return "regex";
+  }
+  if (text.includes("string")) {
     return "string";
   }
   if (text === "number") {
@@ -432,6 +499,21 @@ function generateSyntaxPalette(backgrounds, baseHue, random) {
       findReadableSyntaxColor(backgrounds, baseHue, definition, random),
     ])
   );
+}
+
+/**
+ * The roles a palette fills from colors it already has rather than from its
+ * own hue: escapes and patterns borrow the decorator and markup accents, and
+ * diff lines take the theme's git colors, lifted until they read as code.
+ */
+function derivedSyntaxRoles(syntax, diagnostics, backgrounds, target, floor = MIN_TEXT_CONTRAST) {
+  return {
+    escape: syntax.escape ?? syntax.decorator,
+    regex: syntax.regex ?? syntax.markup,
+    inserted: readable(diagnostics.success, backgrounds, target, floor),
+    deleted: readable(diagnostics.error, backgrounds, target, floor),
+    changed: readable(diagnostics.warning, backgrounds, target, floor),
+  };
 }
 
 function generateTokenColors(template, syntaxPalette) {
@@ -523,6 +605,16 @@ function buildWorkbenchColors(templateColors, palette) {
     tabHoverForeground,
     modernTabHoverForeground,
   } = palette;
+  // Bracket-pair colorization is on by default, and without these VS Code
+  // paints every nesting level in its own gold, orchid and blue, none of which
+  // belongs to any palette here. Three of the theme's accents cycle instead.
+  const brackets = palette.bracketColors ?? [primary, secondary, info];
+  // Line numbers sit just above AA so the gutter stays legible without
+  // competing with the first characters of every line; the current line's
+  // number keeps the accent.
+  const lineNumberForeground =
+    palette.lineNumberForeground ??
+    quietTo(mutedForeground, editorBackground, LINE_NUMBER_CONTRAST);
   const colors = clone(templateColors);
   const inactiveSelectionBackground = visibleSelectionBackground(raisedBackground, foreground, [
     sidebarBackground,
@@ -581,7 +673,7 @@ function buildWorkbenchColors(templateColors, palette) {
     "list.inactiveFocusOutline": withAlpha(primary, "99"),
     "editor.background": editorBackground,
     "editor.foreground": foreground,
-    "editorLineNumber.foreground": mutedForeground,
+    "editorLineNumber.foreground": lineNumberForeground,
     "editorLineNumber.activeForeground": secondary,
     "editorCursor.foreground": primary,
     "editor.selectionBackground": withAlpha(primary, "66"),
@@ -610,6 +702,13 @@ function buildWorkbenchColors(templateColors, palette) {
     "chart.line": primary,
     "editorBracketMatch.background": withAlpha(secondary, "20"),
     "editorBracketMatch.border": primary,
+    "editorBracketHighlight.foreground1": brackets[0],
+    "editorBracketHighlight.foreground2": brackets[1],
+    "editorBracketHighlight.foreground3": brackets[2],
+    "editorBracketHighlight.foreground4": brackets[0],
+    "editorBracketHighlight.foreground5": brackets[1],
+    "editorBracketHighlight.foreground6": brackets[2],
+    "editorBracketHighlight.unexpectedBracket.foreground": error,
     "editorError.foreground": error,
     "editorWarning.foreground": warning,
     "editorInfo.foreground": info,
@@ -795,21 +894,39 @@ function buildWorkbenchColors(templateColors, palette) {
   return colors;
 }
 
+/**
+ * A random draw can land an accent whose hover and selection washes leave no
+ * text color at AA over the lifted dark surfaces, so a failed draw is simply
+ * drawn again; only a run of failures is reported.
+ */
 function generateQTheme(template, random = Math.random) {
   if (!template || !template.colors) {
     throw new TypeError("A theme template with a colors object is required.");
   }
+  let lastError;
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    try {
+      return drawQTheme(template, random);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
+}
 
+function drawQTheme(template, random) {
   const baseHue = randomBetween(random, 0, 360);
-  const editorBackground = randomDarkColor(random, baseHue, 0.045, 0.09);
-  const activityBackground = randomDarkColor(random, baseHue + 15, 0.07, 0.13);
-  const sidebarBackground = randomDarkColor(random, baseHue - 15, 0.085, 0.15);
-  const panelBackground = randomDarkColor(random, baseHue + 35, 0.065, 0.125);
-  const statusBackground = randomDarkColor(random, baseHue - 35, 0.09, 0.15);
-  const widgetBackground = randomDarkColor(random, baseHue + 5, 0.1, 0.16);
-  const raisedBackground = randomDarkColor(random, baseHue - 5, 0.115, 0.17);
-  const tabActiveBackground = randomDarkColor(random, baseHue + 25, 0.08, 0.14);
-  const tabInactiveBackground = randomDarkColor(random, baseHue - 25, 0.055, 0.11);
+  // The editor sits around OKLCH L 0.19, where GitHub Dark and Ayu Dark put
+  // theirs, rather than near black; the chrome stays a small step above it.
+  const editorBackground = randomDarkColor(random, baseHue, 0.07, 0.095);
+  const activityBackground = randomDarkColor(random, baseHue + 15, 0.085, 0.12);
+  const sidebarBackground = randomDarkColor(random, baseHue - 15, 0.095, 0.13);
+  const panelBackground = randomDarkColor(random, baseHue + 35, 0.08, 0.115);
+  const statusBackground = randomDarkColor(random, baseHue - 35, 0.1, 0.135);
+  const widgetBackground = randomDarkColor(random, baseHue + 5, 0.115, 0.15);
+  const raisedBackground = randomDarkColor(random, baseHue - 5, 0.125, 0.16);
+  const tabActiveBackground = randomDarkColor(random, baseHue + 25, 0.095, 0.13);
+  const tabInactiveBackground = randomDarkColor(random, baseHue - 25, 0.075, 0.11);
   const darkSurfaces = [
     editorBackground,
     activityBackground,
@@ -903,6 +1020,10 @@ function generateQTheme(template, random = Math.random) {
     alphaComposite(raisedBackground, editorBackground, "80"),
   ];
   const syntaxPalette = generateSyntaxPalette(syntaxBackgrounds, baseHue, random);
+  Object.assign(
+    syntaxPalette,
+    derivedSyntaxRoles(syntaxPalette, { success, error, warning }, syntaxBackgrounds, foreground)
+  );
   const tokenColors = generateTokenColors(template, syntaxPalette);
   const semanticTokenColors = generateSemanticTokenColors(template, syntaxPalette);
   const minimumContrast = minimumContrastForColors(
@@ -1077,14 +1198,18 @@ module.exports = {
   MIN_TEXT_CONTRAST,
   alphaComposite,
   buildWorkbenchColors,
+  colorDistance,
   contrastRatio,
   composeThemes,
+  derivedSyntaxRoles,
   generateQTheme,
   mixHex,
   passes,
+  quietTo,
   readable,
   syntaxBackgrounds,
   toHsl,
+  toOklab,
   syntaxRoleForSemanticToken,
   syntaxRoleForToken,
   withAlpha,

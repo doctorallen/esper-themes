@@ -18,6 +18,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
+- The film themes' dark editors sit at OKLCH lightness 0.19, where GitHub Dark and Ayu Dark put theirs, instead of near black, and the chrome is held to a small step above them. LCARS keeps its ground.
+- No two syntax roles are a shade apart: the build fails on any pair under ΔE 6, and every palette was regraded to pass, using 6-7 hue families instead of a median of 5.
+- Plain variables and parameters read as text; numbers, functions and types in LCARS each have their own approved color.
+- Bracket-pair colors come from each theme's accents instead of VS Code's defaults.
+- Diff and patch files are colored, string escapes and regular expressions have their own colors, and line numbers sit just over AA so the gutter stays below the code.
+- HTML attribute names and `this` are italic; markup headings are bold.
+- LCARS's selection is 50% dirty mauve, up from 25%.
+
 - The LCARS mark is redrawn from the Enterprise-D blueprints: the phaser strip rings the saucer, the dome section is an egg, the hull flares to a squared stern, the nacelles taper to their bussard caps, and the pylons sweep from the hull's rear flanks.
 - New Marketplace icon: a folded-paper prism splitting one line into three theme colours, above the Esper wordmark; the prism takes Synthwave's palette and the wordmark stays Esper amber. `images/logos/` holds the same icon and the prism alone in every theme's colours.
 - Replicant, Oblivion, Synthwave, Tomcat, and Fellowship follow Deckard's regraded palettes: the fully saturated cyans and greens are softened a step with their hues kept, Fellowship's inks are deepened, and Oblivion's activity bar shares the editor's ground.

@@ -51,7 +51,7 @@
     "list.focusOutline": "#403F65",
     "editor.background": "#FFF9D8",
     "editor.foreground": "#040620",
-    "editorLineNumber.foreground": "#403F65",
+    "editorLineNumber.foreground": "#706E82",
     "editorLineNumber.activeForeground": "#00487B",
     "editorCursor.foreground": "#403F65",
     "editor.selectionBackground": "#403F6566",
@@ -74,6 +74,13 @@
     "chart.line": "#403F65",
     "editorBracketMatch.background": "#00487B20",
     "editorBracketMatch.border": "#403F65",
+    "editorBracketHighlight.foreground1": "#403F65",
+    "editorBracketHighlight.foreground2": "#C83D3B",
+    "editorBracketHighlight.foreground3": "#377796",
+    "editorBracketHighlight.foreground4": "#403F65",
+    "editorBracketHighlight.foreground5": "#C83D3B",
+    "editorBracketHighlight.foreground6": "#377796",
+    "editorBracketHighlight.unexpectedBracket.foreground": "#881716",
     "editorError.foreground": "#881716",
     "editorWarning.foreground": "#7B2E00",
     "editorInfo.foreground": "#403F65",
@@ -315,7 +322,7 @@
         "storage.type"
       ],
       "settings": {
-        "foreground": "#83581B"
+        "foreground": "#2C6683"
       }
     },
     {
@@ -363,7 +370,6 @@
       "scope": [
         "string",
         "constant.other.symbol",
-        "constant.regexp",
         "markup.quoted"
       ],
       "settings": {
@@ -371,16 +377,34 @@
       }
     },
     {
-      "name": "Numbers and constants",
+      "name": "String escapes",
       "scope": [
-        "constant.numeric",
-        "constant.language",
-        "constant.character",
         "constant.character.escape",
         "constant.escape"
       ],
       "settings": {
-        "foreground": "#A43D00"
+        "foreground": "#85485A"
+      }
+    },
+    {
+      "name": "Regular expressions",
+      "scope": [
+        "string.regexp",
+        "constant.regexp"
+      ],
+      "settings": {
+        "foreground": "#B82E2D"
+      }
+    },
+    {
+      "name": "Numbers and constants",
+      "scope": [
+        "constant.numeric",
+        "constant.language",
+        "constant.character"
+      ],
+      "settings": {
+        "foreground": "#2F6B2F"
       }
     },
     {
@@ -391,7 +415,7 @@
         "variable.other.enummember"
       ],
       "settings": {
-        "foreground": "#765800"
+        "foreground": "#2F6B2F"
       }
     },
     {
@@ -404,7 +428,7 @@
         "variable.instance"
       ],
       "settings": {
-        "foreground": "#0265AC"
+        "foreground": "#040620"
       }
     },
     {
@@ -416,7 +440,8 @@
         "variable.language.super"
       ],
       "settings": {
-        "foreground": "#0265AC"
+        "fontStyle": "italic",
+        "foreground": "#040620"
       }
     },
     {
@@ -428,7 +453,7 @@
         "function.parameter"
       ],
       "settings": {
-        "foreground": "#0265AC"
+        "foreground": "#040620"
       }
     },
     {
@@ -465,7 +490,7 @@
         "keyword.other.special-method"
       ],
       "settings": {
-        "foreground": "#775247"
+        "foreground": "#B82E2D"
       }
     },
     {
@@ -475,7 +500,7 @@
         "support.variable"
       ],
       "settings": {
-        "foreground": "#765800"
+        "foreground": "#2F6B2F"
       }
     },
     {
@@ -499,7 +524,7 @@
         "support.type.primitive"
       ],
       "settings": {
-        "foreground": "#83581B"
+        "foreground": "#2C6683"
       }
     },
     {
@@ -512,17 +537,19 @@
         "support.class.component"
       ],
       "settings": {
-        "foreground": "#83581B"
+        "foreground": "#2C6683"
       }
     },
     {
       "name": "Namespaces and modules",
       "scope": [
         "entity.name.namespace",
-        "entity.name.type.module"
+        "entity.name.type.module",
+        "entity.name.import.go",
+        "entity.name.package.go"
       ],
       "settings": {
-        "foreground": "#83581B"
+        "foreground": "#2C6683"
       }
     },
     {
@@ -534,7 +561,7 @@
         "support.tag"
       ],
       "settings": {
-        "foreground": "#A43D00"
+        "foreground": "#B82E2D"
       }
     },
     {
@@ -547,6 +574,7 @@
         "entity.other.attribute-name.class"
       ],
       "settings": {
+        "fontStyle": "italic",
         "foreground": "#040620"
       }
     },
@@ -579,7 +607,8 @@
         "entity.name.section"
       ],
       "settings": {
-        "foreground": "#A43D00"
+        "fontStyle": "bold",
+        "foreground": "#B82E2D"
       }
     },
     {
@@ -590,7 +619,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "#A43D00"
+        "foreground": "#B82E2D"
       }
     },
     {
@@ -601,7 +630,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "#984F28"
+        "foreground": "#983E43"
       }
     },
     {
@@ -611,7 +640,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "#74402E"
+        "foreground": "#672B38"
       }
     },
     {
@@ -623,7 +652,7 @@
       ],
       "settings": {
         "fontStyle": "bold",
-        "foreground": "#472928"
+        "foreground": "#3F1C2E"
       }
     },
     {
@@ -729,7 +758,7 @@
       ],
       "settings": {
         "fontStyle": "underline",
-        "foreground": "#83581B"
+        "foreground": "#2C6683"
       }
     },
     {
@@ -738,7 +767,7 @@
         "constant.other.reference.link.markdown"
       ],
       "settings": {
-        "foreground": "#765800"
+        "foreground": "#2F6B2F"
       }
     },
     {
@@ -798,7 +827,7 @@
         "fenced_code.block.language.attributes.markdown"
       ],
       "settings": {
-        "foreground": "#83581B"
+        "foreground": "#2C6683"
       }
     },
     {
@@ -832,6 +861,49 @@
       }
     },
     {
+      "name": "Diff inserted lines",
+      "scope": [
+        "markup.inserted",
+        "markup.inserted.diff"
+      ],
+      "settings": {
+        "foreground": "#1C4960"
+      }
+    },
+    {
+      "name": "Diff deleted lines",
+      "scope": [
+        "markup.deleted",
+        "markup.deleted.diff"
+      ],
+      "settings": {
+        "foreground": "#881716"
+      }
+    },
+    {
+      "name": "Diff changed lines",
+      "scope": [
+        "markup.changed",
+        "markup.changed.diff"
+      ],
+      "settings": {
+        "foreground": "#7B2E00"
+      }
+    },
+    {
+      "name": "Diff headers",
+      "scope": [
+        "meta.diff.header",
+        "meta.diff.range",
+        "meta.diff.index",
+        "meta.diff.header.from-file",
+        "meta.diff.header.to-file"
+      ],
+      "settings": {
+        "foreground": "#62625C"
+      }
+    },
+    {
       "name": "Invalid",
       "scope": [
         "invalid",
@@ -846,35 +918,35 @@
   "semanticTokenColors": {
     "comment": "#62625C",
     "string": "#8E542B",
-    "number": "#A43D00",
-    "regexp": "#8E542B",
+    "number": "#2F6B2F",
+    "regexp": "#B82E2D",
     "operator": "#252546",
     "function": "#B82E2D",
-    "function.defaultLibrary": "#775247",
+    "function.defaultLibrary": "#B82E2D",
     "method": "#B82E2D",
     "decorator": "#85485A",
     "macro": "#403F65",
     "keyword": "#403F65",
     "modifier": "#403F65",
-    "label": "#A43D00",
-    "event": "#A43D00",
-    "namespace": "#83581B",
-    "type": "#83581B",
-    "type.defaultLibrary": "#83581B",
-    "class": "#83581B",
-    "class.defaultLibrary": "#83581B",
-    "interface": "#83581B",
-    "enum": "#765800",
-    "enumMember": "#765800",
-    "typeParameter": "#83581B",
-    "variable": "#0265AC",
-    "variable.defaultLibrary": "#0265AC",
-    "variable.constant": "#765800",
-    "variable.readonly": "#0265AC",
+    "label": "#B82E2D",
+    "event": "#B82E2D",
+    "namespace": "#2C6683",
+    "type": "#2C6683",
+    "type.defaultLibrary": "#2C6683",
+    "class": "#2C6683",
+    "class.defaultLibrary": "#2C6683",
+    "interface": "#2C6683",
+    "enum": "#2F6B2F",
+    "enumMember": "#2F6B2F",
+    "typeParameter": "#2C6683",
+    "variable": "#040620",
+    "variable.defaultLibrary": "#040620",
+    "variable.constant": "#2F6B2F",
+    "variable.readonly": "#040620",
     "property": "#040620",
     "property.readonly": "#040620",
     "member": "#040620",
-    "parameter": "#0265AC",
-    "method.defaultLibrary": "#775247"
+    "parameter": "#040620",
+    "method.defaultLibrary": "#B82E2D"
   }
 }
