@@ -28,6 +28,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Quick Open matches, find and symbol highlights, peek views, the modified gutter mark, inlay hints, merge conflicts, the progress bar, scrollbars and input validation take each theme's colors instead of VS Code's stock blues and oranges.
 - Bright terminal colors are a visible step brighter than the normal ones instead of repeating them.
 - No two syntax roles read as one color to a red-green color-blind reader: the build checks every pair as deuteranopes and protanopes see it, LCARS included.
+- Pane boundaries (the side bar, Modern UI surface frames, the panel and split editors) are visible edges in every theme, halfway between the old hairline and WCAG's 3:1, and LCARS badge text clears AA.
 
 - The LCARS mark is redrawn from the Enterprise-D blueprints: the phaser strip rings the saucer, the dome section is an egg, the hull flares to a squared stern, the nacelles taper to their bussard caps, and the pylons sweep from the hull's rear flanks.
 - New Marketplace icon: a folded-paper prism splitting one line into three theme colours, above the Esper wordmark; the prism takes Synthwave's palette and the wordmark stays Esper amber. `images/logos/` holds the same icon and the prism alone in every theme's colours.

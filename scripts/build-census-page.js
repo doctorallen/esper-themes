@@ -185,8 +185,9 @@ const BORDER_PAIRS = [
   ["Primary button", "button.background", "button.border", "Button outline against its fill."],
   ["Input control", "input.background", "input.border", "Input outline against its surface."],
   ["Editor widget", "editorWidget.background", "editorWidget.border", "Completion and hover widget boundary."],
-  ["Sidebar", "sideBar.background", "sideBar.border", "Sidebar separator."],
-  ["Modern surface", "surface.background", "surface.border", "The frame around Modern UI's rounded surfaces."],
+  ["Sidebar", "sideBar.background", "sideBar.border", "Sidebar separator, kept subtle by choice.", true],
+  ["Modern surface", "surface.background", "surface.border", "The frame Modern UI draws around the side bar and panel, kept subtle by choice.", true],
+  ["Modern editor frame", "editor.background", "editor.border", "The frame Modern UI draws around the editor, kept subtle by choice.", true],
   ["Active tab bottom", "tab.activeBackground", "tab.activeBorder", "Active editor-tab bottom stroke."],
   ["Active tab top", "tab.activeBackground", "tab.activeBorderTop", "Active editor-tab top stroke."],
   ["Bracket match", "editorBracketMatch.background", "editorBracketMatch.border", "Bracket-match boundary against its highlight."],
@@ -216,7 +217,11 @@ function auditFor(theme) {
   };
   return {
     text: TEXT_PAIRS.map(p => pair(p, false)).filter(Boolean),
-    borders: BORDER_PAIRS.map(([label, main, border, detail]) => pair([label, border, main, detail], true)).filter(Boolean),
+    borders: BORDER_PAIRS.map(([label, main, border, detail, subtle]) => {
+      const result = pair([label, border, main, detail], true);
+      if (result) result.subtle = !!subtle;
+      return result;
+    }).filter(Boolean),
   };
 }
 

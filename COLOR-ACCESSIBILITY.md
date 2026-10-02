@@ -309,10 +309,25 @@ visible in the UI around the editor: `activityBar.foreground`
 used on badges and secondary buttons remains readable (all AA). Diagnostic
 and semantic colors — error/warning/info/hint squiggles, gutters, overview
 rulers, diff borders, and Git decorations — are intentionally left unchanged
-so their meaning (e.g. red = error, green = added) stays consistent. Major workbench section
-separators (`sideBar.border`, `panel.border`, `surface.border`,
-`editor.border`, and `statusBar.border`) use the subdued dark neutral
-`#2F3749` in every theme instead of bright identity accents.
+so their meaning (e.g. red = error, green = added) stays consistent. The lines
+that bound a pane (`sideBar.border`, `surface.border`, `panel.border` and
+`editorGroup.border`) sit halfway between the structural hairline and the color
+that would clear WCAG 1.4.11's 3:1 on the surfaces they bound, keeping the
+hairline's hue (`BOUNDARY_STEP` in `q-theme.js`). That lands at 1.9-2.6:1. At the
+full 3:1 they drew a box around every pane, heaviest in Oblivion, Replicant and
+Helix, and the surfaces they bound already differ in fill; this is a deliberate
+floor, like Replicant's syntax floor, and the build fails below 1.8:1 so a
+regrade cannot let them fade back into the hairline. LCARS uses medium dark
+gray `#52596E` (2.17:1 on the side bar, 2.69:1 on the editor). Modern UI frames
+the side bar and panel with one key, `surface.border`, and the editor with its
+own, `editor.border`, which keeps the quiet structural line by default. A theme
+can frame them in its own accents through the `paneEdges` option in
+`scripts/build-themes.js`, each quieted to about 2:1 on the surface it frames:
+Replicant frames the side bar and panel in the gold of its active activity icon
+(`#624B17`, 2.09:1) and the editor in its searchlight cyan (`#1F4E56`, 2.01:1);
+Helix uses its string orange (`#6E4130`, 2.02:1) and its steel blue (`#2A4C5C`,
+2.01:1). The line between split editors takes the editor's frame. Hairlines that
+only decorate (`statusBar.border`, merge and inline-edit frames) keep the quieter structural color, dark gray `#2F3749` in LCARS.
 
 VS Code controls tab geometry in the workbench; color themes only provide color
 roles. The focused, unfocused, selected, inactive, and hover tab roles are all
@@ -565,6 +580,8 @@ accent. No new colors or grammar injections were added.
 | String escapes | Bright blue `#41C4F7` | Orange `#EB943A` | An escape now stands out from the string around it. |
 | Regular expressions | Almond creme `#FCC19F` | Orange `#EB943A`, shared with escapes | A pattern now stands out from ordinary strings. |
 | Diff lines | Unstyled | Inserted blue `#37A6D1`, deleted pale orange-red `#FF977B`, changed butterscotch `#EA9C72`, headers light gray `#9EA5BA` | The same colors as the inserted-diff border and the deleted and modified Git decorations. |
+| Badge text | Dark blue `#1C3C55` | Deep dark blue `#09131A` | Dark blue on the true-mauve badge measured 3.84:1, below normal-text AA; deep dark blue measures 6.26:1 and keeps the badge mauve. |
+| Pane boundaries | Dark gray `#2F3749` | Medium dark gray `#52596E` | At 1.27:1 the side-bar and surface frames all but disappeared; primary gray `#6D748C` cleared WCAG 1.4.11's 3:1 but boxed in every pane. Medium dark gray sits halfway, at 2.17:1. |
 | Bracket pairs | VS Code defaults | Blue `#37A6D1`, African violet `#BAA4E5`, barley `#EDB378`; unexpected pale orange-red `#FF977B` | The defaults are colors outside the approved palette. |
 | Operators, storage, modifiers, export keywords and tag names | Bright blue `#41C4F7` | Blue `#37A6D1` | To a deuteranope, bright blue and the African-violet keywords and attributes read as one color (ΔE 2.9); Blue stays 8.5 apart. |
 | Storage-type tokens | Pale orange-red `#FF977B` | Subdued sienna `#C47D69` | Pale orange-red merged with barley for deuteranopes and with almond types for protanopes; sienna is at least ΔE 7.4 from both. |
@@ -625,18 +642,18 @@ cannot assign an individual color to either action.
 | Orange | `#EB943A` | Active links, the base active-tab stripe, string escapes and regular expressions, and terminal yellow. |
 | Red | `#CF4F4F` | Approved palette color reserved for future diagnostic or decorative use; not assigned to a current tab role. |
 | Subdued sienna | `#C47D69` | Storage-type declaration tokens, terminal red, and the modified overview-ruler marker. |
-| True mauve | `#C082A9` | Number, constant, enum-member and library-constant tokens, terminal magenta, and badge backgrounds with dark-blue foreground text. |
+| True mauve | `#C082A9` | Number, constant, enum-member and library-constant tokens, terminal magenta, and badge backgrounds with deep-dark-blue foreground text (6.26:1; dark blue measured 3.84:1). |
 | Blue | `#37A6D1` | Operator, storage, modifier, export-keyword and tag-name tokens, the first bracket-pair level, inserted diff lines, the current side of a merge conflict, the informational squiggle and the inserted-diff border. |
 | Bright blue | `#41C4F7` | Focus rings, links, input/widget borders, primary-button borders, active Explorer selection icons, the peek-view border, the progress bar, the active scrollbar, bright terminal blue, and terminal cyan. |
 | Dark blue | `#1C3C55` | Activity bar, panel, title-bar, inactive-tab, primary-button, and active Explorer selection backgrounds. |
-| Dark gray | `#2F3749` | Status bar, widgets, inputs, dropdowns, and line-highlight backgrounds. |
-| Deep dark blue | `#09131A` | Editor, terminal, and editor tab-strip backgrounds (dark blue darkened ~69%). |
+| Dark gray | `#2F3749` | Status bar, widgets, inputs, dropdowns, and line-highlight backgrounds, and decorative hairlines. |
+| Deep dark blue | `#09131A` | Editor, terminal, and editor tab-strip backgrounds (dark blue darkened ~69%), and badge text. |
 | Deep dark gray | `#212633` | LCARS sidebar background (dark gray darkened ~30%). |
 | Ghost gray | `#D2D5DF` | Secondary text, inactive labels, language variables, namespaces/modules, class names, library types/classes, HTML/XML tag punctuation, terminal white, and inactive tabs. |
 | Light gray | `#9EA5BA` | Comments, diff headers, placeholders, and inactive line numbers at 73% opacity. |
 | Light orange-red | `#FF6753` | Added-line gutter indicator only; never normal text. |
 | Medium dark blue | `#2A7193` | Minimap background and hovered primary buttons. |
-| Medium dark gray | `#52596E` | Hover states, section headers, inactive selections, and indent guides. |
+| Medium dark gray | `#52596E` | Pane boundaries (side bar, Modern UI surfaces, panel, split editors), hover states, section headers, inactive selections, and indent guides. |
 | Orange-red | `#E7442A` | Deleted-line gutter and removed-diff border. |
 | Pale orange-red | `#FF977B` | Error text, invalid tokens, deleted-resource text and diff lines, editor cursor, headings, and bright terminal red. |
 | Primary gray | `#6D748C` | Whitespace markers, scrollbars, and bright terminal black. |

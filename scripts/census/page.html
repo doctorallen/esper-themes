@@ -432,7 +432,8 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
           <tr><td>Normal text</td><td>WCAG AA</td><td class="n">4.5:1</td><td>Body copy, labels and syntax text. The build holds every Esper text pair to it, except Replicant's syntax, held to 2.9:1 by choice.</td></tr>
           <tr><td>Normal text</td><td>WCAG AAA</td><td class="n">7:1</td><td>Enhanced readability target.</td></tr>
           <tr><td>Large text</td><td>WCAG AA</td><td class="n">3:1</td><td>Large headings and display text.</td></tr>
-          <tr><td>UI borders and focus</td><td>WCAG 1.4.11</td><td class="n">3:1</td><td>Controls, separators, tab strokes and focus rings.</td></tr>
+          <tr><td>UI borders and focus</td><td>WCAG 1.4.11</td><td class="n">3:1</td><td>Controls, tab strokes and focus rings.</td></tr>
+          <tr><td>Pane edges</td><td>Esper build</td><td class="n">1.8:1</td><td>The sidebar, Modern UI surface, panel and split-editor edges sit halfway between the structural hairline and 3:1, by choice; at full 3:1 they boxed in every pane. The surfaces they bound also differ in fill.</td></tr>
           <tr><td>Syntax roles</td><td>Esper build</td><td class="n">ΔE 6 / ΔE 3</td><td>Two different syntax colors must sit at least ΔE 6 apart, and ΔE 3 as a deuteranope or protanope sees them.</td></tr>
         </tbody></table></div></div>
       <div class="figure"><h3>Text pairs <span class="small" id="auditName"></span></h3><div class="scroll"><table class="audit" id="textAudit"></table></div></div>
@@ -509,6 +510,7 @@ function mod(t) {
     actItemFg: W(t, 'mActItemFg') || W(t, 'activityFg') || t.fg,
     surface: W(t, 'surfaceBg') || sidebar,
     border: W(t, 'surfaceBorder') || W(t, 'sideBarBorder') || W(t, 'editorGroupBorder') || null,
+    edBorder: W(t, 'editorBorder') || W(t, 'surfaceBorder') || W(t, 'editorGroupBorder') || null,
     sideFg: W(t, 'sidebarFg') || t.fg,
     listHi: W(t, 'listHighlight') || t.fg,
     tabA: W(t, 'mEdTabBg') || W(t, 'tabActive') || t.bg,
@@ -574,6 +576,7 @@ function termLine(t) {
 }
 function win(t, big) {
   const m = mod(t), bd = m.border ? `box-shadow:inset 0 0 0 1px ${m.border};` : '';
+  const ebd = m.edBorder ? `box-shadow:inset 0 0 0 1px ${m.edBorder};` : '';
   const dash = (W(t, 'lineNo') || t.fg) + '55';
   const icon = (on) => `<i style="${on && m.actItemBg ? 'background:' + m.actItemBg + ';' : ''}color:${on ? (m.actItemBg ? m.actItemFg : W(t, 'activityFg') || t.fg) : m.actFg}"><b></b></i>`;
   return `<div class="mwin${big ? ' big' : ''}" style="background:${m.frame}">
@@ -582,7 +585,7 @@ function win(t, big) {
       <div class="mact">${icon(true)}${icon(false)}${icon(false)}</div>
       <div class="mcard mside" style="background:${m.surface};color:${m.sideFg};${bd}"><span class="hd">EXPLORER</span><i style="width:70%"></i><span class="sbt"><span style="color:${m.listHi};font-weight:700">lo</span>ad.ts</span><i style="width:80%"></i><i style="width:55%"></i><i style="width:65%"></i></div>
       <div class="mmain">
-        <div class="mcard" style="background:${t.bg};${bd}">
+        <div class="mcard" style="background:${t.bg};${ebd}">
           <div class="mtabs"><span style="background:${m.tabA};color:${m.tabAFg};${m.tabTop ? 'border-top-color:' + m.tabTop + ';' : ''}${m.tabBottom ? 'border-bottom-color:' + m.tabBottom : ''}">load.ts</span><span style="background:${m.tabI};color:${m.tabIFg}">crew.diff</span></div>
           <pre>${lines(t, CODE, true)}</pre><pre class="more" style="border-color:${dash}">${lines(t, MORE, false)}</pre>
         </div>
@@ -868,7 +871,7 @@ function renderPalettes() {
   const groups = ['Surfaces', 'Accents', 'Syntax'].map(g => [g, e.palette.filter(c => c.group === g)]).filter(([, cs]) => cs.length);
   document.getElementById('palGroups').innerHTML = groups.map(([g, cs]) => `<div class="swgroup"><h3>${g} · ${cs.length}</h3><div class="swatches">${cs.map(c => `<button type="button" class="swatch" data-hex="${c.hex}" style="background:${c.hex};color:${inkOn(c.hex)}" aria-label="${esc(c.name)}, ${c.hex}. Copy hex."><span class="hx">${c.hex}</span><span class="nm">${esc(c.name)}${c.hex === e.primary ? ' ★' : ''}</span><span class="st">${fmt(contrastOn(c.hex, t.bg), 2)}:1 on editor</span></button>`).join('')}</div></div>`).join('');
   document.getElementById('auditName').textContent = '· ' + palTheme;
-  const row = p => `<tr><td>${esc(p.label)}<div class="det">${esc(p.detail)}</div></td><td class="demo${p.border ? ' bd' : ''}" style="background:${p.surface};color:${p.border ? inkOn(p.surface) : p.ink};${p.border ? '--bd:' + p.ink : ''}">${p.border ? 'Border' : 'Aa Sample'}</td><td class="mono small">${esc(p.fgKey)}<br>${esc(p.bgKey)}</td><td class="mono">${p.fg}<br>${p.bg}</td><td class="n mono">${fmt(p.ratio, 2)}:1</td><td>${p.border ? badge('UI 3:1', p.ratio >= 3) : badge(p.ratio >= 7 ? 'AAA' : p.ratio >= 4.5 ? 'AA' : p.ratio >= 3 ? 'Large only' : 'Fail', p.ratio >= 4.5, p.ratio >= 3)}</td></tr>`;
+  const row = p => `<tr><td>${esc(p.label)}<div class="det">${esc(p.detail)}</div></td><td class="demo${p.border ? ' bd' : ''}" style="background:${p.surface};color:${p.border ? inkOn(p.surface) : p.ink};${p.border ? '--bd:' + p.ink : ''}">${p.border ? 'Border' : 'Aa Sample'}</td><td class="mono small">${esc(p.fgKey)}<br>${esc(p.bgKey)}</td><td class="mono">${p.fg}<br>${p.bg}</td><td class="n mono">${fmt(p.ratio, 2)}:1</td><td>${p.border ? (p.ratio >= 3 ? badge('UI 3:1', true) : p.subtle && p.ratio >= 1.8 ? badge('Subtle by choice', false, true) : badge('Below 3:1', false)) : badge(p.ratio >= 7 ? 'AAA' : p.ratio >= 4.5 ? 'AA' : p.ratio >= 3 ? 'Large only' : 'Fail', p.ratio >= 4.5, p.ratio >= 3)}</td></tr>`;
   const head = `<thead><tr><th>Pair</th><th>Preview</th><th>Keys</th><th>Colors</th><th class="n">Contrast</th><th>Result</th></tr></thead>`;
   document.getElementById('textAudit').innerHTML = head + '<tbody>' + e.audit.text.map(row).join('') + '</tbody>';
   document.getElementById('borderAudit').innerHTML = head + '<tbody>' + e.audit.borders.map(row).join('') + '</tbody>';

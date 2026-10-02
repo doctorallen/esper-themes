@@ -4,6 +4,13 @@ const MIN_TEXT_CONTRAST = 4.5;
 const MIN_SELECTION_CONTRAST = 1.6;
 // Just over AA: readable, and quieter than any syntax role.
 const LINE_NUMBER_CONTRAST = 4.6;
+// WCAG 1.4.11's 3:1 for the edge that identifies a UI component. Esper's pane
+// edges sit halfway between the quiet structural hairline and that line, which
+// read as too heavy at full strength; the floor keeps a regrade from letting
+// them vanish.
+const WCAG_BOUNDARY_CONTRAST = 3;
+const BOUNDARY_STEP = 0.5;
+const MIN_BOUNDARY_CONTRAST = 1.8;
 const DEFAULT_LIGHT_FOREGROUND = "#F3F4F7";
 const DEFAULT_DARK_FOREGROUND = "#14202B";
 const DEBUGGING_STATUS_BACKGROUND = "#BAA4E5";
@@ -659,6 +666,24 @@ function buildWorkbenchColors(templateColors, palette) {
   const lineNumberForeground =
     palette.lineNumberForeground ??
     quietTo(mutedForeground, editorBackground, LINE_NUMBER_CONTRAST);
+  // The lines that bound a pane (the sidebar's edge, Modern UI's surface frame,
+  // the panel and split-editor edges) sit halfway between the structural
+  // hairline and the color that would clear WCAG's 3:1 on the surfaces they
+  // bound, keeping the hairline's hue: visible as edges without drawing a box
+  // around every pane. Hairlines that only decorate keep the structural color.
+  const paneSurfaces = [sidebarBackground, editorBackground];
+  const boundaryBorder =
+    palette.boundaryBorder ??
+    readable(
+      mixHex(
+        structuralBorder,
+        readable(structuralBorder, paneSurfaces, foreground, WCAG_BOUNDARY_CONTRAST),
+        BOUNDARY_STEP
+      ),
+      paneSurfaces,
+      foreground,
+      MIN_BOUNDARY_CONTRAST
+    );
   const colors = clone(templateColors);
   const inactiveSelectionBackground = visibleSelectionBackground(raisedBackground, foreground, [
     sidebarBackground,
@@ -704,7 +729,7 @@ function buildWorkbenchColors(templateColors, palette) {
     "sideBarTitle.foreground": primary,
     "sideBarSectionHeader.background": raisedBackground,
     "sideBarSectionHeader.foreground": foreground,
-    "sideBar.border": structuralBorder,
+    "sideBar.border": boundaryBorder,
     "list.activeSelectionBackground": primary,
     "list.activeSelectionForeground": primaryForeground,
     "list.activeSelectionIconForeground": primaryForeground,
@@ -770,10 +795,12 @@ function buildWorkbenchColors(templateColors, palette) {
     "editorGroupHeader.tabsBorder": "#00000000",
     "surface.background": sidebarBackground,
     "surface.foreground": foreground,
-    "surface.border": structuralBorder,
-    "editor.border": structuralBorder,
+    "surface.border": boundaryBorder,
+    // Modern UI frames the editor with its own key; it keeps the quiet
+    // structural line unless a theme draws its own editor frame.
+    "editor.border": palette.editorBorder ?? structuralBorder,
     "panel.background": editorBackground,
-    "panel.border": structuralBorder,
+    "panel.border": boundaryBorder,
     "panelSectionHeader.background": panelBackground,
     "panelSectionHeader.foreground": primary,
     "panelSectionHeader.border": structuralBorder,
@@ -990,7 +1017,7 @@ function buildWorkbenchColors(templateColors, palette) {
     "scrollbarSlider.background": withAlpha(mutedForeground, "33"),
     "scrollbarSlider.hoverBackground": withAlpha(mutedForeground, "55"),
     "scrollbarSlider.activeBackground": withAlpha(primary, "66"),
-    "editorGroup.border": structuralBorder,
+    "editorGroup.border": palette.editorBorder ?? boundaryBorder,
     "inputValidation.errorBorder": error,
     "inputValidation.errorBackground": widgetBackground,
     "inputValidation.warningBorder": warning,
@@ -1309,6 +1336,7 @@ function composeThemes(workbench, editor, name = "Mix") {
 module.exports = {
   DEBUGGING_STATUS_BACKGROUND,
   DEBUGGING_STATUS_FOREGROUND,
+  MIN_BOUNDARY_CONTRAST,
   MIN_TEXT_CONTRAST,
   alphaComposite,
   buildWorkbenchColors,

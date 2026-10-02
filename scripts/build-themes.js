@@ -20,6 +20,7 @@ const path = require("path");
 const {
   DEBUGGING_STATUS_BACKGROUND,
   DEBUGGING_STATUS_FOREGROUND,
+  MIN_BOUNDARY_CONTRAST,
   MIN_TEXT_CONTRAST,
   alphaComposite,
   buildWorkbenchColors,
@@ -30,6 +31,7 @@ const {
   mixHex,
   simulateCvd,
   passes,
+  quietTo,
   readable,
   syntaxRoleForSemanticToken,
   syntaxRoleForToken,
@@ -52,6 +54,8 @@ const DARK_EDITOR_LIGHTNESS = 0.19;
 // The chrome stays a step brighter than the code, which is the Esper look, but
 // a small one: the sidebar sits at most this far above the editor.
 const MAX_CHROME_STEP = 0.03;
+// Where a theme frames its panes in an accent, the frame is quieted to this.
+const PANE_EDGE_CONTRAST = 2;
 // Floors that keep a surface's job visible once the ladder is compressed:
 // borders still separate panes and widgets still float over the code.
 const SURFACE_FLOORS = { border: 0.08, widget: 0.05, raised: 0.05 };
@@ -279,6 +283,10 @@ const THEMES = [
     // palette is easier to keep honest with the constraint written down than
     // by eye. Nothing in the syntax may land between these hues.
     forbiddenSyntaxHues: [[250, 345]],
+    // The side bar and panel are framed in the gold of the active activity
+    // icon and the editor in the searchlight cyan, both quieted to the weight
+    // every theme's edges have, rather than one slate line.
+    paneEdges: { surfaces: "primary", editor: "secondary" },
     // The film is graded dark, and a palette that clears 4.5:1 everywhere
     // cannot be. The floor is set just under the comment color so the palette
     // ships as chosen rather than nudged, and no lower, so the build still
@@ -733,6 +741,9 @@ const THEMES = [
       "Attribute names": "number",
       "Library constants and variables": "#80E045",
     },
+    // Framed the way Replicant is, in Helix's own pair: the string orange
+    // around the side bar and panel, the steel blue around the editor.
+    paneEdges: { surfaces: "primary", editor: "#448AA9" },
     // The explorer read in lavender. The active tab is stroked the way LCARS
     // strokes its own: the steel blue on top and the orange underneath.
     colorOverrides: {
@@ -868,6 +879,11 @@ function buildTheme(sourceSpec) {
 
   const primary = primaryPair.background;
   const secondary = secondaryPair.background;
+  const paneEdge = (source, surface) => {
+    if (!source) return undefined;
+    const accent = source === "primary" ? primary : source === "secondary" ? secondary : source;
+    return quietTo(accent, surface, PANE_EDGE_CONTRAST).toUpperCase();
+  };
   const hoverCandidates = [foreground, primaryPair.foreground, mutedForeground];
   const selectionBackgrounds = [
     alphaComposite(primary, s.editor, "66"),
@@ -912,6 +928,11 @@ function buildTheme(sourceSpec) {
     listHoverForeground: pickForeground(listHover, hoverCandidates),
     tabHoverForeground: pickForeground(tabHover, hoverCandidates),
     modernTabHoverForeground: pickForeground(modernTabHover, hoverCandidates),
+    // A theme may frame its panes in its own accents: the side bar and panel
+    // in one, the editor in another, each quieted to about 2:1 on the surface
+    // it frames, the weight the shared mapping gives every edge.
+    boundaryBorder: paneEdge(spec.paneEdges?.surfaces, s.sidebar),
+    editorBorder: paneEdge(spec.paneEdges?.editor, s.editor),
     bracketColors: bracketColors(
       [
         accentText(spec.primary),
@@ -1085,7 +1106,19 @@ function buildTheme(sourceSpec) {
     ),
   });
 
+  // Pane boundaries sit halfway to WCAG's 3:1 by choice; the floor only keeps
+  // them from fading back into the hairline.
+  const boundaryPairs = [
+    ["sideBar.border", "sideBar.background"],
+    ["surface.border", "surface.background"],
+    ["panel.border", "panel.background"],
+    ["editorGroup.border", "editor.background"],
+  ].map(([border, surface]) => [colors[border], colors[surface]]);
+
   const failures = [
+    ...boundaryPairs
+      .filter(([fg, bg]) => contrastRatio(fg, bg) < MIN_BOUNDARY_CONTRAST)
+      .map(pair => [...pair, MIN_BOUNDARY_CONTRAST]),
     ...pairs
       .filter(([fg, bg]) => contrastRatio(fg, bg) < MIN_TEXT_CONTRAST)
       .map(pair => [...pair, MIN_TEXT_CONTRAST]),
