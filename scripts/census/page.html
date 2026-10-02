@@ -1,0 +1,886 @@
+<title>Esper Theme Census</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Atkinson+Hyperlegible+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one long lab report in two acts, the study and the regrade, with a section rail on wide screens and figures that scroll inside their own frames. */
+:root {
+  --paper: #F3F4F6;
+  --sheet: #FFFFFF;
+  --ink: #15171C;
+  --ink-2: #474D59;
+  --muted: #6E7480;
+  --rule: #D9DCE2;
+  --rule-2: #E9EBEF;
+  --field: #69707D;
+  --esper: #A3560A;
+  --esper-soft: #F6E7D6;
+  --pass: #1F7A45;
+  --warn: #9A6200;
+  --fail: #B4232F;
+  --display: "Bricolage Grotesque", "Avenir Next Condensed", "Helvetica Neue", Arial, sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", "SF Mono", Menlo, Consolas, monospace;
+  --code: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1014; --sheet: #161920; --ink: #E9EBEF; --ink-2: #B6BBC5; --muted: #8C929D;
+    --rule: #2B303A; --rule-2: #1F232B; --field: #A0A7B3; --esper: #F2A53A; --esper-soft: #3A2A16;
+    --pass: #5CC98A; --warn: #E8B24A; --fail: #F0717B; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E1014; --sheet: #161920; --ink: #E9EBEF; --ink-2: #B6BBC5; --muted: #8C929D;
+  --rule: #2B303A; --rule-2: #1F232B; --field: #A0A7B3; --esper: #F2A53A; --esper-soft: #3A2A16;
+  --pass: #5CC98A; --warn: #E8B24A; --fail: #F0717B; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 80px; display: grid; grid-template-columns: 172px minmax(0, 1fr); gap: 40px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); padding-inline: 16px; gap: 24px; } }
+nav.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-size: 13px; display: flex; flex-direction: column; gap: 2px; }
+nav.rail .act { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: 10px 10px 4px; }
+nav.rail a { color: var(--ink-2); text-decoration: none; padding: 4px 10px; border-left: 2px solid var(--rule); }
+nav.rail a:hover, nav.rail a:focus-visible { color: var(--ink); border-left-color: var(--esper); outline: none; }
+nav.rail .k { font-family: var(--mono); color: var(--muted); font-size: 11px; margin-right: 6px; }
+@media (max-width: 900px) { nav.rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 4px; } nav.rail a { border: 1px solid var(--rule); border-radius: 4px; } nav.rail .act { display: none; } }
+main { min-width: 0; display: flex; flex-direction: column; gap: 64px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(36px, 6vw, 64px); line-height: 1; font-weight: 800; }
+h2 { font-size: 30px; line-height: 1.1; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; max-width: 70ch; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 19px; color: var(--ink-2); max-width: 66ch; }
+section { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 20px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--rule); padding-top: 18px; }
+.actbreak { border-top: 3px solid var(--ink); padding-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+.prose { display: flex; flex-direction: column; gap: 12px; color: var(--ink-2); }
+.prose strong { color: var(--ink); }
+code, .mono { font-family: var(--mono); font-size: 0.88em; }
+.esp { color: var(--esper); font-weight: 700; }
+.fld { color: var(--field); font-weight: 700; }
+.small { font-size: 12.5px; color: var(--muted); }
+.scroll { overflow-x: auto; min-width: 0; }
+
+.findings { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 12px; }
+.finding { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.finding .trio { display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+.finding .trio div { display: flex; flex-direction: column; }
+.finding .big { font-family: var(--display); font-size: 26px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.finding .big.was { color: var(--esper); opacity: .55; }
+.finding .lab { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.finding p { font-size: 13.5px; color: var(--ink-2); }
+.finding h3 { font-size: 15px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--sheet); }
+.seg button { font: 600 12.5px var(--body); padding: 6px 11px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.seg button:focus-visible, select:focus-visible, th button:focus-visible, .card:focus-visible { outline: 2px solid var(--esper); outline-offset: 2px; }
+label.sel { font-size: 13px; color: var(--ink-2); display: inline-flex; gap: 8px; align-items: center; }
+select { font: 13px var(--body); padding: 6px 8px; border-radius: 6px; border: 1px solid var(--rule); background: var(--sheet); color: var(--ink); }
+
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .gallery { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 8px; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-width: 0; text-align: left; font: inherit; color: inherit; }
+.card:hover { border-color: var(--ink-2); }
+.card[aria-current="true"] { border-color: var(--esper); box-shadow: 0 0 0 1px var(--esper); }
+.card .meta { display: flex; justify-content: space-between; gap: 8px; padding: 0 4px 2px; font-size: 13px; }
+.card .meta b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card .meta span { color: var(--muted); font-family: var(--mono); font-size: 11.5px; white-space: nowrap; }
+.card .stats { display: flex; gap: 10px; padding: 0 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); flex-wrap: wrap; }
+.tag-esper { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--esper); }
+
+/* Modern UI specimen: framed, rounded surfaces on the activity-bar ground */
+.mwin { border-radius: 10px; overflow: hidden; font-family: var(--code); display: flex; flex-direction: column; }
+.mwin .mtitle { height: 24px; display: flex; align-items: center; gap: 5px; padding-left: 10px; }
+.mwin .mtitle i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .45; }
+.mwin .mtitle span { margin-left: 10px; font-size: 10px; opacity: .8; font-family: var(--body); }
+.mwin .mbody { display: grid; grid-template-columns: 34px 96px minmax(0, 1fr); gap: 5px; padding: 0 6px 6px 0; }
+.mwin .mact { display: flex; flex-direction: column; align-items: center; gap: 7px; padding-top: 4px; }
+.mwin .mact i { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; }
+.mwin .mact i b { width: 10px; height: 10px; border-radius: 3px; border: 1.6px solid currentColor; display: block; }
+.mwin .mcard { border-radius: 8px; overflow: hidden; min-width: 0; }
+.mwin .mside { padding: 8px 8px; display: flex; flex-direction: column; gap: 7px; }
+.mwin .mside .hd { font-family: var(--body); font-size: 8.5px; font-weight: 700; letter-spacing: .08em; opacity: .9; }
+.mwin .mside i { height: 5px; border-radius: 3px; background: currentColor; opacity: .32; display: block; }
+.mwin .mside .sbt { font-size: 9.5px; line-height: 11px; white-space: nowrap; overflow: hidden; padding: 2px 4px; margin: 0 -4px; border-radius: 4px; }
+.mwin .mmain { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.mwin .mtabs { display: flex; gap: 5px; padding: 6px 6px 0; }
+.mwin .mtabs span { font-size: 10px; line-height: 17px; padding: 0 10px; border-radius: 6px; white-space: nowrap; border-top: 2px solid transparent; border-bottom: 2px solid transparent; }
+.mwin pre { margin: 0; padding: 6px 0 6px; font-size: 11.5px; line-height: 17px; overflow: hidden; white-space: pre; }
+.mwin pre.more { border-top: 1px dashed; padding-top: 6px; }
+.mwin .ln { display: flex; }
+.mwin .ln .g { width: 28px; text-align: right; padding-right: 9px; flex: none; }
+.mwin .cur { display: inline-block; width: 1.5px; height: 13px; vertical-align: -3px; margin-left: -1px; }
+.mwin .mpanel { padding: 6px 8px 7px; display: flex; flex-direction: column; gap: 5px; }
+.mwin .mpanel .pt { align-self: flex-start; font-family: var(--body); font-size: 8.5px; font-weight: 700; letter-spacing: .08em; padding: 2px 8px; border-radius: 5px; }
+.mwin .mpanel .tl { font-size: 11px; white-space: pre; overflow: hidden; }
+.mwin .mstatus { height: 18px; font-size: 9.5px; line-height: 18px; padding-left: 10px; white-space: nowrap; overflow: hidden; }
+.mwin.big pre { font-size: 13px; line-height: 19px; }
+.mwin.big .mbody { grid-template-columns: 40px 130px minmax(0, 1fr); }
+
+.detail { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 18px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 1100px) { .detail { grid-template-columns: minmax(0, 1fr); } }
+.detail .head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; align-items: baseline; }
+.detail .head .sub { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.dl { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 14px; font-size: 12.5px; }
+.kv div { display: flex; gap: 7px; align-items: center; min-width: 0; }
+.kv .lbl { color: var(--muted); font-size: 11.5px; }
+.chip { width: 14px; height: 14px; border-radius: 3px; flex: none; display: inline-block; box-shadow: inset 0 0 0 1px rgba(127,127,127,.45); vertical-align: -2px; }
+.chips { display: inline-flex; gap: 3px; flex-wrap: wrap; }
+table { border-collapse: collapse; font-size: 12.5px; width: 100%; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule-2); vertical-align: middle; }
+th { font-family: var(--mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); white-space: nowrap; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+.roles td .sw { display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 12px; }
+.roles td.sel { font-family: var(--mono); font-size: 11px; color: var(--muted); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roles tr.grp td { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding-top: 12px; border-bottom: 1px solid var(--rule); }
+.cr { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+.cr.lo { color: var(--fail); } .cr.mid { color: var(--warn); } .cr.hi { color: var(--pass); }
+.cr.lo::before { content: "▼ "; font-size: 9px; } .cr.mid::before { content: "◆ "; font-size: 9px; } .cr.hi::before { content: "● "; font-size: 9px; }
+.sample-txt { padding: 2px 8px; border-radius: 3px; font-family: var(--code); font-size: 12px; }
+
+.figure { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.figure .cap { font-size: 13.5px; color: var(--ink-2); max-width: 78ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.strip-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 12px; align-items: center; }
+@media (max-width: 640px) { .strip-row { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+.strip-row .rl { font-size: 13.5px; font-weight: 600; }
+.strip-row .rl small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+svg.strip { width: 100%; height: auto; display: block; overflow: visible; }
+svg text { font-family: var(--mono); fill: var(--muted); font-size: 10px; }
+svg .grid { stroke: var(--rule); stroke-width: 1; }
+svg .ref { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 3 3; }
+svg .dot-f { fill: var(--sheet); stroke: var(--field); stroke-width: 1.6; }
+svg .dot-o { fill: var(--sheet); stroke: var(--esper); stroke-width: 1.8; }
+svg .dot-e { fill: var(--esper); stroke: var(--sheet); stroke-width: 1.5; }
+svg .med { stroke-width: 2.5; stroke-linecap: round; }
+svg .hit { fill: transparent; }
+svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
+.tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--paper); font-size: 12px; padding: 7px 9px; border-radius: 5px; max-width: 290px; line-height: 1.4; }
+.tip .m { font-family: var(--mono); opacity: .85; }
+
+.ladders { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 6px 22px; }
+.ladder { display: grid; grid-template-columns: 112px minmax(0, 1fr) 48px; gap: 8px; align-items: center; font-size: 12px; min-width: 0; }
+.ladder .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ladder .bars { display: flex; height: 22px; border-radius: 3px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(127,127,127,.3); }
+.ladder .bars i { display: block; }
+.ladder .dl { font-family: var(--mono); font-size: 11px; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ladder.e .nm { color: var(--esper); font-weight: 700; }
+.ladder-key { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+.tally { display: flex; flex-wrap: wrap; gap: 10px; }
+.tally div { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; font-size: 13px; }
+.tally b { font-family: var(--display); font-size: 22px; margin-right: 4px; }
+
+.cons { width: 100%; min-width: 760px; }
+.cons td { padding: 7px 8px; }
+.fambar { display: flex; height: 18px; border-radius: 3px; overflow: hidden; gap: 1px; background: var(--sheet); min-width: 200px; }
+.fambar i { display: block; height: 100%; font-style: normal; font-size: 10px; line-height: 18px; color: #fff; text-shadow: 0 0 2px rgba(0,0,0,.6); padding-left: 3px; overflow: hidden; white-space: nowrap; font-family: var(--mono); }
+.agree { font-family: var(--mono); font-size: 12px; white-space: nowrap; }
+.matrix { border-collapse: separate; border-spacing: 2px; width: auto; }
+.matrix td, .matrix th { padding: 0; border: 0; }
+.matrix th.col { height: 128px; vertical-align: bottom; padding-bottom: 4px; }
+.matrix th.col span { writing-mode: vertical-rl; transform: rotate(180deg); font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 11px; font-weight: 400; color: var(--ink-2); white-space: nowrap; max-height: 124px; overflow: hidden; text-overflow: ellipsis; display: inline-block; }
+.matrix th.col.e span { color: var(--esper); font-weight: 700; }
+.matrix th.row { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 12px; font-weight: 400; color: var(--ink-2); padding-right: 10px; text-align: right; }
+.matrix td.c { width: 18px; height: 18px; border-radius: 3px; position: relative; }
+.matrix td.c i { position: absolute; inset: 4px; border-radius: 2px; }
+.matrix td.gap { width: 10px; }
+.matrix td.c.it i { border-radius: 2px 7px 2px 7px; }
+.famkey { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; color: var(--ink-2); }
+.famkey span { display: inline-flex; gap: 5px; align-items: center; }
+
+.stable th button { all: unset; cursor: pointer; }
+.stable th button::after { content: " ↕"; opacity: .4; }
+.stable th[aria-sort="descending"] button::after { content: " ↓"; opacity: 1; }
+.stable th[aria-sort="ascending"] button::after { content: " ↑"; opacity: 1; }
+.stable tr.e td:first-child { color: var(--esper); font-weight: 700; }
+.stable tr.e { background: color-mix(in srgb, var(--esper-soft) 55%, transparent); }
+.stable td .chips .chip { width: 11px; height: 11px; border-radius: 2px; }
+.dash { color: var(--muted); }
+
+.sugs { display: flex; flex-direction: column; gap: 12px; }
+.sug { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 14px; }
+.sug .no { font-family: var(--display); font-weight: 800; font-size: 24px; color: var(--esper); grid-row: span 4; line-height: 1; }
+.sug .top { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.sug h3 { font-size: 17px; }
+.status { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; padding: 2px 7px; border-radius: 4px; border: 1px solid currentColor; }
+.status.done { color: var(--pass); } .status.changed { color: var(--esper); } .status.open { color: var(--warn); } .status.kept { color: var(--muted); }
+.sug p { font-size: 14px; color: var(--ink-2); }
+.sug .how { font-size: 13.5px; color: var(--ink-2); border-left: 2px solid var(--rule); padding-left: 10px; }
+.sug .out { font-size: 13.5px; color: var(--ink); border-left: 2px solid var(--esper); padding-left: 10px; }
+.keep { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.keep div { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; font-size: 13.5px; color: var(--ink-2); display: flex; flex-direction: column; gap: 6px; }
+.keep b { color: var(--ink); font-size: 14.5px; }
+
+.rtable td { white-space: nowrap; }
+.rtable td.n { font-family: var(--mono); font-size: 12px; }
+.rtable td .v1 { color: var(--muted); } .rtable td .v2 { color: var(--ink-2); } .rtable td .v3 { color: var(--ink); font-weight: 700; }
+.rtable td .sep { color: var(--muted); padding: 0 3px; }
+.rtable tr.field td { color: var(--muted); font-style: italic; border-top: 1px solid var(--rule); }
+.better { color: var(--pass) !important; }
+.vkey { display: flex; flex-wrap: wrap; gap: 6px 12px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.vkey b { color: var(--ink); }
+.changes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.changes div { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: var(--ink-2); display: flex; flex-direction: column; gap: 4px; }
+.changes b { color: var(--ink); font-size: 14.5px; }
+.picker { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; background: var(--paper); padding-block: 10px; border-bottom: 1px solid var(--rule); }
+.picker label { font-size: 13px; color: var(--ink-2); display: inline-flex; gap: 8px; align-items: center; }
+.jump { display: flex; flex-wrap: wrap; gap: 6px; }
+.jump a { font-size: 13px; color: var(--ink-2); text-decoration: none; border: 1px solid var(--rule); border-radius: 5px; padding: 4px 10px; display: inline-flex; gap: 6px; align-items: center; background: var(--sheet); }
+.jump a:hover, .jump a:focus-visible { border-color: var(--esper); color: var(--ink); outline: none; }
+.theme { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 18px; display: flex; flex-direction: column; gap: 16px; scroll-margin-top: 64px; }
+.theme .top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; align-items: baseline; }
+.theme .stats { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.theme ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; display: flex; flex-direction: column; gap: 3px; max-width: 115ch; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 760px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+.side { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.side .lab { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.side .lab b { color: var(--ink); }
+.side.after .lab b { color: var(--esper); }
+.rolediff { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 4px 18px; font-size: 12.5px; }
+.rolediff div { display: grid; grid-template-columns: 128px auto 14px auto; gap: 6px; align-items: center; min-width: 0; }
+.rolediff .r { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rolediff .s { font-family: var(--code); font-size: 11.5px; padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
+.rolediff .a { color: var(--muted); text-align: center; }
+.notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.notes div { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; font-size: 13.5px; color: var(--ink-2); display: flex; flex-direction: column; gap: 6px; }
+.notes b { color: var(--ink); font-size: 14.5px; }
+.method { font-size: 13.5px; color: var(--ink-2); display: flex; flex-direction: column; gap: 8px; }
+.method li { max-width: 84ch; }
+.ctx { font-size: 15px; color: var(--ink-2); max-width: 80ch; }
+.swgroup { display: flex; flex-direction: column; gap: 8px; }
+.swgroup h3 { font-size: 13px; font-family: var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px; }
+.swatch { border-radius: 6px; padding: 10px; min-height: 74px; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; cursor: pointer; border: 0; font: inherit; text-align: left; box-shadow: inset 0 0 0 1px rgba(127,127,127,.3); }
+.swatch:focus-visible { outline: 2px solid var(--esper); outline-offset: 2px; }
+.swatch .hx { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.swatch .nm { font-size: 12.5px; font-weight: 700; }
+.swatch .st { font-size: 10.5px; font-family: var(--mono); opacity: .8; }
+.thresh td, .thresh th { white-space: normal; }
+.audit td { white-space: nowrap; }
+.audit td.demo { font-family: var(--code); font-size: 13px; padding: 6px 12px; border-radius: 4px; }
+.audit td.demo.bd { box-shadow: inset 0 0 0 2px var(--bd); }
+.audit .det { color: var(--muted); font-size: 12px; white-space: normal; min-width: 180px; }
+.badge { font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 4px; border: 1px solid currentColor; white-space: nowrap; }
+.badge.pass { color: var(--pass); } .badge.fail { color: var(--fail); } .badge.mid { color: var(--warn); }
+.recipes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.recipe { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.recipe h4 { margin: 0; font-size: 14.5px; font-family: var(--display); }
+.recipe .cat { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.recipe p { font-size: 13px; color: var(--ink-2); }
+.recipe .cols { display: flex; gap: 4px; flex-wrap: wrap; }
+.recipe .cols span { font-size: 11px; padding: 6px 8px; border-radius: 4px; font-family: var(--mono); box-shadow: inset 0 0 0 1px rgba(127,127,127,.3); }
+.recipe .demo { padding: 10px 12px; border-radius: 5px; font-family: var(--code); font-size: 14px; }
+.toast { position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 8px 14px; border-radius: 6px; font-size: 13px; z-index: 20; }
+@media (prefers-reduced-motion: no-preference) { .card { transition: border-color .15s; } }
+</style>
+
+<div class="wrap">
+  <nav class="rail" aria-label="Sections">
+    <span class="act">The study</span>
+    <a href="#findings"><span class="k">00</span>Findings</a>
+    <a href="#specimens"><span class="k">01</span>Specimens</a>
+    <a href="#contrast"><span class="k">02</span>Contrast</a>
+    <a href="#surfaces"><span class="k">03</span>Surfaces</a>
+    <a href="#semantics"><span class="k">04</span>Semantic color</a>
+    <a href="#settings"><span class="k">05</span>Token settings</a>
+    <a href="#suggestions"><span class="k">06</span>Suggestions</a>
+    <span class="act">The regrade</span>
+    <a href="#regrade"><span class="k">07</span>Before and after</a>
+    <a href="#themes"><span class="k">08</span>Theme by theme</a>
+    <span class="act">Esper palettes</span>
+    <a href="#palettes"><span class="k">09</span>Palettes</a>
+    <a href="#audit"><span class="k">10</span>Accessibility audit</a>
+    <a href="#recipes"><span class="k">11</span>Color theory</a>
+    <a href="#method"><span class="k">12</span>Notes and method</a>
+  </nav>
+  <main>
+    <header style="display:flex;flex-direction:column;gap:16px">
+      <div class="eyebrow">Study, regrade and palettes · Marketplace measured 2 October 2026 · Esper built from themes/</div>
+      <h1>Esper Theme Census</h1>
+      <p class="lede">The 30 most-installed color themes on the Marketplace, 164 million installs between them, measured key by key from their shipped JSON, and Esper's 11 themes measured the same way. The study shows what the field does and where Esper sat; the regrade follows it version by version; the last part documents each Esper theme's palette, its accessibility audit and the color theory behind it. Every theme is rendered as VS Code's Modern UI draws it. Regenerate with <code>npm run build:census-page</code>.</p>
+    </header>
+
+    <section id="findings">
+      <div class="sec-head"><div class="eyebrow">00 · Findings</div><h2>Where Esper sat, and where it sits now</h2>
+        <div class="prose"><p>Each card gives the top-30 median, Esper as it shipped in v0.11.0, and Esper as it builds now. Dark-theme medians unless noted.</p></div></div>
+      <div class="findings" id="findingsGrid"></div>
+    </section>
+
+    <section id="specimens">
+      <div class="sec-head"><div class="eyebrow">01 · Specimens</div><h2>Every theme, rendered from its own colors</h2>
+        <div class="prose"><p>Each window is drawn as VS Code's Modern UI lays out the workbench: framed, rounded surfaces on the activity-bar ground, pill tabs, a filled active activity item, and a pane tab on the terminal. Esper sets the Modern UI keys (<code>surface.*</code>, <code>modernEditorTab.*</code>, <code>modernActivityBarItem.*</code>, <code>modernTab.*</code>); the popular themes do not, so theirs fall back to the matching classic keys. Every token comes from <code>tokenColors</code> plus <code>semanticTokenColors</code>, brackets are colorized as VS Code ships, and the editor is mid-search for <code>ship</code>. Select a window to open its breakdown below.</p></div></div>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Theme set" id="setSeg">
+          <button type="button" data-set="popular" aria-pressed="true">Top 30</button>
+          <button type="button" data-set="now" aria-pressed="false">Esper now</button>
+          <button type="button" data-set="was" aria-pressed="false">Esper v0.11.0</button>
+          <button type="button" data-set="light" aria-pressed="false">Light companions</button>
+        </div>
+        <label class="sel" for="sortSel">Sort
+          <select id="sortSel">
+            <option value="installs">Installs</option>
+            <option value="bgL">Editor background, darkest first</option>
+            <option value="fgCr">Text contrast, highest first</option>
+            <option value="cmt">Comment contrast, lowest first</option>
+          </select>
+        </label>
+      </div>
+      <div class="gallery" id="gallery"></div>
+      <div class="detail" id="detail" aria-live="polite"></div>
+    </section>
+
+    <section id="contrast">
+      <div class="sec-head"><div class="eyebrow">02 · Contrast</div><h2>How loud each layer is</h2>
+        <div class="prose"><p>WCAG contrast ratio against <code>editor.background</code>, on a log scale; translucent colors are composited over the editor first. The typical popular theme puts body text near 11:1 and drops comments to about 3:1. Esper keeps comments above AA, and the regrade brought its gutter down to just over AA and its text off the extremes.</p></div></div>
+      <div class="figure">
+        <div class="legend"><span><svg width="14" height="14"><circle cx="7" cy="7" r="5" class="dot-f"/></svg>Top 30</span><span><svg width="14" height="14"><circle cx="7" cy="7" r="5" class="dot-o"/></svg>Esper v0.11.0</span><span><svg width="14" height="14"><circle cx="7" cy="7" r="5.5" class="dot-e"/></svg>Esper now</span><span><svg width="18" height="14"><line x1="9" y1="1" x2="9" y2="13" stroke="currentColor" stroke-width="2.5"/></svg>Median</span><span><svg width="18" height="14"><line x1="9" y1="0" x2="9" y2="14" class="ref"/></svg>3:1 and 4.5:1</span></div>
+        <div id="contrastStrips" style="display:flex;flex-direction:column;gap:6px"></div>
+        <p class="cap">Hover a dot for the theme. The weakest syntax role is the lowest contrast across the 29 roles studied.</p>
+      </div>
+    </section>
+
+    <section id="surfaces">
+      <div class="sec-head"><div class="eyebrow">03 · Workbench vs editor</div><h2>Grounds and chrome</h2>
+        <div class="prose"><p>Nineteen of the top 30 set the sidebar a step darker than the editor and ten paint everything one color; only Visual Studio's C/C++ theme lifts its chrome above the code. Esper lifts it on every dark theme. In v0.11.0 the step reached +0.16 OKLCH lightness over grounds darker than all but two popular themes; the regrade kept the look, capped the step at 0.03, and moved the film grounds to L 0.19, where GitHub Dark, Ayu Dark, Bearded's black variants and Omni sit.</p></div></div>
+      <div class="tally" id="tally"></div>
+      <div class="figure">
+        <h3>Editor background lightness, dark themes</h3>
+        <div class="legend"><span>Dots are filled with each theme's actual <code>editor.background</code>; rings mark the group.</span></div>
+        <div id="bgStrip"></div>
+        <h3>Sidebar lightness relative to the editor</h3>
+        <div id="sbStrip"></div>
+        <p class="cap">OKLCH lightness of <code>sideBar.background</code> minus <code>editor.background</code>. Left of zero the chrome recedes; right of zero it is brighter than the code.</p>
+      </div>
+      <div class="figure">
+        <h3>Surface ladders</h3>
+        <div class="ladder-key">activity · sidebar · tabs bar · editor · panel · status, widths fixed; number is sidebar ΔL. Esper as it builds now.</div>
+        <div class="ladders" id="ladders"></div>
+      </div>
+    </section>
+
+    <section id="semantics">
+      <div class="sec-head"><div class="eyebrow">04 · Semantic color</div><h2>What each role is colored, and how much the field agrees</h2>
+        <div class="prose"><p>Each role is a real TypeScript, HTML, CSS or Markdown scope stack resolved the way VS Code does it, with <code>semanticTokenColors</code> overriding names where semantic highlighting is on. Colors are bucketed into hue families by OKLCH hue; under 0.035 chroma counts as neutral. The field's convention: strings green, keywords purple or pink, functions blue, types yellow, numbers orange, and plain variables, properties and punctuation at the foreground. Esper keeps its film palettes for the hues and, since the regrade, the field's habit of leaving variables as text.</p></div></div>
+      <div class="figure">
+        <div class="scroll"><table class="cons" id="consTable"></table></div>
+        <div class="famkey" id="famKey"></div>
+      </div>
+      <div class="figure">
+        <h3>Full matrix: 29 roles, top 30 and Esper now</h3>
+        <p class="cap">Each cell is the theme's editor background with the role color inset; a notched inset means italic. Hover for the hex, contrast and the winning selector.</p>
+        <div class="scroll"><table class="matrix" id="matrix"></table></div>
+      </div>
+    </section>
+
+    <section id="settings">
+      <div class="sec-head"><div class="eyebrow">05 · Token settings</div><h2>How the themes are built</h2>
+        <div class="prose"><p>Rule counts vary seventy-fold and say little about quality; coverage of grammars beyond TypeScript matters more. Only 9 of the 30 define any <code>semanticTokenColors</code>; every Esper theme defines 32. Esper rows show the themes as they build now.</p></div></div>
+      <div class="figure">
+        <div class="scroll"><table class="stable" id="stable"></table></div>
+        <p class="cap">Coverage counts 16 extra scopes (JSON and YAML keys, Markdown emphasis, diff markup, Python decorators, CSS values, Go imports and others). Near-collisions counts role pairs within ΔE 6 that are not the same color; color-blind merges counts pairs that become one color for a deuteranope or protanope.</p>
+      </div>
+    </section>
+
+    <section id="suggestions">
+      <div class="sec-head"><div class="eyebrow">06 · Suggestions</div><h2>What the study recommended, and what happened</h2>
+        <div class="prose"><p>The first ten came out of the study; the rest came out of the regrade.</p></div></div>
+      <div class="sugs" id="sugs"></div>
+      <h3>Kept as they were</h3>
+      <div class="keep" id="keep"></div>
+    </section>
+
+    <section id="regrade">
+      <div class="actbreak"><div class="eyebrow">The regrade</div><h2>Four versions of every theme</h2>
+        <div class="prose"><p><strong>v0.11.0</strong> as shipped. <strong>L 0.23</strong>, the first regrade, with dark editors in the popular median band, kept here for comparison. <strong>L 0.19</strong>, the second, beside GitHub Dark, Ayu Dark, Bearded's black variants and Omni (<code>3e152e3</code>). <strong>Now</strong>, the themes as they build today: the L 0.19 grounds plus no stock VS Code colors, separate terminal brights, and a red-green color-blindness check.</p></div></div>
+      <div class="figure" style="gap:10px"><div class="vkey"><span>v0.11.0</span><span>›</span><span>L 0.23</span><span>›</span><span>L 0.19</span><span>›</span><b>now</b></div><div class="scroll"><table class="rtable" id="summary"></table></div>
+        <p class="cap">Green marks a value that moved toward the popular field, or toward fewer collisions and more distinct terminal colors. The last row is the top-30 dark median.</p></div>
+      <div class="changes" id="changes"></div>
+    </section>
+
+    <section id="themes">
+      <div class="sec-head"><div class="eyebrow">08 · Theme by theme</div><h2>Any two versions side by side</h2>
+        <div class="prose"><p>The page opens on v0.11.0 against now. Lines 5 and 6 carry modified and added gutter marks, the sidebar shows a filtered match, and the terminal prints each status color in its normal and bright form. Below each pair, every role whose color or style moved between the two versions is listed on its own theme's ground.</p></div></div>
+      <div class="picker"><label>Left <span class="seg" id="segL" role="group" aria-label="Left version"></span></label><label>Right <span class="seg" id="segR" role="group" aria-label="Right version"></span></label></div>
+      <nav class="jump" id="jump" aria-label="Themes"></nav>
+      <div id="themeList" style="display:flex;flex-direction:column;gap:20px"></div>
+    </section>
+
+    <section id="palettes">
+      <div class="actbreak"><div class="eyebrow">Esper palettes</div><h2>Every color each theme is built from</h2>
+        <div class="prose"><p>Each theme's palette is read from its theme file: every color it uses, named in the terms the docs use (or from its hue), grouped into surfaces, accents and syntax, darkest first. Select a swatch to copy its hex. The ★ marks the primary accent.</p></div></div>
+      <div class="seg" role="group" aria-label="Esper theme" id="palSeg" style="flex-wrap:wrap;align-self:flex-start"></div>
+      <p class="ctx" id="palCtx"></p>
+      <div id="palGroups" style="display:flex;flex-direction:column;gap:18px"></div>
+    </section>
+
+    <section id="audit">
+      <div class="sec-head"><div class="eyebrow">10 · Accessibility audit</div><h2>Every pair the theme is held to</h2>
+        <div class="prose"><p>Color theory describes visual relationships; it does not make a foreground and background readable. Each pair below is read straight from the selected theme's colors, with translucent fills composited over the editor first, and judged by the threshold for its role.</p></div></div>
+      <div class="figure"><div class="scroll"><table class="thresh">
+        <thead><tr><th>Use</th><th>Guideline</th><th class="n">Required</th><th>Applied to</th></tr></thead>
+        <tbody>
+          <tr><td>Normal text</td><td>WCAG AA</td><td class="n">4.5:1</td><td>Body copy, labels and syntax text. The build holds every Esper text pair to it, except Replicant's syntax, held to 2.9:1 by choice.</td></tr>
+          <tr><td>Normal text</td><td>WCAG AAA</td><td class="n">7:1</td><td>Enhanced readability target.</td></tr>
+          <tr><td>Large text</td><td>WCAG AA</td><td class="n">3:1</td><td>Large headings and display text.</td></tr>
+          <tr><td>UI borders and focus</td><td>WCAG 1.4.11</td><td class="n">3:1</td><td>Controls, tab strokes and focus rings.</td></tr>
+          <tr><td>Pane edges</td><td>Esper build</td><td class="n">1.8:1</td><td>The sidebar, Modern UI surface, panel and split-editor edges sit halfway between the structural hairline and 3:1, by choice; at full 3:1 they boxed in every pane. The surfaces they bound also differ in fill.</td></tr>
+          <tr><td>Syntax roles</td><td>Esper build</td><td class="n">ΔE 6 / ΔE 3</td><td>Two different syntax colors must sit at least ΔE 6 apart, and ΔE 3 as a deuteranope or protanope sees them.</td></tr>
+        </tbody></table></div></div>
+      <div class="figure"><h3>Text pairs <span class="small" id="auditName"></span></h3><div class="scroll"><table class="audit" id="textAudit"></table></div></div>
+      <div class="figure"><h3>Borders and focus</h3><div class="scroll"><table class="audit" id="borderAudit"></table></div></div>
+    </section>
+
+    <section id="recipes">
+      <div class="sec-head"><div class="eyebrow">11 · Color theory</div><h2>Recipes in the theme's own colors</h2>
+        <div class="prose"><p>Analogous, complementary, warm/cool and role-based recipes are useful for composition. Each is read off the selected theme's palette and given a declared foreground and background; a recipe is text-safe only when that pair clears normal-text AA, and accent-only otherwise, which means fine for large areas, borders and signals but not for text.</p></div></div>
+      <div class="recipes" id="recipeGrid"></div>
+    </section>
+
+    <section id="method">
+      <div class="sec-head"><div class="eyebrow">12 · Notes and method</div><h2>How this was measured, and what is still open</h2></div>
+      <div class="notes">
+        <div><b>Q at runtime</b><span>Q's specimen is its static fallback, which mirrors LCARS. The generator draws its editor around L 0.20, fills the new roles from its own palette, retries a draw that cannot reach AA, and always separates its terminal brights; 1,000 seeded draws all succeeded. Its random syntax palette is not yet held to the role-distance checks.</span></div>
+        <div><b>The build enforces it</b><span><code>scripts/build-themes.js</code> fails when two syntax roles are different colors within ΔE 6, or within ΔE 3 as a deuteranope or protanope sees them. LCARS is held to the same checks, read off its own rules.</span></div>
+      </div>
+      <ul class="method">
+        <li><b>Snapshot.</b> The popular themes and the earlier Esper versions are a measured snapshot in <code>docs/census/snapshot.json</code>; the current Esper themes are measured from <code>themes/</code> by <code>scripts/census/analyze-theme.js</code> each time the page is built.</li>
+        <li><b>Selection.</b> Marketplace query sorted by installs, category Themes; icon themes and tools listed there were skipped until 30 color-theme extensions remained, from Visual Studio's C/C++ themes (60.2M) to Eva Theme (0.82M). Each VSIX was downloaded and its theme files read directly.</li>
+        <li><b>Flagship variant.</b> One variant per extension, the one it names after itself or its default dark variant. Thirteen extensions also ship a light variant; those form the light comparison set. Mix is left out of Esper because it is assembled from the others.</li>
+        <li><b>Token resolution.</b> Each role is a full scope stack matched against every <code>tokenColors</code> selector, descendant selectors included; the deepest match wins, then the most specific, then the later rule. <code>semanticTokenColors</code> override names when semantic highlighting is on. Unset roles fall back to <code>editor.foreground</code>.</li>
+        <li><b>Color math.</b> WCAG 2 contrast against <code>editor.background</code>; hue, lightness and chroma in OKLCH; collisions as OKLab ΔE × 100. Color blindness is simulated with Machado, Oliveira and Fernandes (2009) at full severity.</li>
+        <li><b>Limits.</b> Unset workbench keys fall back to VS Code's defaults. The Modern UI rendering is an approximation of VS Code's geometry; popular themes are drawn from their classic keys. Language servers beyond TypeScript can recolor names beyond what is measured here.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+<div class="tip" id="tip" hidden></div>
+<div class="toast" id="toast" hidden></div>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+(() => {
+const D = JSON.parse(document.getElementById('data').textContent);
+const ROLES = D.roles;
+const P = D.popular, L = D.light, SETS = D.sets, NOW = SETS.now, WAS = SETS.v011;
+const keyOf = (t, tag) => tag + ':' + t.label;
+const byKey = {};
+P.forEach(t => byKey[keyOf(t, 'p')] = t); L.forEach(t => byKey[keyOf(t, 'l')] = t);
+NOW.forEach(t => byKey[keyOf(t, 'now')] = t); WAS.forEach(t => byKey[keyOf(t, 'was')] = t);
+const tagOf = new Map(); P.forEach(t => tagOf.set(t, 'p')); L.forEach(t => tagOf.set(t, 'l')); NOW.forEach(t => tagOf.set(t, 'now')); WAS.forEach(t => tagOf.set(t, 'was'));
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const median = a => { const s = [...a].sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const fmt = (n, d = 1) => Number(n).toFixed(d);
+const fmtM = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : (n / 1e3).toFixed(0) + 'K';
+const dark = list => list.filter(t => t.kind === 'dark');
+const PD = dark(P), WD = dark(WAS), ND = dark(NOW);
+const minRole = t => Math.min(...Object.values(t.roles).map(r => r.cr));
+const crClass = c => c < 3 ? 'lo' : c < 4.5 ? 'mid' : 'hi';
+const roleLabel = Object.fromEntries(ROLES.map(r => [r.key, r.label]));
+const core14 = ['comment', 'keyword', 'storage', 'string', 'number', 'function', 'class', 'type', 'variable', 'parameter', 'property', 'operator', 'tag', 'attr'];
+const fams = t => new Set(core14.map(k => t.roles[k].fam)).size;
+const tip = document.getElementById('tip');
+function showTip(e, html) { tip.innerHTML = html; tip.hidden = false; const w = tip.offsetWidth, h = tip.offsetHeight; let x = e.clientX + 14, y = e.clientY + 14; if (x + w > innerWidth - 8) x = e.clientX - w - 14; if (y + h > innerHeight - 8) y = e.clientY - h - 14; tip.style.left = x + 'px'; tip.style.top = y + 'px'; }
+function hideTip() { tip.hidden = true; }
+function lum(h) { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16) / 255).map(c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4).reduce((a, c, i) => a + c * [0.2126, 0.7152, 0.0722][i], 0); }
+const inkOn = h => lum(h) > 0.3 ? '#111111' : '#FFFFFF';
+const W = (t, k) => t.wb[k] && t.wb[k].hex;
+const lab = r => { const h = r.H * Math.PI / 180; return [r.L, r.C * Math.cos(h), r.C * Math.sin(h)]; };
+const dist = (a, b) => { const x = lab(a), y = lab(b); return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]) * 100; };
+
+// ---------- Modern UI specimen ----------
+function mod(t) {
+  const sidebar = W(t, 'sidebar') || t.bg;
+  const paneTab = W(t, 'mTabBg') || W(t, 'activityBadge') || W(t, 'focus') || t.fg;
+  return {
+    frame: W(t, 'mActBg') || W(t, 'activity') || W(t, 'title') || t.bg,
+    title: W(t, 'title') || W(t, 'mActBg') || W(t, 'activity') || t.bg,
+    titleFg: W(t, 'sidebarFg') || t.fg,
+    actFg: W(t, 'actInactiveFg') || W(t, 'activityFg') || t.fg,
+    actItemBg: W(t, 'mActItemBg') || W(t, 'actActiveBg') || null,
+    actItemFg: W(t, 'mActItemFg') || W(t, 'activityFg') || t.fg,
+    surface: W(t, 'surfaceBg') || sidebar,
+    border: W(t, 'surfaceBorder') || W(t, 'sideBarBorder') || W(t, 'editorGroupBorder') || null,
+    edBorder: W(t, 'editorBorder') || W(t, 'surfaceBorder') || W(t, 'editorGroupBorder') || null,
+    sideFg: W(t, 'sidebarFg') || t.fg,
+    listHi: W(t, 'listHighlight') || t.fg,
+    tabA: W(t, 'mEdTabBg') || W(t, 'tabActive') || t.bg,
+    tabAFg: W(t, 'mEdTabFg') || t.fg,
+    tabI: W(t, 'mEdTabInactiveBg') || W(t, 'tabInactive') || sidebar,
+    tabIFg: W(t, 'tabInactiveFg') || W(t, 'lineNo') || t.fg,
+    tabTop: W(t, 'tabBorderTop'), tabBottom: W(t, 'tabBorder'),
+    paneTab, paneTabFg: W(t, 'mTabFg') || inkOn(paneTab),
+    panel: W(t, 'panel') || t.bg,
+    status: W(t, 'status') || sidebar, statusFg: W(t, 'statusFg') || t.fg,
+  };
+}
+const CODE = [
+  [['// fetch the crew manifest', 'comment']],
+  [['import', 'import'], [' {', 'punct'], [' log ', 'variable'], ['}', 'punct'], [' '], ['from', 'import'], [' '], ['"./util"', 'string'], [';', 'punct']],
+  [['export', 'modifier'], [' '], ['async', 'modifier'], [' '], ['function', 'storage'], [' '], ['load', 'function'], ['(', 'punct'], ['ship', 'parameter'], [': ', 'punct'], ['Ship', 'type'], [')', 'punct'], [' '], ['{', 'punct']],
+  [['  '], ['const', 'storage'], [' '], ['url', 'constant'], [' '], ['=', 'operator'], [' '], ['`/api/${', 'string'], ['ship', 'variable'], ['.', 'punct'], ['id', 'property'], ['}`', 'string'], [';', 'punct']],
+  [['  '], ['if', 'keyword'], [' '], ['(', 'punct'], ['ship', 'variable'], ['.', 'punct'], ['crew', 'property'], [' '], ['>', 'operator'], [' '], ['12', 'number'], [' '], ['&&', 'operator'], [' '], ['/^[A-Z]/', 'regex'], ['.', 'punct'], ['test', 'method'], ['(', 'punct'], ['url', 'variable'], [')', 'punct'], [')', 'punct'], [' '], ['{', 'punct']],
+  [['    '], ['console', 'variable'], ['.', 'punct'], ['log', 'method'], ['(', 'punct'], ['"found', 'string'], ['\\n', 'escape'], ['"', 'string'], [', ', 'punct'], ['url', 'variable', 'sel'], [')', 'punct'], [';', 'punct']],
+  [['  '], ['}', 'punct']],
+  [['  '], ['return', 'keyword'], [' '], ['new', 'keyword'], [' '], ['Manifest', 'class'], ['(', 'punct'], ['this', 'this'], ['.', 'punct'], ['name', 'property'], [', ', 'punct'], ['true', 'boolean'], [')', 'punct'], [';', 'punct']],
+  [['}', 'punct']],
+];
+const MORE = [
+  [['@@ -8,1 +8,1 @@', 'diffHeader']],
+  [['-  return null;', 'deleted']],
+  [['+  return new Manifest(this.name);', 'inserted']],
+  [['<', 'tagPunct'], ['a', 'tag'], [' '], ['href', 'attr'], ['='], ['"/crew"', 'attrValue'], ['>', 'tagPunct'], ['Crew'], ['</', 'tagPunct'], ['a', 'tag'], ['>', 'tagPunct']],
+  [['# Crew manifest', 'heading']],
+];
+const BRACKETABLE = new Set(['punct', 'operator', undefined]);
+const DEFAULT_BRACKETS = { dark: ['#FFD700', '#DA70D6', '#179FFF'], light: ['#0431FA', '#319331', '#7B3814'] };
+const styleOf = r => r && r.font ? (r.font.includes('italic') ? 'font-style:italic;' : '') + (r.font.includes('bold') ? 'font-weight:700;' : '') + (r.font.includes('underline') ? 'text-decoration:underline;' : '') : '';
+function lines(t, code, withCursor) {
+  const brackets = t.bracket.some(Boolean) ? t.bracket : DEFAULT_BRACKETS[t.kind];
+  const lnHex = W(t, 'lineNo') || '#858585', lnA = W(t, 'lineNoActive') || t.fg, lh = W(t, 'lineHighlight');
+  const sel = W(t, 'selection'), cur = W(t, 'cursor') || t.fg, find = withCursor ? W(t, 'findMatchHighlight') : null;
+  const marks = withCursor ? { 4: W(t, 'gutterModified'), 5: W(t, 'gutterAdded') } : {};
+  let depth = 0;
+  return code.map((line, i) => {
+    const active = withCursor && i === 3;
+    const parts = line.map(([txt, role, flag]) => {
+      const r = role ? t.roles[role] : null;
+      const col = r ? r.hex : t.fg, st = styleOf(r);
+      const bg = flag === 'sel' && sel ? `background:${sel};` : find && txt === 'ship' ? `background:${find};` : '';
+      if (BRACKETABLE.has(role) && /[()[\]{}]/.test(txt)) {
+        return [...txt].map(ch => {
+          if ('([{'.includes(ch)) { const c = brackets[depth % brackets.length]; depth++; return `<span style="color:${c}">${esc(ch)}</span>`; }
+          if (')]}'.includes(ch)) { depth = Math.max(0, depth - 1); return `<span style="color:${brackets[depth % brackets.length]}">${esc(ch)}</span>`; }
+          return `<span style="color:${col};${st}">${esc(ch)}</span>`;
+        }).join('');
+      }
+      return `<span style="color:${col};${st}${bg}">${esc(txt)}</span>`;
+    }).join('') + (active ? `<span class="cur" style="background:${cur}"></span>` : '');
+    const mark = marks[i] ? `box-shadow:inset 3px 0 0 ${marks[i]};` : '';
+    return `<div class="ln" style="${active && lh && lh !== t.bg ? 'background:' + lh : ''}"><span class="g" style="${mark}color:${active ? lnA : lnHex}">${i + 1}</span><span>${parts}</span></div>`;
+  }).join('');
+}
+function termLine(t) {
+  const n = t.ansi || {}, b = t.ansiBright || {};
+  const pair = (k, word) => `<span style="color:${n[k] || t.fg}">${word}</span> <span style="color:${b[k] || n[k] || t.fg}">${word.toUpperCase()}</span>`;
+  return `${pair('Green', 'pass')}  ${pair('Red', 'fail')}  ${pair('Yellow', 'warn')}  ${pair('Blue', 'info')}  ${pair('Magenta', 'tag')}`;
+}
+function win(t, big) {
+  const m = mod(t), bd = m.border ? `box-shadow:inset 0 0 0 1px ${m.border};` : '';
+  const ebd = m.edBorder ? `box-shadow:inset 0 0 0 1px ${m.edBorder};` : '';
+  const dash = (W(t, 'lineNo') || t.fg) + '55';
+  const icon = (on) => `<i style="${on && m.actItemBg ? 'background:' + m.actItemBg + ';' : ''}color:${on ? (m.actItemBg ? m.actItemFg : W(t, 'activityFg') || t.fg) : m.actFg}"><b></b></i>`;
+  return `<div class="mwin${big ? ' big' : ''}" style="background:${m.frame}">
+    <div class="mtitle" style="background:${m.title};color:${m.titleFg}"><i></i><i></i><i></i><span>load.ts — crew</span></div>
+    <div class="mbody">
+      <div class="mact">${icon(true)}${icon(false)}${icon(false)}</div>
+      <div class="mcard mside" style="background:${m.surface};color:${m.sideFg};${bd}"><span class="hd">EXPLORER</span><i style="width:70%"></i><span class="sbt"><span style="color:${m.listHi};font-weight:700">lo</span>ad.ts</span><i style="width:80%"></i><i style="width:55%"></i><i style="width:65%"></i></div>
+      <div class="mmain">
+        <div class="mcard" style="background:${t.bg};${ebd}">
+          <div class="mtabs"><span style="background:${m.tabA};color:${m.tabAFg};${m.tabTop ? 'border-top-color:' + m.tabTop + ';' : ''}${m.tabBottom ? 'border-bottom-color:' + m.tabBottom : ''}">load.ts</span><span style="background:${m.tabI};color:${m.tabIFg}">crew.diff</span></div>
+          <pre>${lines(t, CODE, true)}</pre><pre class="more" style="border-color:${dash}">${lines(t, MORE, false)}</pre>
+        </div>
+        <div class="mcard mpanel" style="background:${m.panel};${bd}"><span class="pt" style="background:${m.paneTab};color:${m.paneTabFg}">TERMINAL</span><span class="tl">${termLine(t)}</span></div>
+      </div>
+    </div>
+    <div class="mstatus" style="background:${m.status};color:${m.statusFg}">main ✓ 0 ⚠ 0 · TypeScript</div></div>`;
+}
+
+// ---------- findings ----------
+const triple = (h, f, fmtv, p) => ({ h, v: [fmtv(f(PD)), fmtv(f(WD)), fmtv(f(ND))], p });
+const medOf = g => list => median(list.map(g));
+const F = [
+  triple('Editor background', medOf(t => t.bgLCH[0]), v => 'L ' + fmt(v, 2), 'OKLCH lightness of the editor ground. v0.11.0 was darker than 27 of the 29 popular dark themes; the film themes now sit at L 0.19 and LCARS keeps its 0.18.'),
+  triple('Text contrast', medOf(t => t.fgCr), v => fmt(v) + ':1', 'Median <code>editor.foreground</code>. GitHub Dark Default is 16.0 and JellyFish 20.3; nothing else in the top 30 passes 15.'),
+  triple('Comment contrast', medOf(t => t.roles.comment.cr), v => fmt(v) + ':1', '24 of the top 30 put comments under 4.5:1. Esper keeps them above AA everywhere but Replicant, whose 2.9:1 syntax floor is a film choice.'),
+  triple('Line numbers', medOf(t => t.wb.lineNo.cr), v => fmt(v) + ':1', 'The field keeps the gutter near comment level. Esper\'s ran as bright as syntax; it now sits just over AA.'),
+  triple('Near-collisions', list => median(list.map(t => t.nearCollisions.length)), v => fmt(v, 0), 'Role pairs per theme that are different colors within ΔE 6. 20 of the top 30 have none; Esper had 68 across 11 themes and now has none, enforced by the build.'),
+  triple('Color-blind merges', list => median(list.map(t => t.cvd3)), v => fmt(v, 0), 'Role pairs that become one color for a deuteranope or protanope. Only 7 of the top 30 have none; every Esper theme now has none.'),
+  triple('Hue families', list => median(list.map(fams)), v => fmt(v, 0), 'Distinct hue families across 14 core roles. Esper separates roles by lightness inside a film palette; the regrade widened that to 5–7.'),
+  triple('Semantic token keys', list => median(list.map(t => t.nSemantic)), v => fmt(v, 0), 'Median <code>semanticTokenColors</code> entries. Esper defines 32 on every theme, the most complete semantic layer in the study.'),
+];
+document.getElementById('findingsGrid').innerHTML = F.map(x => `<div class="finding"><h3>${x.h}</h3><div class="trio"><div><span class="big fld">${x.v[0]}</span><span class="lab">Top 30</span></div><div><span class="big was">${x.v[1]}</span><span class="lab">v0.11.0</span></div><div><span class="big esp">${x.v[2]}</span><span class="lab">Esper now</span></div></div><p>${x.p}</p></div>`).join('');
+
+// ---------- gallery ----------
+let curSet = 'popular', curSort = 'installs', curSel = keyOf(NOW[2], 'now');
+const setList = () => ({ popular: P, now: NOW, was: WAS, light: L })[curSet];
+function sortList(list) {
+  const f = { installs: t => -(t.installs || 0), bgL: t => t.bgLCH[0], fgCr: t => -t.fgCr, cmt: t => t.roles.comment.cr }[curSort];
+  return [...list].sort((a, b) => f(a) - f(b));
+}
+function renderGallery() {
+  document.getElementById('gallery').innerHTML = sortList(setList()).map(t => { const k = keyOf(t, tagOf.get(t)); return `<button type="button" class="card" data-k="${esc(k)}" aria-current="${k === curSel}">
+    ${win(t)}
+    <div class="meta"><b>${esc(t.label)}</b><span>${t.esper ? `<span class="tag-esper">Esper ${tagOf.get(t) === 'was' ? 'v0.11.0' : 'now'}</span>` : fmtM(t.installs)}</span></div>
+    <div class="stats"><span>bg ${t.bg}</span><span>text ${fmt(t.fgCr)}</span><span>comment ${fmt(t.roles.comment.cr)}</span><span>gutter ${fmt(t.wb.lineNo.cr)}</span></div></button>`; }).join('');
+}
+document.getElementById('gallery').addEventListener('click', e => {
+  const c = e.target.closest('.card'); if (!c) return;
+  curSel = c.dataset.k; document.querySelectorAll('.card').forEach(x => x.setAttribute('aria-current', x.dataset.k === curSel));
+  renderDetail(); document.getElementById('detail').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+});
+document.getElementById('setSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; curSet = b.dataset.set; document.querySelectorAll('#setSeg button').forEach(x => x.setAttribute('aria-pressed', x === b)); renderGallery(); });
+document.getElementById('sortSel').addEventListener('change', e => { curSort = e.target.value; renderGallery(); });
+function renderDetail() {
+  const t = byKey[curSel];
+  const groups = [...new Set(ROLES.map(r => r.group))];
+  const rows = groups.map(g => `<tr class="grp"><td colspan="5">${g}</td></tr>` + ROLES.filter(r => r.group === g).map(r => {
+    const v = t.roles[r.key];
+    return `<tr><td>${esc(r.label)}</td><td><span class="sw"><span class="sample-txt" style="background:${t.bg};color:${v.hex};${styleOf(v)}">Ab</span>${v.hex}</span></td><td class="n"><span class="cr ${crClass(v.cr)}">${fmt(v.cr)}</span></td><td>${esc(v.font || '')}${v.un ? '<span class="dash">foreground</span>' : ''}</td><td class="sel" title="${esc(v.sel || '')}">${esc(v.sel || '—')}</td></tr>`;
+  }).join('')).join('');
+  const wbRows = [['sidebar', 'Sidebar'], ['activity', 'Activity bar'], ['status', 'Status bar'], ['panel', 'Panel'], ['surfaceBg', 'Modern surface'], ['mEdTabBg', 'Modern editor tab'], ['mActItemBg', 'Active activity item'], ['focus', 'Focus border'], ['selection', 'Selection'], ['lineHighlight', 'Current line'], ['lineNo', 'Line numbers'], ['findMatchHighlight', 'Find highlight'], ['listHighlight', 'List match'], ['gutterModified', 'Gutter modified'], ['error', 'Error'], ['warning', 'Warning']]
+    .filter(([k]) => t.wb[k]).map(([k, n]) => `<div title="${esc(t.wb[k].key)} ${esc(t.wb[k].raw)}${t.wb[k].def ? ' (VS Code default)' : ''}"><span class="chip" style="background:${t.wb[k].hex}"></span><span><span class="lbl">${n}</span><br><span class="mono">${t.wb[k].raw}${t.wb[k].def ? '*' : ''}</span></span></div>`).join('');
+  const ansi = ['Black', 'Red', 'Green', 'Yellow', 'Blue', 'Magenta', 'Cyan', 'White'];
+  const brk = t.bracket.filter(Boolean);
+  document.getElementById('detail').innerHTML = `
+    <div class="head"><div><div class="eyebrow">${t.esper ? 'Esper Themes · ' + (curSel.startsWith('was') ? 'v0.11.0' : 'now') : esc(t.extName) + ' · ' + esc(t.ext)}</div><h2>${esc(t.label)}</h2></div>
+      <div class="sub">${t.installs ? fmtM(t.installs) + ' installs · ' : ''}${t.kind} · ${t.nRules} rules · ${t.nSemantic} semantic keys · ${t.nColors} workbench keys${t.variants ? ' · ' + t.variants + ' variants' : ''}</div></div>
+    <div class="dl">${win(t, true)}
+      <div><h3 style="margin-bottom:8px">Workbench</h3><div class="kv">${wbRows}</div><p class="small" style="margin-top:6px">* not set by the theme; VS Code default shown.</p></div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap">
+        <div><h3 style="margin-bottom:6px">Token palette (${t.nTokenColors})</h3><div class="chips">${t.palette.map(h => `<span class="chip" title="${h}" style="background:${h}"></span>`).join('')}</div></div>
+        <div><h3 style="margin-bottom:6px">Brackets</h3>${brk.length ? `<div class="chips">${brk.map(h => `<span class="chip" title="${h}" style="background:${h}"></span>`).join('')}</div>` : '<span class="small">Not set; VS Code default gold · orchid · blue</span>'}</div>
+        <div><h3 style="margin-bottom:6px">Terminal, normal over bright</h3>${t.ansi && t.ansi.Red ? `<div style="display:flex;flex-direction:column;gap:3px"><div class="chips">${ansi.map(k => `<span class="chip" title="${k} ${t.ansi[k] || ''}" style="background:${t.ansi[k] || 'transparent'}"></span>`).join('')}</div><div class="chips">${ansi.map(k => `<span class="chip" title="Bright ${k} ${(t.ansiBright || {})[k] || ''}" style="background:${(t.ansiBright || {})[k] || 'transparent'}"></span>`).join('')}</div></div>` : '<span class="small">Not set</span>'}</div>
+      </div>
+    </div>
+    <div class="scroll"><table class="roles"><thead><tr><th>Role</th><th>Color</th><th class="n">Contrast</th><th>Style</th><th>Winning selector</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+// ---------- strips ----------
+function strip(el, opts) {
+  const Wd = 640, H = opts.h || 84, padL = 8, padR = 14;
+  const { min, max, log, ticks, refs = [], groups, fmtTick = v => v } = opts;
+  const sx = v => { const a = log ? Math.log(v) : v, lo = log ? Math.log(min) : min, hi = log ? Math.log(max) : max; return padL + (Math.min(Math.max(a, lo), hi) - lo) / (hi - lo) * (Wd - padL - padR); };
+  let s = `<svg class="strip" viewBox="0 0 ${Wd} ${H}" role="img" aria-label="${esc(opts.aria)}">`;
+  ticks.forEach(v => { s += `<line class="grid" x1="${sx(v)}" x2="${sx(v)}" y1="2" y2="${H - 16}"/><text x="${sx(v)}" y="${H - 3}" text-anchor="middle">${fmtTick(v)}</text>`; });
+  refs.forEach(v => { s += `<line class="ref" x1="${sx(v)}" x2="${sx(v)}" y1="0" y2="${H - 16}"/>`; });
+  const laneH = (H - 20) / groups.length;
+  groups.forEach((g, gi) => {
+    const yc = 4 + laneH * gi + laneH / 2;
+    const pts = g.items.map(t => ({ t, v: opts.val(t) })).filter(p => p.v != null).sort((a, b) => a.v - b.v);
+    let lastX = -99, k = 0;
+    pts.forEach(p => { const x = sx(p.v); if (x - lastX < 7) k++; else k = 0; lastX = x; p.x = x; p.y = yc + [0, -1, 1, -2, 2][k % 5] * (laneH / 6); });
+    const m = median(pts.map(p => p.v));
+    s += `<line class="med" stroke="${g.cls === 'dot-f' ? 'var(--field)' : 'var(--esper)'}" x1="${sx(m)}" x2="${sx(m)}" y1="${yc - laneH / 2 + 2}" y2="${yc + laneH / 2 - 2}" opacity=".55"/>`;
+    pts.forEach(p => {
+      const fill = opts.fillBg ? `style="fill:${p.t.bg}"` : '';
+      s += `<circle class="hit" cx="${p.x}" cy="${p.y}" r="8" data-k="${esc(keyOf(p.t, tagOf.get(p.t)))}" data-v="${p.v}"/><circle class="${g.cls}" ${fill} cx="${p.x}" cy="${p.y}" r="${g.cls === 'dot-e' ? 5.5 : 4.5}" pointer-events="none"/>`;
+    });
+  });
+  el.innerHTML = s + '</svg>';
+  el.querySelectorAll('.hit').forEach(h => {
+    h.addEventListener('mousemove', e => { const t = byKey[h.dataset.k]; const tg = h.dataset.k.split(':')[0]; showTip(e, `<b>${esc(t.label)}</b>${tg === 'now' ? ' · Esper now' : tg === 'was' ? ' · Esper v0.11.0' : ''}<br><span class="m">${opts.tipFmt(+h.dataset.v, t)}</span>`); });
+    h.addEventListener('mouseleave', hideTip);
+  });
+}
+const G3 = (a, b, c) => [{ items: a, cls: 'dot-f' }, { items: b, cls: 'dot-o' }, { items: c, cls: 'dot-e' }];
+const metrics = [
+  ['Editor text', 'editor.foreground', t => t.fgCr],
+  ['Comments', 'comment role', t => t.roles.comment.cr],
+  ['Line numbers', 'editorLineNumber.foreground', t => t.wb.lineNo && t.wb.lineNo.cr],
+  ['Weakest syntax role', 'min of 29 roles', minRole],
+  ['Selection', 'editor.selectionBackground', t => t.wb.selection && t.wb.selection.cr],
+];
+document.getElementById('contrastStrips').innerHTML = metrics.map((m, i) => `<div class="strip-row"><div class="rl">${m[0]}<small>${m[1]}</small></div><div id="cs${i}"></div></div>`).join('');
+metrics.forEach((m, i) => strip(document.getElementById('cs' + i), { min: 1, max: 21, log: true, ticks: [1, 1.5, 2, 3, 4.5, 7, 10, 15, 21], refs: [3, 4.5], aria: m[0] + ' contrast', groups: G3(P, WAS, NOW), val: m[2], tipFmt: v => `${fmt(v, 2)}:1 · ${m[0].toLowerCase()}`, fmtTick: v => v + '' }));
+
+// ---------- surfaces ----------
+const side = t => { const x = t.surfaces.sidebar ? t.surfaces.sidebar.dL : 0; return x < -0.01 ? 'darker' : x > 0.01 ? 'lighter' : 'same'; };
+const cnt = (list, v) => list.filter(t => side(t) === v).length;
+document.getElementById('tally').innerHTML = `<div><b class="fld">${cnt(P, 'darker')}</b>of 30 top themes recede the sidebar</div><div><b class="fld">${cnt(P, 'same')}</b>paint it the editor color</div><div><b class="fld">${cnt(P, 'lighter')}</b>lift it</div><div><b class="esp">${cnt(ND, 'lighter')}</b>of ${ND.length} dark Esper themes lift it, by at most ${fmt(Math.max(...ND.filter(t => t.label !== 'LCARS' && t.label !== 'Q').map(t => t.surfaces.sidebar.dL)), 3)} outside LCARS</div>`;
+strip(document.getElementById('bgStrip'), { min: 0.1, max: 0.34, ticks: [0.1, 0.15, 0.2, 0.25, 0.3], aria: 'Editor background lightness', fillBg: true, groups: G3(PD, WD, ND), val: t => t.bgLCH[0], tipFmt: (v, t) => `${t.bg} · L ${fmt(v, 3)}`, fmtTick: v => 'L ' + v.toFixed(2) });
+document.querySelectorAll('#bgStrip circle.dot-e').forEach(c => { c.style.stroke = 'var(--esper)'; c.style.strokeWidth = '2.6'; });
+strip(document.getElementById('sbStrip'), { min: -0.08, max: 0.17, ticks: [-0.05, 0, 0.05, 0.1, 0.15], refs: [0], aria: 'Sidebar minus editor lightness', groups: G3(PD, WD, ND), val: t => t.surfaces.sidebar ? t.surfaces.sidebar.dL : 0, tipFmt: v => `ΔL ${v >= 0 ? '+' : ''}${fmt(v, 3)}`, fmtTick: v => (v > 0 ? '+' : '') + v.toFixed(2) });
+function ladder(t) {
+  const segs = [['activity', 10], ['sidebar', 22], ['tabsBar', 10], [null, 34], ['panel', 14], ['status', 10]];
+  const dl = t.surfaces.sidebar ? t.surfaces.sidebar.dL : 0;
+  return `<div class="ladder${t.esper ? ' e' : ''}"><span class="nm" title="${esc(t.label)}">${esc(t.label)}</span><span class="bars">${segs.map(([k, w]) => `<i style="width:${w}%;background:${k ? W(t, k) || t.bg : t.bg}"></i>`).join('')}</span><span class="dl">${dl >= 0 ? '+' : ''}${dl.toFixed(3)}</span></div>`;
+}
+document.getElementById('ladders').innerHTML = [...NOW, ...[...P].sort((a, b) => (a.surfaces.sidebar?.dL || 0) - (b.surfaces.sidebar?.dL || 0))].map(ladder).join('');
+
+// ---------- semantics ----------
+const FAM = { neutral: '#8E9196', red: '#E0484F', orange: '#EE7A2E', yellow: '#D9AE22', lime: '#97BC34', green: '#3EA85A', teal: '#26A497', cyan: '#2AAFD4', blue: '#4C7EDF', violet: '#7C67E0', purple: '#A65BD6', pink: '#DE5AA2' };
+const FAMORDER = Object.keys(FAM);
+document.getElementById('famKey').innerHTML = 'Hue families: ' + FAMORDER.map(f => `<span><span class="chip" style="background:${FAM[f]}"></span>${f}</span>`).join('');
+document.getElementById('consTable').innerHTML = `<thead><tr><th>Role</th><th>Top 30 by hue family</th><th>Field majority</th><th>Esper now</th><th class="n">Agree</th></tr></thead><tbody>` + ROLES.map(r => {
+  const counts = {}; P.forEach(t => { const f = t.roles[r.key].fam; counts[f] = (counts[f] || 0) + 1; });
+  const fs = FAMORDER.filter(f => counts[f]).sort((a, b) => counts[b] - counts[a]);
+  const top = fs[0]; const agree = NOW.filter(t => t.roles[r.key].fam === top).length;
+  return `<tr><td>${esc(r.label)}<br><span class="small mono">${esc(r.scope)}</span></td><td><div class="fambar">${fs.map(f => `<i style="width:${counts[f] / 30 * 100}%;background:${FAM[f]}" title="${f}: ${counts[f]} of 30">${counts[f] >= 3 ? f + ' ' + counts[f] : ''}</i>`).join('')}</div></td><td class="agree">${top} · ${counts[top]}/30</td><td><div class="chips" style="gap:5px;padding:2px">${NOW.map(t => `<span class="chip" style="background:${t.roles[r.key].hex};box-shadow:0 0 0 2px ${t.bg}" title="${esc(t.label)}: ${t.roles[r.key].hex} (${t.roles[r.key].fam})"></span>`).join('')}</div></td><td class="n agree">${agree}/${NOW.length}</td></tr>`;
+}).join('') + '</tbody>';
+const mt = document.getElementById('matrix');
+const cols = [...P, null, ...NOW];
+mt.innerHTML = `<thead><tr><th></th>${cols.map(t => t ? `<th class="col${t.esper ? ' e' : ''}"><span title="${esc(t.label)}">${esc(t.label.replace(/ Theme$| \(.*\)$/, ''))}</span></th>` : '<td class="gap"></td>').join('')}</tr></thead><tbody>` +
+  ROLES.map(r => `<tr><th class="row">${esc(r.label)}</th>${cols.map(t => t ? `<td class="c${t.roles[r.key].font.includes('italic') ? ' it' : ''}" style="background:${t.bg}" data-k="${esc(keyOf(t, tagOf.get(t)))}" data-r="${r.key}"><i style="background:${t.roles[r.key].hex}"></i></td>` : '<td class="gap"></td>').join('')}</tr>`).join('') + '</tbody>';
+mt.addEventListener('mousemove', e => { const c = e.target.closest('td.c'); if (!c) { hideTip(); return; } const t = byKey[c.dataset.k], v = t.roles[c.dataset.r]; showTip(e, `<b>${esc(t.label)}</b> · ${esc(roleLabel[c.dataset.r])}<br><span class="m">${v.hex} · ${fmt(v.cr, 2)}:1 · ${v.fam}${v.font ? ' · ' + v.font : ''}<br>${esc(v.sel || 'editor.foreground')}</span>`); });
+mt.addEventListener('mouseleave', hideTip);
+
+// ---------- settings ----------
+const italN = t => Object.values(t.roles).filter(r => r.font.includes('italic')).length;
+const covN = t => t.extra ? Object.values(t.extra).filter(Boolean).length : null;
+const SCOLS = [
+  ['Theme', t => t.label, 's'], ['Installs', t => t.installs || 0, 'n', t => t.installs ? fmtM(t.installs) : '<span class="dash">Esper</span>'],
+  ['Rules', t => t.nRules, 'n'], ['Semantic', t => t.nSemantic, 'n'], ['Workbench keys', t => t.nColors, 'n'],
+  ['Hue families', fams, 'n'], ['Italic roles', italN, 'n'], ['Coverage /16', t => covN(t) ?? -1, 'n', t => covN(t) ?? '—'],
+  ['Near-collisions', t => t.nearCollisions.length, 'n'], ['Color-blind merges', t => t.cvd3, 'n'],
+  ['Brackets', t => t.bracket.filter(Boolean).length, 'n', t => t.bracket.some(Boolean) ? `<span class="chips">${t.bracket.filter(Boolean).slice(0, 3).map(h => `<span class="chip" style="background:${h}"></span>`).join('')}</span>` : '<span class="dash">default</span>'],
+  ['Bright ANSI', t => t.brightDistinct, 'n'], ['Variants', t => t.variants || 0, 'n', t => t.variants || '—'],
+];
+let sCol = 1, sDir = -1;
+function renderSettings() {
+  const rows = [...P, ...NOW].sort((a, b) => { const f = SCOLS[sCol][1]; const x = f(a), y = f(b); return (typeof x === 'string' ? x.localeCompare(y) : x - y) * sDir; });
+  document.getElementById('stable').innerHTML = `<thead><tr>${SCOLS.map((c, i) => `<th class="${c[2] === 'n' ? 'n' : ''}" aria-sort="${i === sCol ? (sDir < 0 ? 'descending' : 'ascending') : 'none'}"><button type="button" data-i="${i}">${c[0]}</button></th>`).join('')}</tr></thead><tbody>` +
+    rows.map(t => `<tr class="${t.esper ? 'e' : ''}">${SCOLS.map(c => `<td class="${c[2] === 'n' ? 'n' : ''}">${c[3] ? c[3](t) : esc(c[1](t))}</td>`).join('')}</tr>`).join('') + '</tbody>';
+}
+document.getElementById('stable').addEventListener('click', e => { const b = e.target.closest('th button'); if (!b) return; const i = +b.dataset.i; if (i === sCol) sDir = -sDir; else { sCol = i; sDir = i === 0 ? 1 : -1; } renderSettings(); });
+renderSettings();
+
+// ---------- suggestions ----------
+const SUG = [
+  ['done', 'Separate or merge the near-collisions', 'Every Esper theme had pairs of different colors within ΔE 6: Fellowship 17, Tomcat 13, Cooper 11. Among the top 30, 20 have none.', 'All 68 resolved. Each pair now shares a hex or sits clear of ΔE 6, and the build fails on any new one.'],
+  ['done', 'Give the bracket-pair colors a palette', 'No Esper theme set <code>editorBracketHighlight.*</code>, so VS Code\'s gold, orchid and blue showed everywhere. 12 of the top 30 set their own.', 'Three of each theme\'s accents cycle through the six levels, at least ΔE 10 apart; an unexpected bracket takes the error color.'],
+  ['done', 'Style diff markup', '<code>markup.inserted</code>, <code>deleted</code> and <code>changed</code> were unstyled; 27 of the top 30 color them.', 'Diff lines take each theme\'s git colors and hunk headers the comment color.'],
+  ['done', 'Stop coloring plain variables', 'Seven Esper themes colored every variable; in LCARS one cyan covered six roles. 19 of the top 30 leave variables at the foreground.', 'Variables and parameters read as text everywhere; color goes to declarations, calls and literals.'],
+  ['done', 'Bring the gutter back below the code', 'Esper\'s dark line numbers ran at a median 6.6:1 against 2.7:1 in the field; Bluey Night\'s were 11.7:1.', 'Line numbers sit at 4.6–4.8:1, just over AA; the current line keeps its accent.'],
+  ['done', 'Make the LCARS and Q selection visible', 'LCARS selected with a 25% mauve at 1.21:1, tied for the faintest in the top 30.', 'The selection is 50% dirty mauve, 1.57:1, above the field median.'],
+  ['done', 'Use font style as a second channel', 'The field bolds headings and italicizes attributes, <code>this</code> and parameters. Correction: Esper already bolded Markdown headings; the first pass of the study missed it.', 'HTML attribute names and <code>this</code> are italic; generic markup headings are bold.'],
+  ['changed', 'Offer a dimmed contrast option', 'Esper paired the darkest grounds in the study with 15–19:1 text, where thin bright text blooms.', 'Replaced by lighter grounds. The first try put dark editors at L 0.23; the second at L 0.19, beside GitHub Dark, Ayu Dark, Bearded\'s black variants and Omni. LCARS keeps its 0.18 ground.'],
+  ['done', 'Close the smaller coverage gaps', 'Regex shared the string color and escapes the number color everywhere; Q lacked Markdown rules; Go imports were unstyled.', 'Escapes and regular expressions have their own roles, Q mirrors LCARS\'s rules, and Go imports take the namespace color.'],
+  ['changed', 'Decide about the lifted chrome', 'Every dark Esper theme lit its sidebar above the editor, up to +0.163; 29 of the top 30 do not.', 'Kept as the Esper look, with the step capped at 0.03 outside LCARS.'],
+  ['done', 'Replace VS Code\'s stock colors', 'Quick Open matches, find and symbol highlights, peek views, the modified gutter mark, inlay hints, merge conflicts, the progress bar and scrollbars fell back to VS Code\'s blues and oranges.', 'All set from each theme\'s roles, with syntax held to its floor over every highlight that sits under code.'],
+  ['done', 'Make the terminal\'s bright colors brighter', 'Every film theme repeated its normal ANSI colors as the bright ones, so emphasis in CLI output vanished.', 'Each bright color is a step toward the foreground at least ΔE 8 from the normal one.'],
+  ['done', 'Check collisions as color-blind readers see them', 'Seven Esper themes had role pairs that become one color for a deuteranope or protanope.', 'None now; the build checks every pair under both simulations.'],
+  ['open', 'Give Q and Mix the same guarantee', 'Q\'s random palettes and Mix\'s lifts can still produce near-collisions the fixed themes cannot ship.', ''],
+  ['open', 'Ease the brightest text', 'LCARS, Q and Bluey Night run 17–17.5:1, above GitHub Dark\'s 16.', ''],
+  ['open', 'Restore Bluey Night\'s chrome step', 'The 0.03 cap took its sidebar from 1.47:1 to about 1.08:1 against the editor.', ''],
+  ['open', 'A light variant for LCARS', 'Half the top 30 ship a light variant; Esper has two light themes and none for its flagship.', ''],
+];
+const STATUS = { done: 'Done', changed: 'Changed course', open: 'Open', kept: 'Kept' };
+document.getElementById('sugs').innerHTML = SUG.map(([st, h, b, o], i) => `<div class="sug"><span class="no">${String(i + 1).padStart(2, '0')}</span><div class="top"><h3>${h}</h3><span class="status ${st}">${STATUS[st]}</span></div><p>${b}</p>${o ? `<p class="out">${o}</p>` : ''}</div>`).join('');
+const KEEP = [
+  ['Comment contrast', 'Esper comments sit above AA where 24 of the top 30 sit below it.'],
+  ['Light themes that pass', 'Popular light companions put comments near 2.6:1; Fellowship and Bluey keep every role above 5.4:1.'],
+  ['A complete semantic layer', '32 semantic token keys on every theme; only Ayu and Catppuccin come close.'],
+  ['Strings that aren\'t green', 'Strings are green in 22 of the top 30 and warm in most Esper themes. The hue map belongs to each film palette.'],
+  ['Hue count', 'The field\'s median is 7 hue families, Esper\'s 5–7. Chasing the count would mean inventing colors outside the films, and lightness separation holds up better for color-blind readers.'],
+];
+document.getElementById('keep').innerHTML = KEEP.map(([h, b]) => `<div><b>${h}</b><span>${b}</span></div>`).join('');
+
+// ---------- regrade ----------
+const VERSIONS = D.versions;
+const FIELD = { L: 0.27, fg: 10.8, cmt: 3.15, ln: 2.7, sel: 1.52, sb: -0.029, fams: 7, near: 0, cvd: 1 };
+const RM = [
+  ['Editor L', t => t.bgLCH[0], 3, (b, a, t) => t.kind === 'dark' && Math.abs(a - FIELD.L) < Math.abs(b - FIELD.L)],
+  ['Text', t => t.fgCr, 1, (b, a, t) => t.kind === 'dark' && Math.abs(a - FIELD.fg) < Math.abs(b - FIELD.fg)],
+  ['Comment', t => t.roles.comment.cr, 1, () => false],
+  ['Line numbers', t => t.wb.lineNo.cr, 1, (b, a) => Math.abs(a - FIELD.ln) < Math.abs(b - FIELD.ln)],
+  ['Selection', t => t.wb.selection.cr, 2, (b, a) => a > b + 0.05],
+  ['Sidebar ΔL', t => t.surfaces.sidebar.dL, 3, (b, a) => Math.abs(a) < Math.abs(b) - 0.005],
+  ['Hue families', fams, 0, (b, a) => a > b],
+  ['Near-collisions', t => t.nearCollisions.length, 0, (b, a) => a < b],
+  ['Color-blind merges', t => t.cvd3, 0, (b, a) => a < b],
+  ['Bright ANSI', t => t.brightDistinct, 0, (b, a) => a > b],
+];
+document.getElementById('summary').innerHTML = `<thead><tr><th>Theme</th>${RM.map(m => `<th class="n">${m[0]}</th>`).join('')}</tr></thead><tbody>` +
+  NOW.map((a, i) => {
+    const vs = VERSIONS.map(([k]) => SETS[k][i]);
+    return `<tr><td><span class="chip" style="background:${a.bg}"></span> <b>${esc(a.label)}</b></td>${RM.map(([n, f, d, good]) => {
+      const fx = n === 'Sidebar ΔL' ? (v => (v >= 0 ? '+' : '') + fmt(v, 3)) : (v => fmt(v, d));
+      const v = vs.map(f), last = v.length - 1;
+      return `<td class="n">${v.map((x, j) => `<span class="${j === last ? 'v3' + (good(v[0], x, a) ? ' better' : '') : j === 0 ? 'v1' : 'v2'}">${fx(x)}</span>`).join('<span class="sep">›</span>')}</td>`;
+    }).join('')}</tr>`;
+  }).join('') + `<tr class="field"><td>Top 30 dark median</td><td class="n">${FIELD.L}</td><td class="n">${FIELD.fg}</td><td class="n">${FIELD.cmt}</td><td class="n">${FIELD.ln}</td><td class="n">${FIELD.sel}</td><td class="n">${FIELD.sb}</td><td class="n">${FIELD.fams}</td><td class="n">${FIELD.near}</td><td class="n">${FIELD.cvd}</td><td class="n">—</td></tr></tbody>`;
+const CHANGES = [
+  ['Lighter dark grounds', 'Film editors move off 0.12–0.17 near-black to L 0.19, beside GitHub Dark and Ayu Dark (text 13.8–17.5:1). LCARS keeps its ground. A first try at L 0.23 is kept for comparison.'],
+  ['A smaller chrome step', 'The sidebar stays brighter than the code, by at most 0.03 L; borders and widgets keep floors so they still separate.'],
+  ['No near-collisions', 'Two roles are one hex or at least ΔE 6 apart; 68 pairs went to 0 and the build fails otherwise.'],
+  ['Readable without red-green vision', 'No two roles become one color for a deuteranope or protanope (under ΔE 3). Every Esper theme clears it; 7 of the top 30 do.'],
+  ['Variables read as text', 'Plain variables and parameters take the foreground; color goes to declarations, calls and literals.'],
+  ['Bracket pairs from the palette', 'Three of each theme\'s accents, at least ΔE 10 apart.'],
+  ['A quieter gutter', 'Line numbers at 4.6–4.8:1 against 5.4–11.7:1 before.'],
+  ['No stock VS Code colors', 'List matches, find and symbol highlights, peek views, the modified gutter, inlay hints, merges, progress and scrollbars come from each theme.'],
+  ['Terminal brights', 'Each bright ANSI color is a visible step toward the foreground.'],
+  ['Diffs, escapes and patterns', 'Diff lines take the git colors; escapes and regular expressions have their own roles.'],
+  ['Style as a second channel', 'HTML attributes and <code>this</code> italic, generic markup headings bold.'],
+];
+document.getElementById('changes').innerHTML = CHANGES.map(([h, b]) => `<div><b>${h}</b><span>${b}</span></div>`).join('');
+const NOTES = {
+  'LCARS': ['Keeps <code>#09131A</code>; L 0.23 had tried <code>#0E1E2A</code>.', 'Variables and parameters take starlight; numbers and constants true mauve; functions and library functions Bluey <code>#8899FF</code>; types almond.', 'Operators, tags, storage keywords and modifiers move from bright blue to Blue <code>#37A6D1</code>, which deuteranopes can tell from the keyword violet; storage types take subdued sienna; escapes and regular expressions orange.', 'Selection 50% dirty mauve; line numbers light gray at 73% opacity. Every change is from the approved palette.'],
+  'Q': ['The static fallback mirrors LCARS; at runtime the generator draws lighter surfaces and fills the new roles from its own palette.'],
+  'Replicant': ['Chrome step +0.052 to about +0.03.', 'Types and decorators take the constant gold; strings a deeper sea glass <code>#6BD0B2</code>; properties read as text. The 2.9:1 comment floor stays.'],
+  'Oblivion': ['Types take the sky blue <code>#8DB4E8</code>; operators and properties read as text; tags the alert orange; constants and decorators share it; library functions the function cyan.'],
+  'Synthwave': ['The orange variable and violet property overrides are gone; numbers and constants share one red; operators take <code>#B0A6D9</code>; tags the hot pink.', 'The pink activity icons lift to <code>#F46DAE</code> to stay AA on the lighter chrome.'],
+  'Tomcat': ['Still phosphor-led. Types take a radar teal, numbers and constants the caution amber, tags a canopy blue <code>#6FB3E8</code>, comments an unlit grey, operators a sage grey.', 'Functions drop a lightness step below keywords; library functions join them.'],
+  'Fellowship': ['Types take a blue river ink <code>#2D4F6E</code>, functions a green-blue ink <code>#1F6E63</code>, constants and tags a purple seal <code>#7B3F8F</code>, numbers a vermilion ink <code>#A3283A</code>, strings a deeper gold.', 'Operators and properties go back to the text ink. The parchment is unchanged.'],
+  'Cooper': ['Types take Miller\'s ocean <code>#6FC2B5</code>; tags a warning red; operators a warm grey; properties read as text; decorators share the number orange; library functions the constant gold.'],
+  'Bluey': ['Variables read as navy text; numbers and constants take Bluey blue; types the steel of his coat; functions and tags a raspberry <code>#D04A80</code>, the one color not from the artwork; decorators join the keywords.'],
+  'Bluey Night': ['Chrome step +0.163 to about +0.03, which costs the sidebar some separation; it could be restored on its own.', 'Variables read as cream text; numbers take the tongue red; types and decorators a lavender; library functions the Bingo orange.'],
+  'Helix': ['Shares Replicant\'s workbench. Variables read as text; the steel blue stays on numbers, constants and the overrides that name it.', 'Comments take the bracket grey and italic separates them; types and tags a lighter slate <code>#A5B4DB</code>.'],
+};
+document.getElementById('jump').innerHTML = NOW.map((t, i) => `<a href="#t-${i}"><span class="chip" style="background:${t.bg}"></span>${esc(t.label)}</a>`).join('');
+let left = 'v011', right = 'now';
+const vLabel = Object.fromEntries(VERSIONS.map(([k, l, d]) => [k, [l, d]]));
+function renderThemes() {
+  document.getElementById('themeList').innerHTML = NOW.map((_, i) => {
+    const b = SETS[left][i], a = SETS[right][i];
+    const moved = ROLES.filter(r => dist(b.roles[r.key], a.roles[r.key]) > 3 || b.roles[r.key].font !== a.roles[r.key].font);
+    const chip = (t, k) => { const r = t.roles[k]; return `<span class="s" style="background:${t.bg};color:${r.hex};${styleOf(r)}">${r.hex}</span>`; };
+    const ground = VERSIONS.map(([k, l]) => `${l} <code>${SETS[k][i].bg}</code>`).join(' · ');
+    return `<article class="theme" id="t-${i}">
+      <div class="top"><h2>${esc(a.label)}</h2><span class="stats">${a.kind} · near-collisions ${b.nearCollisions.length} → ${a.nearCollisions.length} · color-blind merges ${b.cvd3} → ${a.cvd3} · hue families ${fams(b)} → ${fams(a)} · text ${fmt(b.fgCr)} → ${fmt(a.fgCr)}:1</span></div>
+      <ul><li>Ground: ${ground}</li>${(NOTES[a.label] || []).map(n => `<li>${n}</li>`).join('')}</ul>
+      <div class="pair">
+        <div class="side"><div class="lab"><b>${vLabel[left][0]}</b><span>${vLabel[left][1]} · ${b.bg}</span></div>${win(b)}</div>
+        <div class="side after"><div class="lab"><b>${vLabel[right][0]}</b><span>${vLabel[right][1]} · ${a.bg}</span></div>${win(a)}</div>
+      </div>
+      <div><div class="small" style="margin-bottom:6px">${moved.length ? moved.length + ' roles changed color or style between these two versions' : 'No role changed color or style between these two versions'}</div><div class="rolediff">${moved.map(r => `<div><span class="r" title="${esc(r.label)}">${esc(r.label)}</span>${chip(b, r.key)}<span class="a">→</span>${chip(a, r.key)}</div>`).join('')}</div></div>
+    </article>`;
+  }).join('');
+}
+function renderPicker() {
+  for (const [id, cur] of [['segL', left], ['segR', right]]) document.getElementById(id).innerHTML = VERSIONS.map(([k, l]) => `<button type="button" data-v="${k}" aria-pressed="${k === cur}">${l}</button>`).join('');
+}
+document.getElementById('segL').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; left = b.dataset.v; renderPicker(); renderThemes(); });
+document.getElementById('segR').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; right = b.dataset.v; renderPicker(); renderThemes(); });
+
+// ---------- palettes, audit, recipes ----------
+const ESP = D.esper;
+let palTheme = NOW[0].label;
+const toast = document.getElementById('toast');
+let toastTimer;
+async function copyHex(hex) {
+  let ok = false;
+  try { await navigator.clipboard.writeText(hex); ok = true; } catch (e) { ok = false; }
+  toast.textContent = ok ? `Copied ${hex}` : `${hex}: select and copy it from the swatch`;
+  toast.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { toast.hidden = true; }, 1600);
+}
+const badge = (label, pass, mid) => `<span class="badge ${pass ? 'pass' : mid ? 'mid' : 'fail'}">${label}</span>`;
+function renderPalettes() {
+  const e = ESP[palTheme], t = NOW.find(x => x.label === palTheme);
+  document.getElementById('palSeg').innerHTML = NOW.map(x => `<button type="button" data-t="${esc(x.label)}" aria-pressed="${x.label === palTheme}">${esc(x.label)}</button>`).join('');
+  document.getElementById('palCtx').textContent = e.context;
+  const groups = ['Surfaces', 'Accents', 'Syntax'].map(g => [g, e.palette.filter(c => c.group === g)]).filter(([, cs]) => cs.length);
+  document.getElementById('palGroups').innerHTML = groups.map(([g, cs]) => `<div class="swgroup"><h3>${g} · ${cs.length}</h3><div class="swatches">${cs.map(c => `<button type="button" class="swatch" data-hex="${c.hex}" style="background:${c.hex};color:${inkOn(c.hex)}" aria-label="${esc(c.name)}, ${c.hex}. Copy hex."><span class="hx">${c.hex}</span><span class="nm">${esc(c.name)}${c.hex === e.primary ? ' ★' : ''}</span><span class="st">${fmt(contrastOn(c.hex, t.bg), 2)}:1 on editor</span></button>`).join('')}</div></div>`).join('');
+  document.getElementById('auditName').textContent = '· ' + palTheme;
+  const row = p => `<tr><td>${esc(p.label)}<div class="det">${esc(p.detail)}</div></td><td class="demo${p.border ? ' bd' : ''}" style="background:${p.surface};color:${p.border ? inkOn(p.surface) : p.ink};${p.border ? '--bd:' + p.ink : ''}">${p.border ? 'Border' : 'Aa Sample'}</td><td class="mono small">${esc(p.fgKey)}<br>${esc(p.bgKey)}</td><td class="mono">${p.fg}<br>${p.bg}</td><td class="n mono">${fmt(p.ratio, 2)}:1</td><td>${p.border ? (p.ratio >= 3 ? badge('UI 3:1', true) : p.subtle && p.ratio >= 1.8 ? badge('Subtle by choice', false, true) : badge('Below 3:1', false)) : badge(p.ratio >= 7 ? 'AAA' : p.ratio >= 4.5 ? 'AA' : p.ratio >= 3 ? 'Large only' : 'Fail', p.ratio >= 4.5, p.ratio >= 3)}</td></tr>`;
+  const head = `<thead><tr><th>Pair</th><th>Preview</th><th>Keys</th><th>Colors</th><th class="n">Contrast</th><th>Result</th></tr></thead>`;
+  document.getElementById('textAudit').innerHTML = head + '<tbody>' + e.audit.text.map(row).join('') + '</tbody>';
+  document.getElementById('borderAudit').innerHTML = head + '<tbody>' + e.audit.borders.map(row).join('') + '</tbody>';
+  document.getElementById('recipeGrid').innerHTML = e.recipes.map(r => `<article class="recipe"><span class="cat">${esc(r.category)}</span><h4>${esc(r.name)}</h4><p>${esc(r.detail)}</p><div class="cols">${r.colors.map(c => `<span style="background:${c.hex};color:${inkOn(c.hex)}">${esc(c.name)}</span>`).join('')}</div><div class="demo" style="background:${r.bg.hex};color:${r.fg.hex}">${esc(r.fg.name)} on ${esc(r.bg.name)}</div><div style="display:flex;gap:8px;align-items:center"><span class="mono">${fmt(r.ratio, 2)}:1</span>${r.textSafe ? badge('Text-safe', true) : badge('Accent-only', false, true)}</div></article>`).join('');
+}
+function contrastOn(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+document.getElementById('palSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; palTheme = b.dataset.t; renderPalettes(); });
+document.getElementById('palGroups').addEventListener('click', e => { const s = e.target.closest('.swatch'); if (s) copyHex(s.dataset.hex); });
+
+renderGallery(); renderDetail(); renderPicker(); renderThemes(); renderPalettes();
+})();
+</script>
