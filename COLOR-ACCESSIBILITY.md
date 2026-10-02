@@ -70,6 +70,36 @@ comments and the bold markdown headings already shipped.
 **Escapes and patterns.** String escapes and regular expressions have their
 own roles instead of sharing the number and string colors.
 
+**No stock VS Code colors.** Most popular themes set these keys and no Esper
+theme did, so VS Code painted its own blues and oranges into them: the matched
+letters in Quick Open and every list (`list.highlightForeground`), the find,
+selection-occurrence and symbol highlights, the peek views, the modified
+gutter mark, inlay hints, merge conflicts, the progress bar, scrollbars,
+split-editor borders and input validation. Each now comes from the theme's
+own roles, in the shared mapping and by hand in LCARS. Syntax is held to its
+floor over every highlight that sits under code while it is read; the current
+find match, like the selection, is one transient spot with its own border and
+is not.
+
+**Terminal brights.** Every bright ANSI color repeated its normal one, so the
+emphasis Git, test runners and `ls` print in bright colors vanished. Each
+bright color is now a step toward the foreground at least ΔE 8 from the normal
+one (`brighterStep` in `q-theme.js`).
+
+**Red-green color blindness.** The role-distance check also runs on every pair
+as a deuteranope and a protanope see it (Machado, Oliveira and Fernandes 2009,
+full severity, `simulateCvd`). Those readers lose most of the hue axis, so the
+floor there only rules out pairs that become one color: ΔE 3
+(`MIN_CVD_ROLE_DISTANCE`). Among the thirty most-installed themes, the median
+has one such pair and only seven have none; every Esper theme has none. LCARS
+is now held to the same checks, read off its own token rules. Meeting them
+moved Replicant's strings to a deeper sea glass `#6BD0B2` and its types to the
+constant gold, Tomcat's tags to a canopy blue `#6FB3E8`, Fellowship's numbers
+to a vermilion ink `#A3283A` and its seals to `#7B3F8F`, and Bluey's numbers to
+Bluey blue and its functions and tags to a raspberry `#D04A80`, the one Bluey
+color not sampled from the artwork. Replicant and Bluey span 5 hue families
+as a result.
+
 ## Film themes
 
 Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are outside the
@@ -217,6 +247,9 @@ whatever ground the build puts under them.
 
 The explorer text is set to lavender `#BD93F9` as a color override, the way
 the old theme had it; at 7.9:1 on the side bar it clears AA on its own.
+The active tab is stroked as LCARS strokes its own: the steel blue `#448AA9` on
+top (4.3:1 on the active tab, clear of the 3:1 non-text floor) and the orange
+underneath.
 
 ## Mix
 
@@ -387,27 +420,38 @@ the dark panel content and preserves the identity-colored section-header
 roles (and panel tab accents), while the native top strip follows VS Code's
 shared `panel.background` behavior.
 
-## Theme palette reference page
+## Theme census page
 
-`theme-palettes.html` is a generated, self-contained page (open directly in a
-browser, no build step) with an interactive mock VS Code window styled from
-each theme's real color values — activity bar, sidebar, Modern UI tab roles,
-editor with syntax-highlighted sample code, dark panel content with an
-identity-colored header, status bar, and badges. A theme selector
-switches between every contributed theme. Clicking any
-element in the mock-up (or any color in the palette legend below it) opens an
-inspector showing exactly which color role(s) it uses, with a live color
-picker to edit them; editing a palette-legend color updates every role that
-shares that exact color at once. The WCAG contrast table recalculates live as
-colors are edited. An **Export theme JSON** button downloads the edited
-result as a ready-to-use VS Code theme file. Edits are local to the browser
-session only (a **Reset changes** button restores the original per theme).
-Regenerate the embedded theme data with `npm run build:palette-page` after any
-palette or color-role change so it stays accurate. Each theme carries its own
-named palette, derived from the colors that theme actually uses and grouped
-into surfaces, accents and syntax. Color edits in the inspector are restricted
-to that palette — there is no free-form or native color picker, so an edit made
-in the page stays within the colors its theme is built from.
+`theme-census.html` is a generated, self-contained page (open it directly in a
+browser) built by `npm run build:census-page`. It replaces the earlier
+`theme-palettes.html` and carries forward its named palettes, contrast
+thresholds, text and border audits and color-theory recipes. It has four parts:
+
+- **The study.** The thirty most-installed color themes on the Marketplace,
+  measured from their shipped JSON, against Esper: contrast for text,
+  comments, line numbers and selection; editor grounds and the chrome around
+  them; the hue each syntax role takes and how far the field agrees; token
+  settings and grammar coverage; and the suggestions that came out of it, each
+  with its outcome.
+- **The regrade.** Every Esper theme in four versions (v0.11.0, the L 0.23 and
+  L 0.19 regrades, and now), with a picker to set any two side by side.
+- **Esper palettes.** Each theme's context and its named palette, read from the
+  theme file, grouped into surfaces, accents and syntax; select a swatch to
+  copy its hex.
+- **Accessibility audit and color theory.** The WCAG thresholds; every text
+  pair and border pair the theme is held to, read from its colors with
+  translucent fills composited over the editor; and recipes in the theme's own
+  colors, each marked text-safe or accent-only by whether its declared pair
+  clears AA.
+
+Every specimen is drawn as VS Code's Modern UI lays out the workbench, from the
+theme's `surface.*`, `modernEditorTab.*`, `modernActivityBarItem.*` and
+`modernTab.*` roles; popular themes, which do not set those, fall back to their
+classic keys. The popular themes and the earlier Esper versions come from the
+measured snapshot in `docs/census/snapshot.json`; the current Esper themes are
+measured from `themes/` by `scripts/census/analyze-theme.js` on every build, so
+rebuild the page after any palette or role change. The page is a reference for
+this repository and is not packaged with the extension.
 
 ## Scope
 
@@ -519,9 +563,14 @@ accent. No new colors or grammar injections were added.
 | Function and method tokens | African violet `#BAA4E5` | Bluey `#8899FF` | Functions shared the keyword violet; Bluey reads at 7.19:1 and sits ΔE 8.9 from it. |
 | Type tokens | Barley `#EDB378` | Almond `#D29B7F` | Barley sat ΔE 5.7 from the almond-creme strings. Almond is ΔE 12.1 from strings and 8.1 from barley, which keeps constants and library symbols. |
 | String escapes | Bright blue `#41C4F7` | Orange `#EB943A` | An escape now stands out from the string around it. |
-| Regular expressions | Almond creme `#FCC19F` | Blue `#37A6D1` | A pattern now stands out from ordinary strings. |
+| Regular expressions | Almond creme `#FCC19F` | Orange `#EB943A`, shared with escapes | A pattern now stands out from ordinary strings. |
 | Diff lines | Unstyled | Inserted blue `#37A6D1`, deleted pale orange-red `#FF977B`, changed butterscotch `#EA9C72`, headers light gray `#9EA5BA` | The same colors as the inserted-diff border and the deleted and modified Git decorations. |
-| Bracket pairs | VS Code defaults | Bright blue `#41C4F7`, African violet `#BAA4E5`, barley `#EDB378`; unexpected pale orange-red `#FF977B` | The defaults are colors outside the approved palette. |
+| Bracket pairs | VS Code defaults | Blue `#37A6D1`, African violet `#BAA4E5`, barley `#EDB378`; unexpected pale orange-red `#FF977B` | The defaults are colors outside the approved palette. |
+| Operators, storage, modifiers, export keywords and tag names | Bright blue `#41C4F7` | Blue `#37A6D1` | To a deuteranope, bright blue and the African-violet keywords and attributes read as one color (ΔE 2.9); Blue stays 8.5 apart. |
+| Storage-type tokens | Pale orange-red `#FF977B` | Subdued sienna `#C47D69` | Pale orange-red merged with barley for deuteranopes and with almond types for protanopes; sienna is at least ΔE 7.4 from both. |
+| Named constants, enum members and library constants | Barley `#EDB378` | True mauve `#C082A9`, shared with numbers | Barley sat ΔE 5.7 from the almond-creme strings. |
+| Library functions | Barley `#EDB378` | Bluey `#8899FF`, shared with functions | As above. |
+| Terminal red, blue and magenta | Bright and normal identical | Red sienna `#C47D69` / bright pale orange-red `#FF977B`; blue Bluey `#8899FF` / bright blue `#41C4F7`; magenta true mauve `#C082A9` / bright African violet `#BAA4E5` | Bright terminal output now reads as emphasis. |
 | Inactive line numbers | Light gray `#9EA5BA` | Light gray at 73% opacity, `#9EA5BABB` | 4.60:1 on the editor instead of 7.63:1, so the gutter stays below the code. |
 | Active Explorer selection icons | Bright blue `#41C4F7` | Dark blue `#1C3C55` | Aligns file-type icons with the active filename and provides 5.22:1 contrast on the African-violet selection background. |
 | Active Explorer selection | African violet `#BAA4E5` with dark-blue text `#1C3C55` | Dark blue `#1C3C55` with starlight text `#F3F4F7` | Replaces the lower-contrast lavender row with an AAA text treatment; the focused file remains distinct from the dark-gray sidebar. |
@@ -562,23 +611,23 @@ cannot assign an individual color to either action.
 
 | Color | Hex | Current usage |
 | --- | --- | --- |
-| African violet | `#BAA4E5` | Active selections, suggestion selections, secondary buttons, keywords, function/method tokens, decorators, PHP visibility/storage modifiers, TypeScript/JavaScript class keywords, HTML/XML attribute names, terminal magenta. |
-| Almond | `#D29B7F` | Type tokens, terminal green and untracked Git decorations. |
+| African violet | `#BAA4E5` | Active selections, suggestion selections, secondary buttons, keywords, decorators, the find-match border, PHP visibility/storage modifiers, TypeScript/JavaScript class keywords, HTML/XML attribute names, terminal magenta. |
+| Almond | `#D29B7F` | Type tokens, library types, terminal green and untracked Git decorations. |
 | Almond creme | `#FCC19F` | Hovered primary and secondary buttons, active line numbers, HTML/XML attribute values, string tokens, bright terminal green. |
-| Barley | `#EDB378` | Activity-bar icons, sidebar and panel headings, the third bracket-pair level, named constants, enum members, library functions/constants/variables, labels, LCARS tab modified borders, 25% translucent Explorer hover background, and bright terminal yellow. |
-| Bluey | `#8899FF` | Function and method tokens, and the word-highlight overview-ruler marker. |
+| Barley | `#EDB378` | Activity-bar icons, sidebar and panel headings, the third bracket-pair level, labels, the selected peek-view result, LCARS tab modified borders, 25% translucent Explorer hover background, and bright terminal yellow. |
+| Bluey | `#8899FF` | Function, method and library-function tokens, terminal blue, the incoming side of a merge conflict, and the word highlight and its overview-ruler marker. |
 | Brown | `#895129` | Bracket-match background. |
-| Butterscotch | `#EA9C72` | Modified Git decorations and warning squiggle. |
+| Butterscotch | `#EA9C72` | Modified Git decorations, the modified gutter mark, changed diff lines, and warning squiggle. |
 | Dirty mauve | `#7A506D` | 50% opacity active editor selection overlay and find-match overview-ruler marker. |
-| Dusty mauve | `#9D698A` | Selection-highlight overview-ruler marker. |
-| Lilac | `#8A72A7` | Strong word-highlight overview-ruler marker and hint squiggle. |
+| Dusty mauve | `#9D698A` | Selection-occurrence highlight and its overview-ruler marker. |
+| Lilac | `#8A72A7` | Find-match and other-match highlights, the strong word highlight and its overview-ruler marker, and hint squiggle. |
 | Mars | `#FF2200` | Error squiggle and error indicator only; never normal text. |
-| Orange | `#EB943A` | Active links, the base active-tab stripe, string escapes, and terminal yellow. |
+| Orange | `#EB943A` | Active links, the base active-tab stripe, string escapes and regular expressions, and terminal yellow. |
 | Red | `#CF4F4F` | Approved palette color reserved for future diagnostic or decorative use; not assigned to a current tab role. |
-| Subdued sienna | `#C47D69` | Modified overview-ruler marker. |
-| True mauve | `#C082A9` | Number and language-constant tokens, and badge backgrounds with dark-blue foreground text. |
-| Blue | `#37A6D1` | Regular-expression tokens, inserted diff lines, the informational squiggle and the inserted-diff border. |
-| Bright blue | `#41C4F7` | Focus rings, links, input/widget borders, primary-button borders, active Explorer selection icons, operators, storage/modifier tokens, export and PHP function keywords, HTML/XML tag names, the first bracket-pair level, terminal blue, and terminal cyan. |
+| Subdued sienna | `#C47D69` | Storage-type declaration tokens, terminal red, and the modified overview-ruler marker. |
+| True mauve | `#C082A9` | Number, constant, enum-member and library-constant tokens, terminal magenta, and badge backgrounds with dark-blue foreground text. |
+| Blue | `#37A6D1` | Operator, storage, modifier, export-keyword and tag-name tokens, the first bracket-pair level, inserted diff lines, the current side of a merge conflict, the informational squiggle and the inserted-diff border. |
+| Bright blue | `#41C4F7` | Focus rings, links, input/widget borders, primary-button borders, active Explorer selection icons, the peek-view border, the progress bar, the active scrollbar, bright terminal blue, and terminal cyan. |
 | Dark blue | `#1C3C55` | Activity bar, panel, title-bar, inactive-tab, primary-button, and active Explorer selection backgrounds. |
 | Dark gray | `#2F3749` | Status bar, widgets, inputs, dropdowns, and line-highlight backgrounds. |
 | Deep dark blue | `#09131A` | Editor, terminal, and editor tab-strip backgrounds (dark blue darkened ~69%). |
@@ -589,6 +638,6 @@ cannot assign an individual color to either action.
 | Medium dark blue | `#2A7193` | Minimap background and hovered primary buttons. |
 | Medium dark gray | `#52596E` | Hover states, section headers, inactive selections, and indent guides. |
 | Orange-red | `#E7442A` | Deleted-line gutter and removed-diff border. |
-| Pale orange-red | `#FF977B` | Error text, invalid tokens, storage-type declaration tokens, deleted-resource text, editor cursor, headings, and terminal red. |
-| Primary gray | `#6D748C` | Whitespace markers and bright terminal black. |
+| Pale orange-red | `#FF977B` | Error text, invalid tokens, deleted-resource text and diff lines, editor cursor, headings, and bright terminal red. |
+| Primary gray | `#6D748C` | Whitespace markers, scrollbars, and bright terminal black. |
 | Starlight | `#F3F4F7` | Main editor, object properties, buttons, sidebar, widget, terminal, tab, title-bar, status-bar, and Explorer hover text. |

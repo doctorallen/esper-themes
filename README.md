@@ -102,7 +102,7 @@ Mix wears one theme's workbench around another theme's editor colors.
 
 - `npm run build:themes` rebuilds the fixed themes from the palettes in `scripts/build-themes.js`.
 - `npm run capture:screenshots` retakes the screenshots above.
-- `npm run build:palette-page` regenerates `theme-palettes.html`, a palette and contrast page for every theme.
+- `npm run build:census-page` regenerates `theme-census.html`: the thirty most-installed VS Code themes measured against Esper's, the regrade that followed, and every Esper theme's named palette, accessibility audit and color-theory recipes.
 - `npm run package:vsix` builds the extension. A push to `master` publishes a release.
 
 Palette choices and the contrast rationale behind them are in `COLOR-ACCESSIBILITY.md`.

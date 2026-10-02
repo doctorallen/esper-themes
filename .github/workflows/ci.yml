@@ -40,7 +40,8 @@ jobs:
           node --check extension.js
           node --check q-theme.js
           node --check scripts/build-themes.js
-          node --check scripts/build-palette-page.js
+          node --check scripts/build-census-page.js
+          node --check scripts/census/analyze-theme.js
 
       - name: Build VSIX
         run: npm run package:vsix

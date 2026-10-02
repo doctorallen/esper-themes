@@ -11,7 +11,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper themes, built from Deckard's webview theme palettes.
 - README screenshots of every theme, regenerated with `npm run capture:screenshots`.
 - Bluey and Bluey Night themes, built from colors sampled out of the Heeler family artwork.
-- `theme-palettes.html` covers every theme, each with its own named palette.
+- `theme-census.html` (`npm run build:census-page`) measures the thirty most-installed VS Code themes against Esper's, follows the regrade version by version in Modern UI specimens, and documents every theme's named palette, accessibility audit and color-theory recipes. It replaces `theme-palettes.html`.
 - Helix theme, a long-lived custom syntax palette on Replicant's workbench.
 - A mark for every theme (`images/logos/mark-<theme>.svg`), drawn from its source material in its own colours and shown in the README table.
 - Mix theme and the **Esper Themes: Mix Themes** command: one theme's workbench, editor background included, around another theme's syntax colours, each colour lifted until it reads on the new ground as well as it read on its own.
@@ -25,6 +25,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Diff and patch files are colored, string escapes and regular expressions have their own colors, and line numbers sit just over AA so the gutter stays below the code.
 - HTML attribute names and `this` are italic; markup headings are bold.
 - LCARS's selection is 50% dirty mauve, up from 25%.
+- Quick Open matches, find and symbol highlights, peek views, the modified gutter mark, inlay hints, merge conflicts, the progress bar, scrollbars and input validation take each theme's colors instead of VS Code's stock blues and oranges.
+- Bright terminal colors are a visible step brighter than the normal ones instead of repeating them.
+- No two syntax roles read as one color to a red-green color-blind reader: the build checks every pair as deuteranopes and protanopes see it, LCARS included.
 
 - The LCARS mark is redrawn from the Enterprise-D blueprints: the phaser strip rings the saucer, the dome section is an egg, the hull flares to a squared stern, the nacelles taper to their bussard caps, and the pylons sweep from the hull's rear flanks.
 - New Marketplace icon: a folded-paper prism splitting one line into three theme colours, above the Esper wordmark; the prism takes Synthwave's palette and the wordmark stays Esper amber. `images/logos/` holds the same icon and the prism alone in every theme's colours.

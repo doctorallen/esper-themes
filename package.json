@@ -17,7 +17,7 @@
   "scripts": {
     "build:themes": "node scripts/build-themes.js",
     "capture:screenshots": "node scripts/capture-theme-screenshots.mjs",
-    "build:palette-page": "node scripts/build-palette-page.js",
+    "build:census-page": "node scripts/build-census-page.js",
     "package:vsix": "vsce package --no-dependencies --skip-license"
   },
   "devDependencies": {
