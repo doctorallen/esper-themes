@@ -110,16 +110,17 @@ td.n { text-align: right; font-variant-numeric: tabular-nums; font-family: var(-
 .toast { position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 8px 14px; border-radius: 6px; font-size: 13px; z-index: 30; }
 footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; }
 
-.spec { font: 10px/1.3 "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; box-shadow: 0 0 0 1px rgba(127,127,127,.25); }
+.spec { font: 10px/1.3 "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; box-shadow: 0 0 0 1px rgba(127,127,127,.25); --ui: -apple-system, "Segoe UI", system-ui, sans-serif; }
 .spec.big { font-size: 13px; }
 .spec .ci { width: 1.4em; height: 1.4em; fill: currentColor; flex: none; display: inline-block; vertical-align: -0.3em; }
-.spec .chev.ci { width: 1.1em; height: 1.1em; opacity: .85; }
+.spec .chev { width: 1.2em; height: 1.2em; opacity: .9; flex: none; display: inline-block; }
+.spec .fi { font: 700 .72em/1 var(--ui); letter-spacing: -.02em; width: 1.9em; flex: none; display: inline-block; text-align: center; }
 .spec .sp { flex: 1; }
-.spec .title { height: 2.6em; display: flex; align-items: center; gap: .8em; padding: 0 1em; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
-.spec .dots { display: inline-flex; gap: .55em; } .spec .dots i { width: .9em; height: .9em; border-radius: 50%; background: currentColor; opacity: .35; }
-.spec .cc { display: inline-flex; align-items: center; gap: .5em; margin-left: auto; margin-right: auto; padding: .25em 1.6em; border-radius: .5em; background: rgba(127,127,127,.22); opacity: .9; }
-.spec .lay { opacity: .7; }
-.spec .body { display: grid; grid-template-columns: 3.6em 13em minmax(0, 1fr); min-width: 0; }
+.spec .title { height: 2.8em; display: flex; align-items: center; gap: .8em; padding: 0 1em; font-family: var(--ui); position: relative; }
+.spec .title .nav { display: inline-flex; gap: .2em; margin-left: auto; opacity: .8; } .spec .title .nav .back { transform: scaleX(-1); }
+.spec .cc { display: inline-flex; align-items: center; justify-content: center; width: 38%; min-width: 9em; padding: .25em 1em; border-radius: .5em; box-shadow: inset 0 0 0 1px rgba(127,127,127,.5); background: rgba(127,127,127,.12); opacity: .9; font-size: .95em; margin-right: auto; }
+.spec .lay { display: inline-flex; gap: .4em; opacity: .7; }
+.spec .body { display: grid; grid-template-columns: 3.6em 14.5em minmax(0, 1fr); min-width: 0; }
 .spec.modern .body { gap: .6em; padding: 0 .6em .6em .6em; }
 .spec .sc { min-width: 0; } .spec.modern .sc { border-radius: .8em; overflow: hidden; }
 .spec .rail { display: flex; flex-direction: column; align-items: center; gap: .5em; padding: .6em 0; }
@@ -127,37 +128,41 @@ footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rul
 .spec .ai { width: 2.6em; height: 2.6em; display: grid; place-items: center; border-radius: .6em; position: relative; }
 .spec.classic .ai { width: 3.6em; height: 3.2em; border-radius: 0; }
 .spec .ai .ci { width: 1.9em; height: 1.9em; }
-.spec .ai b { position: absolute; right: .25em; top: .2em; min-width: 1.4em; height: 1.4em; border-radius: .7em; font: 700 .85em/1.65 -apple-system, "Segoe UI", system-ui, sans-serif; text-align: center; padding: 0 .3em; }
-.spec .side { display: flex; flex-direction: column; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 1.05em; padding-bottom: .6em; }
-.spec .sbt { display: flex; align-items: center; justify-content: space-between; padding: .7em 1em .5em; font-size: .95em; font-weight: 600; }
+.spec .ai b { position: absolute; right: .1em; bottom: .1em; min-width: 1.45em; height: 1.45em; border-radius: .75em; font: 700 .8em/1.8 var(--ui); text-align: center; padding: 0 .3em; }
+.spec .side { display: flex; flex-direction: column; font-family: var(--ui); font-size: 1.05em; padding-bottom: .2em; min-height: 100%; }
+.spec .sbt { display: flex; align-items: center; justify-content: space-between; padding: .7em 1em .5em; font-size: 1em; font-weight: 600; }
 .spec .more .ci { width: 1.3em; height: 1.3em; }
-.spec .sect { display: flex; align-items: center; gap: .3em; padding: .25em .5em; font-size: .8em; font-weight: 700; letter-spacing: .04em; margin-top: .3em; }
-.spec .row { display: flex; align-items: center; gap: .4em; padding: .22em .6em .22em .8em; white-space: nowrap; overflow: hidden; }
-.spec .row.d1 { padding-left: 2.2em; } .spec .row .rl { overflow: hidden; text-overflow: ellipsis; }
-.spec .row .fi { display: inline-flex; } .spec .row .fi .ci { width: 1.15em; height: 1.15em; }
-.spec .row .deco { margin-left: auto; font-size: .85em; opacity: .95; }
+.spec .sect { display: flex; align-items: center; gap: .2em; padding: .3em .4em; font-size: .9em; font-weight: 700; }
+.spec .row { display: flex; align-items: center; gap: .3em; padding: .2em .6em .2em .4em; white-space: nowrap; overflow: hidden; }
+.spec .row.d1 { padding-left: 1.6em; } .spec .row.d2 { padding-left: 2.8em; } .spec .row .rl { overflow: hidden; text-overflow: ellipsis; }
+.spec .row .deco { margin-left: auto; font-size: .85em; opacity: .95; } .spec .row .deco.dot .ci { width: .7em; height: .7em; }
 .spec .main { display: flex; flex-direction: column; min-width: 0; } .spec.modern .main { gap: .6em; }
 .spec .ed { display: flex; flex-direction: column; min-width: 0; }
-.spec .tabs { display: flex; min-width: 0; overflow: hidden; }
+.spec .tabs { display: flex; align-items: center; min-width: 0; overflow: hidden; }
 .spec.modern .tabs { gap: .4em; padding: .5em .5em 0; }
-.spec .tab { display: inline-flex; align-items: center; gap: .5em; padding: 0 1em; line-height: 2.7em; white-space: nowrap; font-size: .95em; }
+.spec .tabs .acts { display: inline-flex; gap: .3em; padding: 0 .6em; opacity: .8; }
+.spec .tab { display: inline-flex; align-items: center; gap: .45em; padding: 0 .7em 0 .8em; line-height: 2.7em; white-space: nowrap; font-size: .95em; font-family: var(--ui); }
 .spec.modern .tab { border-radius: .6em; line-height: 2.3em; }
-.spec .tab .ci { width: 1.1em; height: 1.1em; opacity: .8; } .spec .tab .dot .ci { opacity: 1; }
-.spec .crumbs { display: flex; align-items: center; gap: .2em; padding: .3em 1em; font-size: .85em; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; white-space: nowrap; overflow: hidden; }
+.spec .tab .ci { width: 1.1em; height: 1.1em; opacity: .75; } .spec .tab .dot .ci { opacity: 1; width: .8em; height: .8em; }
+.spec .crumbs { display: flex; align-items: center; gap: .25em; padding: .3em 1em; font-size: .85em; font-family: var(--ui); white-space: nowrap; overflow: hidden; }
+.spec .crumbs .fi { width: auto; margin: 0 .1em; }
 .spec .code { position: relative; }
-.spec pre { margin: 0; padding: .6em 0; font: inherit; line-height: 1.55; overflow: hidden; white-space: pre; }
+.spec pre { margin: 0; padding: .6em 7em .6em 0; font: inherit; line-height: 1.55; overflow: hidden; white-space: pre; }
 .spec pre.more { border-top: 1px dashed; }
 .spec .ln { display: flex; } .spec .ln .g { width: 3.2em; text-align: right; padding-right: 1em; flex: none; } .spec .ln .lc { position: relative; }
 .spec .ig { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; }
 .spec .cur { display: inline-block; width: 1.5px; height: 1.2em; vertical-align: -0.25em; margin-left: -1px; }
-.spec .find { position: absolute; z-index: 1; top: 0; right: 1.2em; display: flex; gap: .5em; align-items: center; padding: .45em .6em; border-radius: 0 0 .4em .4em; font-size: .9em; }
+.spec .find { position: absolute; z-index: 2; top: 0; right: 7.5em; display: flex; gap: .5em; align-items: center; padding: .45em .6em; border-radius: 0 0 .4em .4em; font-size: .9em; }
 .spec .find .in { padding: .2em .6em; border-radius: .2em; min-width: 6em; } .spec .find .n { opacity: .7; } .spec .find .bt { padding: .2em .7em; border-radius: .25em; font-weight: 700; }
+.spec .mini { position: absolute; z-index: 1; top: 0; right: 0; bottom: 0; width: 6em; padding: .6em .6em; display: flex; flex-direction: column; gap: .22em; opacity: .55; }
+.spec .mini i { display: block; height: .28em; border-radius: 1px; }
 .spec .pan { display: flex; flex-direction: column; }
-.spec .pts { display: flex; align-items: center; gap: 1.2em; padding: .5em 1em 0; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: .85em; font-weight: 700; letter-spacing: .06em; }
-.spec.modern .pts { gap: .6em; } .spec.modern .pt { padding: .25em .9em; border-radius: .45em; } .spec.classic .pt { padding: .5em 0 .4em; }
+.spec .pts { display: flex; align-items: center; gap: 1.2em; padding: .5em 1em 0; font-family: var(--ui); font-size: .9em; font-weight: 600; }
+.spec.modern .pts { gap: .5em; } .spec.modern .pt { padding: .25em .9em; border-radius: .45em; } .spec.classic .pt { padding: .5em 0 .4em; font-size: .85em; letter-spacing: .06em; }
 .spec .term { padding: .6em 1em .8em; white-space: pre; overflow: hidden; margin-top: .3em; }
-.spec .status { height: 2.3em; display: flex; align-items: stretch; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: .95em; white-space: nowrap; overflow: hidden; }
-.spec .si { display: inline-flex; align-items: center; gap: .35em; padding: 0 .6em; }
+.spec .status { height: 2.3em; display: flex; align-items: center; gap: .15em; padding: 0 .3em; font-family: var(--ui); font-size: .95em; white-space: nowrap; overflow: hidden; }
+.spec .si { display: inline-flex; align-items: center; gap: .35em; padding: .2em .5em; }
+.spec.modern .si { border-radius: .35em; }
 .spec .status .ci { width: 1.25em; height: 1.25em; }
 
 </style>
@@ -233,7 +238,7 @@ const ROLES = [["comment", "Comment", "Text", ["source.ts", "comment.line.double
 const SEMANTIC = {"variable": ["variable", []], "constant": ["variable", ["declaration", "readonly"]], "parameter": ["parameter", ["declaration"]], "property": ["property", []], "objkey": ["property", ["declaration"]], "function": ["function", ["declaration"]], "call": ["function", []], "method": ["method", ["defaultLibrary"]], "class": ["class", ["declaration"]], "type": ["type", []]};
 const WB_KEYS = {"editor": "editor.background", "fg": "editor.foreground", "sidebar": "sideBar.background", "activity": "activityBar.background", "status": "statusBar.background", "statusFg": "statusBar.foreground", "title": "titleBar.activeBackground", "titleFg": "titleBar.activeForeground", "panel": "panel.background", "tabActive": "tab.activeBackground", "tabInactive": "tab.inactiveBackground", "tabsBar": "editorGroupHeader.tabsBackground", "terminal": "terminal.background", "widget": "editorWidget.background", "input": "input.background", "focus": "focusBorder", "button": "button.background", "badge": "badge.background", "activityFg": "activityBar.foreground", "activityBadge": "activityBarBadge.background", "tabBorderTop": "tab.activeBorderTop", "tabBorder": "tab.activeBorder", "selection": "editor.selectionBackground", "lineHighlight": "editor.lineHighlightBackground", "lineNo": "editorLineNumber.foreground", "lineNoActive": "editorLineNumber.activeForeground", "cursor": "editorCursor.foreground", "listActive": "list.activeSelectionBackground", "findMatch": "editor.findMatchBackground", "indent": "editorIndentGuide.background1", "indentActive": "editorIndentGuide.activeBackground1", "whitespace": "editorWhitespace.foreground", "sidebarFg": "sideBar.foreground", "error": "editorError.foreground", "warning": "editorWarning.foreground", "info": "editorInfo.foreground", "gitAdded": "gitDecoration.addedResourceForeground", "gitModified": "gitDecoration.modifiedResourceForeground", "gitDeleted": "gitDecoration.deletedResourceForeground", "gitUntracked": "gitDecoration.untrackedResourceForeground", "diffInserted": "diffEditor.insertedTextBackground", "diffRemoved": "diffEditor.removedTextBackground", "sideBarBorder": "sideBar.border", "editorGroupBorder": "editorGroup.border", "statusBorder": "statusBar.border", "activityBorder": "activityBar.border", "panelBorder": "panel.border", "titleBorder": "titleBar.border", "tabsBorder": "editorGroupHeader.tabsBorder", "contrastBorder": "contrastBorder", "debugStatus": "statusBar.debuggingBackground", "findMatchHighlight": "editor.findMatchHighlightBackground", "listHighlight": "list.highlightForeground", "gutterModified": "editorGutter.modifiedBackground", "gutterAdded": "editorGutter.addedBackground", "surfaceBg": "surface.background", "surfaceBorder": "surface.border", "editorBorder": "editor.border", "mTabBg": "modernTab.activeBackground", "mTabFg": "modernTab.activeForeground", "mEdTabBg": "modernEditorTab.activeBackground", "mEdTabFg": "modernEditorTab.activeForeground", "mEdTabInactiveBg": "modernEditorTab.inactiveBackground", "tabInactiveFg": "tab.inactiveForeground", "mActBg": "modernActivityBar.background", "mActItemBg": "modernActivityBarItem.activeBackground", "mActItemFg": "modernActivityBarItem.activeForeground", "actInactiveFg": "activityBar.inactiveForeground", "actActiveBg": "activityBar.activeBackground",
   // Read for the specimen windows, so every element in them wears its own key.
-  "listActiveFg": "list.activeSelectionForeground", "listActiveIcon": "list.activeSelectionIconForeground", "listInactive": "list.inactiveSelectionBackground", "listInactiveFg": "list.inactiveSelectionForeground", "focusOutline": "list.focusOutline", "listFocusHi": "list.focusHighlightForeground",
+  "listActiveFg": "list.activeSelectionForeground", "listActiveIcon": "list.activeSelectionIconForeground", "listInactive": "list.inactiveSelectionBackground", "listInactiveFg": "list.inactiveSelectionForeground", "focusOutline": "list.focusOutline", "listFocusHi": "list.focusHighlightForeground", "listInactiveFocusOutline": "list.inactiveFocusOutline", "minimapBg": "minimap.background", "tabsActionsFg": "editorGroupHeader.tabsBackground",
   "sbTitle": "sideBarTitle.foreground", "sectBg": "sideBarSectionHeader.background", "sectFg": "sideBarSectionHeader.foreground",
   "tabActiveFg": "tab.activeForeground", "tabModified": "tab.activeModifiedBorder", "tabInactiveModified": "tab.inactiveModifiedBorder", "mEdTabInactiveFg": "tab.inactiveForeground",
   "badgeFg": "badge.foreground", "activityBadgeFg": "activityBarBadge.foreground", "actActiveBorder": "activityBar.activeBorder", "mActInactiveBg": "modernActivityBar.inactiveBackground",
@@ -921,7 +926,7 @@ else window.EsperReport = api;
       sectBg: W(t, "sectBg"), sectFg: W(t, "sectFg") || W(t, "sidebarFg") || t.fg,
       listA: W(t, "listActive"), listAFg: W(t, "listActiveFg") || W(t, "sidebarFg") || t.fg, listAIcon: W(t, "listActiveIcon") || W(t, "listActiveFg") || W(t, "sidebarFg") || t.fg,
       listI: W(t, "listInactive"), listIFg: W(t, "listInactiveFg") || W(t, "sidebarFg") || t.fg,
-      focusOutline: W(t, "focusOutline") || W(t, "focus"),
+      focusOutline: W(t, "focusOutline") || W(t, "focus"), inactiveFocusOutline: W(t, "listInactiveFocusOutline"),
       listHi: W(t, "listHighlight") || t.fg, listFocusHi: W(t, "listFocusHi") || W(t, "listHighlight") || t.fg,
       gitMod: W(t, "gitModified"), gitUn: W(t, "gitUntracked"), listErr: W(t, "listErrorFg") || W(t, "error"), listWarn: W(t, "listWarningFg") || W(t, "warning"),
       iconFg: W(t, "iconFg") || W(t, "sidebarFg") || t.fg,
@@ -936,6 +941,7 @@ else window.EsperReport = api;
       widget: W(t, "widget") || sidebar, widgetBorder: W(t, "widgetBorder") || W(t, "focus"),
       input: W(t, "input") || W(t, "widget") || sidebar, inputFg: W(t, "inputFg") || t.fg, inputBorder: W(t, "inputBorder"),
       button: W(t, "button") || W(t, "focus") || t.fg, buttonFg: W(t, "buttonFg") || inkOn(W(t, "button") || W(t, "focus") || t.fg),
+      minimap: W(t, "minimapBg"),
       panel: W(t, "panel") || t.bg, panelBorder: W(t, "panelBorder") || W(t, "sideBarBorder"),
       paneTab, paneTabFg: W(t, "mTabFg") || inkOn(paneTab),
       panelTitle: W(t, "panelTitleActive") || t.fg, panelTitleIn: W(t, "panelTitleInactive") || W(t, "lineNo") || t.fg,
@@ -947,6 +953,11 @@ else window.EsperReport = api;
   }
 
   const dk = (label, ...ks) => ` data-keys="${esc(ks.filter(Boolean).join(","))}" data-label="${esc(label)}"`;
+  // File icons come from the icon theme, not the color theme; these are Seti's,
+  // which VS Code ships as its default, so the tree reads as it does in VS Code.
+  const SETI = { ts: ["TS", "#519ABA"], html: ["<>", "#E37933"], md: ["i", "#519ABA"], diff: ["±", "#8DC149"], json: ["{}", "#CBCB41"] };
+  const fileIcon = ext => { const [g, c] = SETI[ext] || ["·", "#A074C4"]; return `<i class="fi" style="color:${c}" data-keys="" data-label="File icon (Seti icon theme, not the color theme)">${esc(g)}</i>`; };
+  const extOf = name => name.split(".").pop();
 
   /** The window. `opts.ui` is "modern" (default) or "classic"; `opts.big` scales it up. */
   function render(t, opts = {}) {
@@ -966,6 +977,8 @@ else window.EsperReport = api;
     const bd = m.border ? `box-shadow:inset 0 0 0 1px ${m.border};` : "";
     // Classic VS Code draws the side bar's border on its editor-facing edge only.
     const sideBd = modern ? bd : m.border ? `box-shadow:inset -1px 0 0 ${m.border};` : "";
+
+    // ---- activity bar ----
     const actItem = (name, on, badge) => {
       const fill = on && m.actItemBg ? `background:${m.actItemBg};` : "";
       const color = on ? (m.actItemBg ? m.actItemFg : m.actFg) : m.actInFg;
@@ -973,75 +986,97 @@ else window.EsperReport = api;
       return `<span class="ai${on ? " on" : ""}" style="${fill}${stroke}color:${color}"${dk(on ? "Active activity item" : "Activity item", ...(on ? K.actItem.split(",") : ["activityBar.inactiveForeground"]))}>${icon(name)}${badge ? `<b style="background:${m.badge};color:${m.badgeFg}"${dk("Activity badge", "activityBarBadge.background", "activityBarBadge.foreground")}>${badge}</b>` : ""}</span>`;
     };
     const rail = `<div class="rail" style="background:${m.rail}"${dk("Activity bar", ...K.rail.split(","))}>
-      ${actItem("files", true)}${actItem("search", false)}${actItem("source-control", false, 2)}${actItem("debug-alt", false)}${actItem("extensions", false)}
+      ${actItem("files", true)}${actItem("search", false)}${actItem("source-control", false, 4)}${actItem("debug-alt", false)}${actItem("extensions", false)}
       <span class="sp"></span>${actItem("account", false)}${actItem("settings-gear", false)}</div>`;
 
-    const row = (name, kind, extra = {}) => {
-      const color = extra.color || m.sideFg;
-      const sel = kind === "focused" ? `background:${m.listA || "transparent"};color:${m.listAFg};${m.focusOutline ? `box-shadow:inset 0 0 0 1px ${m.focusOutline};` : ""}` : kind === "inactive" ? `background:${m.listI || "transparent"};color:${m.listIFg};` : `color:${color};`;
-      const ks = kind === "focused" ? dk("Selected file, tree focused", "list.activeSelectionBackground", "list.activeSelectionForeground", "list.activeSelectionIconForeground", "list.focusOutline") : kind === "inactive" ? dk("Selected file, tree unfocused", "list.inactiveSelectionBackground", "list.inactiveSelectionForeground") : extra.keys ? dk(extra.label, ...extra.keys) : dk("Explorer row", "sideBar.foreground");
-      const ic = extra.folder ? icon(extra.open ? "chevron-down" : "chevron-right", "chev") : `<i class="fi" style="color:${kind === "focused" ? m.listAIcon : extra.color || m.iconFg}"${dk("File icon", "icon.foreground")}>${icon("symbol-method")}</i>`;
-      const label = extra.match ? `<span style="color:${kind === "focused" ? m.listFocusHi : m.listHi};font-weight:700"${dk("Filter match", kind === "focused" ? "list.focusHighlightForeground" : "list.highlightForeground")}>${esc(name.slice(0, 2))}</span>${esc(name.slice(2))}` : esc(name);
-      const deco = extra.deco ? `<span class="deco" style="color:${extra.decoColor || color}"${extra.decoKeys ? dk(extra.decoLabel, ...extra.decoKeys) : ""}>${extra.deco}</span>` : "";
-      return `<div class="row d${extra.depth || 0}" style="${sel}"${ks}>${ic}<span class="rl">${label}</span>${deco}</div>`;
+    // ---- side bar ----
+    // The explorer as the README captures show it: the samples folder open, the
+    // active file selected while the editor has focus (inactive selection with
+    // the inactive focus outline), and Open Editors above it showing the same
+    // file as a focused list draws it.
+    const row = (name, kind, x = {}) => {
+      const color = x.color || m.sideFg;
+      const style = kind === "focused" ? `background:${m.listA || "transparent"};color:${m.listAFg};${m.focusOutline ? `box-shadow:inset 0 0 0 1px ${m.focusOutline};` : ""}`
+        : kind === "inactive" ? `background:${m.listI || "transparent"};color:${m.listIFg};${m.inactiveFocusOutline ? `box-shadow:inset 0 0 0 1px ${m.inactiveFocusOutline};` : ""}`
+        : `color:${color};`;
+      const ks = kind === "focused" ? dk("Selected file, list focused", "list.activeSelectionBackground", "list.activeSelectionForeground", "list.activeSelectionIconForeground", "list.focusOutline")
+        : kind === "inactive" ? dk("Selected file, list unfocused (editor has focus)", "list.inactiveSelectionBackground", "list.inactiveSelectionForeground", "list.inactiveFocusOutline")
+        : x.keys ? dk(x.label, ...x.keys) : dk("Explorer row", "sideBar.foreground");
+      const chev = x.folder ? icon(x.open ? "chevron-down" : "chevron-right", "chev") : `<i class="chev"></i>`;
+      const ic = x.folder ? "" : fileIcon(extOf(name));
+      const label = x.match ? `<span style="color:${kind === "focused" ? m.listFocusHi : m.listHi};font-weight:700"${dk("Filter match", kind === "focused" ? "list.focusHighlightForeground" : "list.highlightForeground")}>${esc(name.slice(0, 2))}</span>${esc(name.slice(2))}` : esc(name);
+      const deco = x.deco ? `<span class="deco" style="color:${x.decoColor || color}"${x.decoKeys ? dk(x.decoLabel, ...x.decoKeys) : ""}>${x.deco}</span>` : x.dot ? `<span class="deco dot" style="color:${color}">${icon("circle-filled")}</span>` : "";
+      return `<div class="row d${x.depth || 0}" style="${style}"${ks}>${chev}${ic}<span class="rl">${label}</span>${deco}</div>`;
     };
     const sect = (label, open) => `<div class="sect" style="${m.sectBg ? `background:${m.sectBg};` : ""}color:${m.sectFg}"${dk("Section header", "sideBarSectionHeader.background", "sideBarSectionHeader.foreground")}>${icon(open ? "chevron-down" : "chevron-right", "chev")}${label}</div>`;
     const side = `<div class="side sc" style="background:${m.surface};color:${m.sideFg};${sideBd}"${dk(modern ? "Side bar surface" : "Side bar", ...K.surface.split(","))}>
-      <div class="sbt"><span style="color:${m.sbTitle}"${dk("Side bar title", "sideBarTitle.foreground")}>Explorer</span><span class="more" style="color:${m.iconFg}">${icon("ellipsis")}</span></div>
-      ${sect("OPEN EDITORS", true)}
-      ${row("load.ts", "inactive", { depth: 1 })}
-      ${row("crew.diff", "plain", { depth: 1, color: m.gitMod, keys: ["gitDecoration.modifiedResourceForeground"], label: "Modified file", deco: "M" })}
-      ${sect("ESPER-THEMES", true)}
-      ${row("scripts", "plain", { folder: true })}
-      ${row("src", "plain", { folder: true, open: true })}
-      ${row("load.ts", "focused", { depth: 1, match: true })}
-      ${row("crew.diff", "plain", { depth: 1, color: m.gitMod, keys: ["gitDecoration.modifiedResourceForeground"], label: "Modified file", deco: "4", decoColor: m.listErr, decoKeys: ["list.errorForeground"], decoLabel: "Problem count" })}
-      ${row("notes.md", "plain", { depth: 1, color: m.gitUn, keys: ["gitDecoration.untrackedResourceForeground"], label: "Untracked file", deco: "U" })}
-      ${row("README.md", "plain", { depth: 0 })}
-      ${sect("OUTLINE", false)}
+      <div class="sbt"><span style="color:${m.sbTitle}"${dk("Side bar title", "sideBarTitle.foreground")}>Explorer</span><span class="more" style="color:${m.iconFg}"${dk("Icon", "icon.foreground")}>${icon("ellipsis")}</span></div>
+      ${sect("Open Editors", true)}
+      ${row("load.ts", "focused", { depth: 1 })}
+      ${row("telemetry.ts", "plain", { depth: 1, color: m.gitMod, keys: ["gitDecoration.modifiedResourceForeground"], label: "Modified file", deco: "M" })}
+      ${sect("samples", true)}
+      ${row("angular", "plain", { folder: true, color: m.gitUn, keys: ["gitDecoration.untrackedResourceForeground"], label: "Folder with untracked files", dot: true })}
+      ${row("css", "plain", { folder: true })}
+      ${row("typescript", "plain", { folder: true, open: true })}
+      ${row("load.ts", "inactive", { depth: 1, match: true })}
+      ${row("relay-alerts.ts", "plain", { depth: 1, color: m.gitUn, keys: ["gitDecoration.untrackedResourceForeground"], label: "Untracked file", deco: "U" })}
+      ${row("telemetry.ts", "plain", { depth: 1, color: m.gitMod, keys: ["gitDecoration.modifiedResourceForeground"], label: "Modified file", deco: "4", decoColor: m.listErr, decoKeys: ["list.errorForeground"], decoLabel: "Problem count" })}
+      ${row("README.md", "plain")}
+      <span class="sp"></span>
+      ${sect("Outline", false)}
+      ${sect("Timeline", false)}
     </div>`;
 
+    // ---- editor ----
     const tab = (name, active, modified) => {
       const fill = active ? m.tabA : m.tabI, color = active ? m.tabAFg : m.tabIFg;
+      const outline = active && modern && m.tabTop ? `inset 0 0 0 1px ${m.tabTop}` : "";
       const strokes = active ? [m.tabTop ? `inset 0 2px 0 ${m.tabTop}` : "", m.tabBottom ? `inset 0 -2px 0 ${m.tabBottom}` : ""].filter(Boolean).join(",") : "";
       const modStroke = modified && !active && m.tabIMod && !modern ? `inset 0 2px 0 ${m.tabIMod}` : "";
-      const shadow = [strokes, modStroke].filter(Boolean).join(",");
-      const close = modified ? `<i class="dot" style="color:${active ? (m.tabMod || color) : (m.tabIMod || color)}"${dk("Modified tab mark", active ? "tab.activeModifiedBorder" : "tab.inactiveModifiedBorder")}>${icon("circle-filled")}</i>` : active ? `<i class="x">${icon("close")}</i>` : "";
+      const shadow = [strokes, outline, modStroke].filter(Boolean).join(",");
+      const close = modified ? `<i class="dot" style="color:${active ? (m.tabMod || color) : (m.tabIMod || color)}"${dk("Modified tab mark", active ? "tab.activeModifiedBorder" : "tab.inactiveModifiedBorder")}>${icon("circle-filled")}</i>` : `<i class="x">${icon("close")}</i>`;
       const label = modified ? `<span style="color:${m.gitMod || color}"${dk("Decorated tab label", "gitDecoration.modifiedResourceForeground")}>${esc(name)}</span>` : esc(name);
-      return `<span class="tab${active ? " on" : ""}" style="background:${fill};color:${color};${shadow ? `box-shadow:${shadow};` : ""}"${dk(active ? "Active tab" : modified ? "Inactive tab, modified file" : "Inactive tab", ...(active ? K.tabA : K.tabI).split(","))}>${label}${close}</span>`;
+      return `<span class="tab${active ? " on" : ""}" style="background:${fill};color:${color};${shadow ? `box-shadow:${shadow};` : ""}"${dk(active ? "Active tab" : modified ? "Inactive tab, modified file" : "Inactive tab", ...(active ? K.tabA : K.tabI).split(","))}>${fileIcon(extOf(name))}${label}${close}</span>`;
     };
     const find = `<div class="find" style="background:${m.widget};${m.widgetBorder ? `box-shadow:0 0 0 1px ${m.widgetBorder};` : ""}color:${t.fg}"${dk("Find widget", "editorWidget.background", "editorWidget.border", "editorWidget.foreground")}><span class="in" style="background:${m.input};color:${m.inputFg};${m.inputBorder ? `box-shadow:0 0 0 1px ${m.inputBorder};` : ""}"${dk("Input", "input.background", "input.foreground", "input.border")}>ship</span><span class="n">1 of 3</span><span class="bt" style="background:${m.button};color:${m.buttonFg}"${dk("Button", "button.background", "button.foreground")}>Aa</span></div>`;
-    const crumbs = `<div class="crumbs" style="color:${m.crumb}"${dk("Breadcrumbs", "breadcrumb.foreground", "breadcrumb.focusForeground")}>src ${icon("chevron-right", "chev")} load.ts ${icon("chevron-right", "chev")} <span style="color:${m.crumbFocus}">load</span></div>`;
+    const crumbs = `<div class="crumbs" style="color:${m.crumb}"${dk("Breadcrumbs", "breadcrumb.foreground", "breadcrumb.focusForeground")}>typescript ${icon("chevron-right", "chev")} ${fileIcon("ts")} load.ts ${icon("chevron-right", "chev")} ${icon("symbol-method", "chev")} <span style="color:${m.crumbFocus}">load</span></div>`;
+    // A minimap: each sample line as a short bar in its first colored token's color.
+    const minimap = `<div class="mini" style="${m.minimap ? `background:${m.minimap};` : ""}"${dk("Minimap", "minimap.background")}>${[...CODE, ...MORE, ...CODE].map((line, i) => { const r = line.map(([, role]) => role && t.roles[role]).find(Boolean); return `<i style="width:${Math.min(90, 18 + (line.map(p => p[0]).join("").length * 3))}%;background:${r ? r.hex : t.fg}"></i>`; }).join("")}</div>`;
     const dash = (W(t, "lineNo") || t.fg) + "55";
     const editor = `<div class="ed sc" style="background:${t.bg};${m.edBorder ? `box-shadow:inset 0 0 0 1px ${m.edBorder};` : ""}"${dk(modern ? "Editor surface" : "Editor", ...K.editor.split(","))}>
-      <div class="tabs" style="background:${m.tabsBar}"${dk("Tab strip", modern ? "editor.background" : "editorGroupHeader.tabsBackground")}>${tab("load.ts", true)}${tab("crew.diff", false, true)}${tab("notes.md", false)}</div>
+      <div class="tabs" style="background:${m.tabsBar}"${dk("Tab strip", modern ? "editor.background" : "editorGroupHeader.tabsBackground")}>${tab("load.ts", true)}${tab("telemetry.ts", false, true)}${tab("status-panel.html", false)}<span class="sp"></span><span class="acts" style="color:${m.iconFg}">${icon("split-horizontal")}${icon("ellipsis")}</span></div>
       ${crumbs}
-      <div class="code" style="color:${t.fg}"${dk("Editor text", "editor.background", "editor.foreground")}>${find}<pre>${lines(t, CODE, 1, true)}</pre><pre class="more" style="border-color:${dash}">${lines(t, MORE, 1, false)}</pre></div>
+      <div class="code" style="color:${t.fg}"${dk("Editor text", "editor.background", "editor.foreground")}>${find}${minimap}<pre>${lines(t, CODE, 1, true)}</pre><pre class="more" style="border-color:${dash}">${lines(t, MORE, 1, false)}</pre></div>
     </div>`;
 
+    // ---- panel ----
     const paneTabs = modern
-      ? `<span class="pt on" style="background:${m.paneTab};color:${m.paneTabFg}"${dk("Active pane tab", ...K.paneTab.split(","))}>TERMINAL</span><span class="pt" style="color:${m.panelTitleIn}"${dk("Pane tab", "panelTitle.inactiveForeground")}>PROBLEMS</span><span class="pt" style="color:${m.panelTitleIn}"${dk("Pane tab", "panelTitle.inactiveForeground")}>OUTPUT</span>`
+      ? `<span class="pt on" style="background:${m.paneTab};color:${m.paneTabFg}"${dk("Active pane tab", ...K.paneTab.split(","))}>Terminal</span><span class="pt" style="color:${m.panelTitleIn}"${dk("Pane tab", "panelTitle.inactiveForeground")}>Problems</span><span class="pt" style="color:${m.panelTitleIn}"${dk("Pane tab", "panelTitle.inactiveForeground")}>Output</span>`
       : `<span class="pt on" style="color:${m.panelTitle};box-shadow:inset 0 -1px 0 ${m.panelTitle}"${dk("Active panel title", ...K.paneTab.split(","))}>TERMINAL</span><span class="pt" style="color:${m.panelTitleIn}"${dk("Panel title", "panelTitle.inactiveForeground")}>PROBLEMS</span><span class="pt" style="color:${m.panelTitleIn}"${dk("Panel title", "panelTitle.inactiveForeground")}>OUTPUT</span>`;
     const panel = `<div class="pan sc" style="background:${m.panel};${modern ? bd : m.panelBorder ? `box-shadow:inset 0 1px 0 ${m.panelBorder};` : ""}"${dk(modern ? "Panel surface" : "Panel", ...K.panel.split(","))}>
       <div class="pts">${paneTabs}</div>
       <div class="term" style="background:${m.terminal};color:${t.fg}"${dk("Terminal", "terminal.background", "terminal.foreground")}>${termLine(t)}</div>
     </div>`;
 
+    // ---- status bar ----
     const stItem = (bg, fg, ks, label, body) => `<span class="si" style="${bg ? `background:${bg};` : ""}${fg ? `color:${fg};` : ""}"${dk(label, ...ks)}>${body}</span>`;
     const status = `<div class="status" style="background:${m.status};color:${m.statusFg};${m.statusBorder ? `box-shadow:inset 0 1px 0 ${m.statusBorder};` : ""}"${dk("Status bar", "statusBar.background", "statusBar.foreground", "statusBar.border")}>
       ${stItem(m.remote, m.remoteFg, ["statusBarItem.remoteBackground", "statusBarItem.remoteForeground"], "Remote item", icon("remote"))}
-      ${stItem(null, null, ["statusBar.foreground"], "Status item", `${icon("git-branch")} main`)}
+      ${stItem(null, null, ["statusBar.foreground"], "Status item", `${icon("git-branch")} main* ${icon("sync")}`)}
       ${stItem(null, null, ["statusBar.foreground"], "Problems", `${icon("error")} 4 ${icon("warning")} 0`)}
       ${stItem(m.stErr, m.stErrFg, ["statusBarItem.errorBackground", "statusBarItem.errorForeground"], "Error item", `${icon("error")} 1`)}
       ${stItem(m.stWarn, m.stWarnFg, ["statusBarItem.warningBackground", "statusBarItem.warningForeground"], "Warning item", `${icon("warning")} 2`)}
       <span class="sp"></span>
       ${stItem(null, null, ["statusBar.foreground"], "Status item", "Ln 4, Col 18")}
+      ${stItem(null, null, ["statusBar.foreground"], "Status item", "Spaces: 2")}
       ${stItem(null, null, ["statusBar.foreground"], "Status item", "UTF-8")}
-      ${stItem(null, null, ["statusBar.foreground"], "Status item", "TypeScript")}
+      ${stItem(null, null, ["statusBar.foreground"], "Status item", "LF")}
+      ${stItem(null, null, ["statusBar.foreground"], "Status item", "{ } TypeScript")}
       ${stItem(null, null, ["statusBar.foreground"], "Status item", icon("bell"))}
     </div>`;
 
-    const titlebar = `<div class="title" style="background:${m.title};color:${m.titleFg}"${dk("Title bar", "titleBar.activeBackground", "titleBar.activeForeground")}><span class="dots"><i></i><i></i><i></i></span><span class="cc">${icon("search")} esper-themes</span><span class="sp"></span><span class="lay">${icon("split-horizontal")}</span></div>`;
+    // ---- title bar ----
+    const titlebar = `<div class="title" style="background:${m.title};color:${m.titleFg}"${dk("Title bar", "titleBar.activeBackground", "titleBar.activeForeground")}><span class="nav">${icon("chevron-right", "back")}${icon("chevron-right")}</span><span class="cc">esper-themes</span><span class="lay">${icon("split-horizontal")}${icon("split-horizontal")}</span></div>`;
 
     return `<div class="spec ${modern ? "modern" : "classic"}${opts.big ? " big" : ""}" style="background:${m.frame}"${dk(modern ? "Window ground (title bar color)" : "Window", "titleBar.activeBackground")}>
       ${titlebar}
@@ -1052,16 +1087,17 @@ else window.EsperReport = api;
 
   // One stylesheet for both layouts; the window scales with its font-size.
   const css = `
-.spec { font: 10px/1.3 "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; box-shadow: 0 0 0 1px rgba(127,127,127,.25); }
+.spec { font: 10px/1.3 "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; box-shadow: 0 0 0 1px rgba(127,127,127,.25); --ui: -apple-system, "Segoe UI", system-ui, sans-serif; }
 .spec.big { font-size: 13px; }
 .spec .ci { width: 1.4em; height: 1.4em; fill: currentColor; flex: none; display: inline-block; vertical-align: -0.3em; }
-.spec .chev.ci { width: 1.1em; height: 1.1em; opacity: .85; }
+.spec .chev { width: 1.2em; height: 1.2em; opacity: .9; flex: none; display: inline-block; }
+.spec .fi { font: 700 .72em/1 var(--ui); letter-spacing: -.02em; width: 1.9em; flex: none; display: inline-block; text-align: center; }
 .spec .sp { flex: 1; }
-.spec .title { height: 2.6em; display: flex; align-items: center; gap: .8em; padding: 0 1em; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; }
-.spec .dots { display: inline-flex; gap: .55em; } .spec .dots i { width: .9em; height: .9em; border-radius: 50%; background: currentColor; opacity: .35; }
-.spec .cc { display: inline-flex; align-items: center; gap: .5em; margin-left: auto; margin-right: auto; padding: .25em 1.6em; border-radius: .5em; background: rgba(127,127,127,.22); opacity: .9; }
-.spec .lay { opacity: .7; }
-.spec .body { display: grid; grid-template-columns: 3.6em 13em minmax(0, 1fr); min-width: 0; }
+.spec .title { height: 2.8em; display: flex; align-items: center; gap: .8em; padding: 0 1em; font-family: var(--ui); position: relative; }
+.spec .title .nav { display: inline-flex; gap: .2em; margin-left: auto; opacity: .8; } .spec .title .nav .back { transform: scaleX(-1); }
+.spec .cc { display: inline-flex; align-items: center; justify-content: center; width: 38%; min-width: 9em; padding: .25em 1em; border-radius: .5em; box-shadow: inset 0 0 0 1px rgba(127,127,127,.5); background: rgba(127,127,127,.12); opacity: .9; font-size: .95em; margin-right: auto; }
+.spec .lay { display: inline-flex; gap: .4em; opacity: .7; }
+.spec .body { display: grid; grid-template-columns: 3.6em 14.5em minmax(0, 1fr); min-width: 0; }
 .spec.modern .body { gap: .6em; padding: 0 .6em .6em .6em; }
 .spec .sc { min-width: 0; } .spec.modern .sc { border-radius: .8em; overflow: hidden; }
 .spec .rail { display: flex; flex-direction: column; align-items: center; gap: .5em; padding: .6em 0; }
@@ -1069,37 +1105,41 @@ else window.EsperReport = api;
 .spec .ai { width: 2.6em; height: 2.6em; display: grid; place-items: center; border-radius: .6em; position: relative; }
 .spec.classic .ai { width: 3.6em; height: 3.2em; border-radius: 0; }
 .spec .ai .ci { width: 1.9em; height: 1.9em; }
-.spec .ai b { position: absolute; right: .25em; top: .2em; min-width: 1.4em; height: 1.4em; border-radius: .7em; font: 700 .85em/1.65 -apple-system, "Segoe UI", system-ui, sans-serif; text-align: center; padding: 0 .3em; }
-.spec .side { display: flex; flex-direction: column; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: 1.05em; padding-bottom: .6em; }
-.spec .sbt { display: flex; align-items: center; justify-content: space-between; padding: .7em 1em .5em; font-size: .95em; font-weight: 600; }
+.spec .ai b { position: absolute; right: .1em; bottom: .1em; min-width: 1.45em; height: 1.45em; border-radius: .75em; font: 700 .8em/1.8 var(--ui); text-align: center; padding: 0 .3em; }
+.spec .side { display: flex; flex-direction: column; font-family: var(--ui); font-size: 1.05em; padding-bottom: .2em; min-height: 100%; }
+.spec .sbt { display: flex; align-items: center; justify-content: space-between; padding: .7em 1em .5em; font-size: 1em; font-weight: 600; }
 .spec .more .ci { width: 1.3em; height: 1.3em; }
-.spec .sect { display: flex; align-items: center; gap: .3em; padding: .25em .5em; font-size: .8em; font-weight: 700; letter-spacing: .04em; margin-top: .3em; }
-.spec .row { display: flex; align-items: center; gap: .4em; padding: .22em .6em .22em .8em; white-space: nowrap; overflow: hidden; }
-.spec .row.d1 { padding-left: 2.2em; } .spec .row .rl { overflow: hidden; text-overflow: ellipsis; }
-.spec .row .fi { display: inline-flex; } .spec .row .fi .ci { width: 1.15em; height: 1.15em; }
-.spec .row .deco { margin-left: auto; font-size: .85em; opacity: .95; }
+.spec .sect { display: flex; align-items: center; gap: .2em; padding: .3em .4em; font-size: .9em; font-weight: 700; }
+.spec .row { display: flex; align-items: center; gap: .3em; padding: .2em .6em .2em .4em; white-space: nowrap; overflow: hidden; }
+.spec .row.d1 { padding-left: 1.6em; } .spec .row.d2 { padding-left: 2.8em; } .spec .row .rl { overflow: hidden; text-overflow: ellipsis; }
+.spec .row .deco { margin-left: auto; font-size: .85em; opacity: .95; } .spec .row .deco.dot .ci { width: .7em; height: .7em; }
 .spec .main { display: flex; flex-direction: column; min-width: 0; } .spec.modern .main { gap: .6em; }
 .spec .ed { display: flex; flex-direction: column; min-width: 0; }
-.spec .tabs { display: flex; min-width: 0; overflow: hidden; }
+.spec .tabs { display: flex; align-items: center; min-width: 0; overflow: hidden; }
 .spec.modern .tabs { gap: .4em; padding: .5em .5em 0; }
-.spec .tab { display: inline-flex; align-items: center; gap: .5em; padding: 0 1em; line-height: 2.7em; white-space: nowrap; font-size: .95em; }
+.spec .tabs .acts { display: inline-flex; gap: .3em; padding: 0 .6em; opacity: .8; }
+.spec .tab { display: inline-flex; align-items: center; gap: .45em; padding: 0 .7em 0 .8em; line-height: 2.7em; white-space: nowrap; font-size: .95em; font-family: var(--ui); }
 .spec.modern .tab { border-radius: .6em; line-height: 2.3em; }
-.spec .tab .ci { width: 1.1em; height: 1.1em; opacity: .8; } .spec .tab .dot .ci { opacity: 1; }
-.spec .crumbs { display: flex; align-items: center; gap: .2em; padding: .3em 1em; font-size: .85em; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; white-space: nowrap; overflow: hidden; }
+.spec .tab .ci { width: 1.1em; height: 1.1em; opacity: .75; } .spec .tab .dot .ci { opacity: 1; width: .8em; height: .8em; }
+.spec .crumbs { display: flex; align-items: center; gap: .25em; padding: .3em 1em; font-size: .85em; font-family: var(--ui); white-space: nowrap; overflow: hidden; }
+.spec .crumbs .fi { width: auto; margin: 0 .1em; }
 .spec .code { position: relative; }
-.spec pre { margin: 0; padding: .6em 0; font: inherit; line-height: 1.55; overflow: hidden; white-space: pre; }
+.spec pre { margin: 0; padding: .6em 7em .6em 0; font: inherit; line-height: 1.55; overflow: hidden; white-space: pre; }
 .spec pre.more { border-top: 1px dashed; }
 .spec .ln { display: flex; } .spec .ln .g { width: 3.2em; text-align: right; padding-right: 1em; flex: none; } .spec .ln .lc { position: relative; }
 .spec .ig { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; }
 .spec .cur { display: inline-block; width: 1.5px; height: 1.2em; vertical-align: -0.25em; margin-left: -1px; }
-.spec .find { position: absolute; z-index: 1; top: 0; right: 1.2em; display: flex; gap: .5em; align-items: center; padding: .45em .6em; border-radius: 0 0 .4em .4em; font-size: .9em; }
+.spec .find { position: absolute; z-index: 2; top: 0; right: 7.5em; display: flex; gap: .5em; align-items: center; padding: .45em .6em; border-radius: 0 0 .4em .4em; font-size: .9em; }
 .spec .find .in { padding: .2em .6em; border-radius: .2em; min-width: 6em; } .spec .find .n { opacity: .7; } .spec .find .bt { padding: .2em .7em; border-radius: .25em; font-weight: 700; }
+.spec .mini { position: absolute; z-index: 1; top: 0; right: 0; bottom: 0; width: 6em; padding: .6em .6em; display: flex; flex-direction: column; gap: .22em; opacity: .55; }
+.spec .mini i { display: block; height: .28em; border-radius: 1px; }
 .spec .pan { display: flex; flex-direction: column; }
-.spec .pts { display: flex; align-items: center; gap: 1.2em; padding: .5em 1em 0; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: .85em; font-weight: 700; letter-spacing: .06em; }
-.spec.modern .pts { gap: .6em; } .spec.modern .pt { padding: .25em .9em; border-radius: .45em; } .spec.classic .pt { padding: .5em 0 .4em; }
+.spec .pts { display: flex; align-items: center; gap: 1.2em; padding: .5em 1em 0; font-family: var(--ui); font-size: .9em; font-weight: 600; }
+.spec.modern .pts { gap: .5em; } .spec.modern .pt { padding: .25em .9em; border-radius: .45em; } .spec.classic .pt { padding: .5em 0 .4em; font-size: .85em; letter-spacing: .06em; }
 .spec .term { padding: .6em 1em .8em; white-space: pre; overflow: hidden; margin-top: .3em; }
-.spec .status { height: 2.3em; display: flex; align-items: stretch; font-family: -apple-system, "Segoe UI", system-ui, sans-serif; font-size: .95em; white-space: nowrap; overflow: hidden; }
-.spec .si { display: inline-flex; align-items: center; gap: .35em; padding: 0 .6em; }
+.spec .status { height: 2.3em; display: flex; align-items: center; gap: .15em; padding: 0 .3em; font-family: var(--ui); font-size: .95em; white-space: nowrap; overflow: hidden; }
+.spec .si { display: inline-flex; align-items: center; gap: .35em; padding: .2em .5em; }
+.spec.modern .si { border-radius: .35em; }
 .spec .status .ci { width: 1.25em; height: 1.25em; }
 `;
 
