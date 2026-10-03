@@ -102,6 +102,9 @@ td.n { text-align: right; font-variant-numeric: tabular-nums; font-family: var(-
 .irow { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--rule-2); }
 .irow label { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; font-size: 14px; }
 .irow label code { color: var(--muted); }
+.copyk { border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 2px; margin-left: 6px; vertical-align: -3px; border-radius: 4px; }
+.copyk svg { width: 15px; height: 15px; display: block; }
+.copyk:hover { color: var(--esper); background: var(--esper-soft); }
 .picker { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .picker .pc { width: 24px; height: 24px; border-radius: 5px; border: 0; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(127,127,127,.4); padding: 0; }
 .picker .pc[aria-pressed="true"] { outline: 2px solid var(--esper); outline-offset: 2px; }
@@ -322,12 +325,13 @@ function picker(key, value, scope) {
   const cur = up((value || '').slice(0, 7));
   return `<div class="picker" data-key="${esc(key)}" data-scope="${scope}">${pal.map(p => `<button class="pc" type="button" data-hex="${p.hex}" aria-pressed="${p.hex === cur}" title="${esc(p.name)} ${p.hex}" style="background:${p.hex}"></button>`).join('')}<input type="text" value="${esc(value || '')}" aria-label="Hex" spellcheck="false"></div>`;
 }
+const COPY_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M4 4l1-1h5.414L14 6.586V14l-1 1H5l-1-1V4zm9 3l-3-3v3h3zM5 4v10h8V8H9V4H5z"/><path fill="currentColor" d="M3 1L2 2v10l1 1V2h6.414l-1-1H3z"/></svg>';
 function openElement(el) {
   const keys = el.dataset.keys.split(',').filter(Boolean);
   const theme = work[current];
   const rows = keys.map(k => {
     const v = readKey(theme, k);
-    return `<div class="irow"><label><span>${esc(friendly(k))}</span><code>${v ? esc(v) : 'unset · VS Code default'}</code></label>${picker(k, v, 'key')}</div>`;
+    return `<div class="irow"><label><span>${esc(friendly(k))}<button class="copyk" type="button" data-copy="${esc(k)}" title="Copy key name" aria-label="Copy ${esc(k)}">${COPY_ICON}</button></span><code>${v ? esc(v) : 'unset · VS Code default'}</code></label>${picker(k, v, 'key')}</div>`;
   }).join('');
   openInspector(el.dataset.label || 'Element', 'The theme keys that paint this element. Pick a color from the theme’s palette, or type a hex; translucent roles keep their alpha.', rows);
 }
@@ -350,6 +354,8 @@ function applyPick(pickerEl, hex) {
   refresh(current);
 }
 document.getElementById('inspBody').addEventListener('click', e => {
+  const c = e.target.closest('button.copyk');
+  if (c) { copyText(c.dataset.copy, `Copied ${c.dataset.copy}`); return; }
   const b = e.target.closest('button.pc'); if (!b) return;
   applyPick(b.closest('.picker'), b.dataset.hex);
 });
