@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200" width="1440" height="200" role="img" aria-label="Fellowship — Esper Themes">
+  <rect width="1440" height="200" rx="28" fill="#F1E8C8"/>
+  <g fill="none" stroke="#405E2A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#F1E8C8" stroke="none"/>
+  <path d="M4,172 Q100,0 196,172" stroke="#94412C"/><line x1="4" y1="172" x2="196" y2="172"/><circle cx="100" cy="130" r="38" fill="#F1E8C8"/><circle cx="100" cy="130" r="30" stroke="#7D5311"/><circle cx="100" cy="130" r="5" fill="#7D5311" stroke="none"/><circle cx="46" cy="152" r="8" stroke="#7D5311"/><circle cx="154" cy="152" r="8" stroke="#7D5311"/></g>
+  <g aria-hidden="true">
+    <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#405E2A" d="M763 690 715 522H66L173 690ZM701 457 646 274H325L250 1H-13L114 457Z"/>
+    <path transform="translate(358.6 152) scale(0.15072 -0.15072)" fill="#664317" d="M775 690 731 522H79L187 690ZM710 457 662 275H337L311 181H633L585 1H-2L120 457Z"/>
+    <path transform="translate(479.0 152) scale(0.15072 -0.15072)" fill="#6E4A10" d="M432 690 382 523H140L186 688ZM620 171 480 1H-6L123 457H366L286 172Z"/>
+    <path transform="translate(581.6 152) scale(0.15072 -0.15072)" fill="#186056" d="M432 690 382 523H140L186 688ZM620 171 480 1H-6L123 457H366L286 172Z"/>
+    <path transform="translate(684.3 152) scale(0.15072 -0.15072)" fill="#354A1F" d="M788 522H129Q149 590 197 637Q256 694 319 694H659Q788 694 788 557Q788 523 788 522ZM774 458 770 442Q754 390 715 252Q690 165 638 106Q544 0 386 0H267Q171 0 115 36Q46 79 46 169Q46 217 61 271L111 456H344L275 213Q271 196 271 187Q271 167 289 162H434Q461 169 474 213L546 457Z"/>
+    <path transform="translate(806.5 152) scale(0.15072 -0.15072)" fill="#2D4F6E" d="M973 689 932 523H695L743 689ZM434 690 388 523H142L189 690ZM912 457 785 0 553 1 410 130 239 1 0 0 127 457H372L321 289L491 425L628 289L678 457Z"/>
+    <path transform="translate(955.1 152) scale(0.15072 -0.15072)" fill="#A3283A" d="M833 690 788 524H140Q161 588 217 637Q278 690 341 690ZM664 64Q624 23 540 0L-6 1L47 191L425 189Q474 195 474 237Q474 262 467.5 271.0Q461 280 437 288H244Q181 288 152.0 319.5Q123 351 123 422Q123 457 123 457H565Q646 447 674 425Q678 422 728 366Q747 318 747 257Q747 146 664 64Z"/>
+    <path transform="translate(1084.0 152) scale(0.15072 -0.15072)" fill="#405E2A" d="M810 690 766 522H522L569 690ZM389 690 344 522H104L148 690ZM746 457 622 0H380L452 276H277L200 1H-45L81 457Z"/>
+    <path transform="translate(1209.5 152) scale(0.15072 -0.15072)" fill="#664317" d="M408 690 362 522H121L169 690ZM347 457 222 1H-21L106 457Z"/>
+    <path transform="translate(1273.9 152) scale(0.15072 -0.15072)" fill="#6E4A10" d="M896 523H127L230 690H795Q818 690 842.0 674.0Q866 658 877 636Q896 601 896 523ZM878 457Q874 432 859 399Q800 276 577 276H347L270 1H41L166 456Z"/>
+  </g>
+</svg>

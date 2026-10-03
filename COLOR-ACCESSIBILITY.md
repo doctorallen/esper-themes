@@ -435,12 +435,31 @@ the dark panel content and preserves the identity-colored section-header
 roles (and panel tab accents), while the native top strip follows VS Code's
 shared `panel.background` behavior.
 
-## Theme census page
+## Theme specimens and census pages
 
-`theme-census.html` is a generated, self-contained page (open it directly in a
-browser) built by `npm run build:census-page`. It replaces the earlier
-`theme-palettes.html` and carries forward its named palettes, contrast
-thresholds, text and border audits and color-theory recipes. It has four parts:
+Two generated, self-contained pages share one window renderer
+(`scripts/census/specimen.js`) and one analyzer (`scripts/census/analyze-theme.js`),
+and both draw VS Code in either layout. Opened directly, their templates under
+`scripts/` show a notice; the pages at the repository root are the built ones.
+
+`theme-specimens.html` (`npm run build:specimens-page`) is the current state of
+every Esper theme: a gallery, then one theme large. Click any part of the window
+to see the keys that paint it and swap them for another color from the theme's
+own palette; a swatch changes every use of a color at once; the text and border
+audit and the color-theory recipes recompute from the working copy, which can be
+exported as a theme file or copied as `workbench.colorCustomizations`. This is
+what `theme-palettes.html` did in v0.11.0, with the window drawn to match
+VS Code: real Codicons, the selected file with the tree focused (folder tree)
+and unfocused (Open Editors), git- and problem-decorated rows and tabs,
+breadcrumbs, the find widget, and the status bar's remote, error and warning
+items. In the Modern UI the ground between the cards is painted in
+`titleBar.activeBackground` and the activity rail is a card of its own in
+`modernActivityBar.background` (VS Code 1.136.1, `modernUI/README.md`: "the
+shell gutters use the active or inactive `titleBar.*` background"); the render
+follows that, and keys a theme leaves unset take VS Code's defaults.
+
+`theme-census.html` (`npm run build:census-page`) carries the study, the regrade
+and each theme's named palette, audit and recipes. It has four parts:
 
 - **The study.** The thirty most-installed color themes on the Marketplace,
   measured from their shipped JSON, against Esper: contrast for text,

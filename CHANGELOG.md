@@ -14,6 +14,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - `theme-census.html` (`npm run build:census-page`) measures the thirty most-installed VS Code themes against Esper's, follows the regrade version by version in Modern UI specimens, and documents every theme's named palette, accessibility audit and color-theory recipes. It replaces `theme-palettes.html`.
 - Helix theme, a long-lived custom syntax palette on Replicant's workbench.
 - A mark for every theme (`images/logos/mark-<theme>.svg`), drawn from its source material in its own colours and shown in the README table.
+- A lockup for every theme (`images/logos/lockup-<theme>.svg`, `npm run build:lockups`): its mark and its name set in the Blade Runner Movie Font (Phil Steinschneider, freeware; outlines in `scripts/lockups/`), each letter in one of the theme's accents in turn, on the theme's own ground. The README's theme headings use them.
+- `theme-specimens.html` (`npm run build:specimens-page`): every Esper theme as it ships, drawn as VS Code draws it in the Modern UI or the classic layout, with real Codicons, the selected file shown with the tree focused and unfocused, git- and problem-decorated rows and tabs, and an inspector that swaps any key for another color from the theme's own palette, re-auditing as it goes, with export. It brings back what `theme-palettes.html` did in v0.11.0.
 - Mix theme and the **Esper Themes: Mix Themes** command: one theme's workbench, editor background included, around another theme's syntax colours, each colour lifted until it reads on the new ground as well as it read on its own.
 
 ### Changed
@@ -29,6 +31,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Bright terminal colors are a visible step brighter than the normal ones instead of repeating them.
 - No two syntax roles read as one color to a red-green color-blind reader: the build checks every pair as deuteranopes and protanopes see it, LCARS included.
 - Pane boundaries (the side bar, Modern UI surface frames, the panel and split editors) are visible edges in every theme, halfway between the old hairline and WCAG's 3:1, and LCARS badge text clears AA.
+- LCARS's workbench is built from the Classic LCARS set its syntax already uses instead of the Picard set's blues: an orange activity rail with a Bluey pill behind the active item, a dirty-mauve frame, status rail and section headers with starlight text, peach pane tabs, a mauve-dark active editor tab under an orange stroke and over a sky-blue one, lilac around inputs and widgets, and pane edges in almond creme around the side bar, sky blue around the editor and ghost gray over the classic panel. Blue stays only where it frames or signals: the edges, the pill, the tab stroke, the operators and info diagnostics. Q's static fallback follows. The status-bar states LCARS never set (no folder open, remote, prominent, error, warning, offline) are set, so VS Code's default purple no longer shows under dark text.
+- The census and specimen pages draw windows as VS Code does, in either layout: the Modern UI ground between the cards is the title bar's color and the activity rail is a card of its own; the explorer title, section headers, selected rows, tabs, breadcrumbs, find widget and status items each wear their own key, and keys a theme leaves unset take VS Code's defaults.
 
 - The LCARS mark is redrawn from the Enterprise-D blueprints: the phaser strip rings the saucer, the dome section is an egg, the hull flares to a squared stern, the nacelles taper to their bussard caps, and the pylons sweep from the hull's rear flanks.
 - New Marketplace icon: a folded-paper prism splitting one line into three theme colours, above the Esper wordmark; the prism takes Synthwave's palette and the wordmark stays Esper amber. `images/logos/` holds the same icon and the prism alone in every theme's colours.
@@ -41,6 +45,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+- The Modern UI tab strokes the extension copies into `workbench.colorCustomizations` follow the theme when it changes; before, the first values written stayed forever. Values a user set by hand are still left alone.
 - Active editor tabs show their top and bottom borders under VS Code's Modern UI.
 - Mermaid diagrams in the markdown preview draw their edges and node borders in the theme's accent instead of VS Code's steel-blue default, which all but vanished on the darker themes.
 

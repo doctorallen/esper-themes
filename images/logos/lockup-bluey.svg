@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 858 200" width="858" height="200" role="img" aria-label="Bluey — Esper Themes">
+  <rect width="858" height="200" rx="28" fill="#FFF9D8"/>
+  <g fill="none" stroke="#403F65" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#FFF9D8" stroke="none"/>
+  <ellipse cx="100" cy="128" rx="34" ry="28" fill="#83BBE3"/><ellipse cx="58" cy="92" rx="13" ry="17" transform="rotate(-24 58 92)"/><ellipse cx="84" cy="64" rx="13" ry="17" transform="rotate(-8 84 64)"/><ellipse cx="116" cy="64" rx="13" ry="17" transform="rotate(8 116 64)"/><ellipse cx="142" cy="92" rx="13" ry="17" transform="rotate(24 142 92)"/></g>
+  <g aria-hidden="true">
+    <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#403F65" d="M800 522H82L226 693H671Q802 693 802 552Q802 538 800 522ZM794 456Q794 392 716 362Q745 313 747 310Q758 285 758 246Q758 242 758 226Q752 127 678 66Q621 17 554 0L8 1L141 456ZM479 220Q479 250 458 254H302L283 184H438Q452 184 465.5 195.0Q479 206 479 220Z"/>
+    <path transform="translate(374.7 152) scale(0.15072 -0.15072)" fill="#00487B" d="M432 690 382 523H140L186 688ZM620 171 480 1H-6L123 457H366L286 172Z"/>
+    <path transform="translate(477.3 152) scale(0.15072 -0.15072)" fill="#884F27" d="M808 687 761 522H533L579 687ZM392 687 346 522H121L168 686ZM745 457 619 1 253 0Q81 0 40 103Q29 131 29 159Q29 175 33 189L107 457H329L258 209Q253 192 253 184Q253 164 273 158H433L517 457Z"/>
+    <path transform="translate(601.2 152) scale(0.15072 -0.15072)" fill="#B41E5B" d="M775 690 731 522H79L187 690ZM710 457 662 275H337L311 181H633L585 1H-2L120 457Z"/>
+    <path transform="translate(721.6 152) scale(0.15072 -0.15072)" fill="#2C6683" d="M763 692 612 523H123L87 689H338L357 612L431 693ZM549 457 427 326 338 1H76L169 328L140 455Z"/>
+  </g>
+</svg>

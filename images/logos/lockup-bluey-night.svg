@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1485 200" width="1485" height="200" role="img" aria-label="Bluey Night — Esper Themes">
+  <rect width="1485" height="200" rx="28" fill="#040620"/>
+  <g fill="none" stroke="#99C9EC" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#040620" stroke="none"/>
+  <ellipse cx="100" cy="128" rx="34" ry="28" fill="#403F65"/><ellipse cx="58" cy="92" rx="13" ry="17" transform="rotate(-24 58 92)"/><ellipse cx="84" cy="64" rx="13" ry="17" transform="rotate(-8 84 64)"/><ellipse cx="116" cy="64" rx="13" ry="17" transform="rotate(8 116 64)"/><ellipse cx="142" cy="92" rx="13" ry="17" transform="rotate(24 142 92)"/><path d="M158,26 A22,22 0 1 0 180,50 A16,16 0 0 1 158,26 Z" stroke="#EDCE74"/></g>
+  <g aria-hidden="true">
+    <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#83BBE3" d="M800 522H82L226 693H671Q802 693 802 552Q802 538 800 522ZM794 456Q794 392 716 362Q745 313 747 310Q758 285 758 246Q758 242 758 226Q752 127 678 66Q621 17 554 0L8 1L141 456ZM479 220Q479 250 458 254H302L283 184H438Q452 184 465.5 195.0Q479 206 479 220Z"/>
+    <path transform="translate(374.7 152) scale(0.15072 -0.15072)" fill="#EDCE74" d="M432 690 382 523H140L186 688ZM620 171 480 1H-6L123 457H366L286 172Z"/>
+    <path transform="translate(477.3 152) scale(0.15072 -0.15072)" fill="#E37A3B" d="M808 687 761 522H533L579 687ZM392 687 346 522H121L168 686ZM745 457 619 1 253 0Q81 0 40 103Q29 131 29 159Q29 175 33 189L107 457H329L258 209Q253 192 253 184Q253 164 273 158H433L517 457Z"/>
+    <path transform="translate(601.2 152) scale(0.15072 -0.15072)" fill="#B59CE6" d="M775 690 731 522H79L187 690ZM710 457 662 275H337L311 181H633L585 1H-2L120 457Z"/>
+    <path transform="translate(721.6 152) scale(0.15072 -0.15072)" fill="#DF7776" d="M763 692 612 523H123L87 689H338L357 612L431 693ZM549 457 427 326 338 1H76L169 328L140 455Z"/>
+    <path transform="translate(892.4 152) scale(0.15072 -0.15072)" fill="#83BBE3" d="M822 690 772 523H117L164 690H391L539 549L575 690ZM759 457 637 1H386L463 278L317 411L201 0H-28L97 457Z"/>
+    <path transform="translate(1016.0 152) scale(0.15072 -0.15072)" fill="#EDCE74" d="M408 690 362 522H121L169 690ZM347 457 222 1H-21L106 457Z"/>
+    <path transform="translate(1080.4 152) scale(0.15072 -0.15072)" fill="#E37A3B" d="M817 690 776 523H123Q141 581 193 633Q250 690 312 690ZM758 432 705 236Q683 156 638 103Q551 1 385 1H265Q91 1 52 100Q36 140 36 173Q36 200 46 237L108 457H344L285 251Q280 234 280 226Q280 206 300 200H442Q472 208 482 251L484 263L336 261L442 432Z"/>
+    <path transform="translate(1209.2 152) scale(0.15072 -0.15072)" fill="#B59CE6" d="M810 690 766 522H522L569 690ZM389 690 344 522H104L148 690ZM746 457 622 0H380L452 276H277L200 1H-45L81 457Z"/>
+    <path transform="translate(1334.8 152) scale(0.15072 -0.15072)" fill="#DF7776" d="M804 690 758 524H92L198 690ZM545 457 424 1H195L319 457Z"/>
+  </g>
+</svg>

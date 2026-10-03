@@ -95,34 +95,7 @@ select { font: 13px var(--body); padding: 6px 8px; border-radius: 6px; border: 1
 .card .stats { display: flex; gap: 10px; padding: 0 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); flex-wrap: wrap; }
 .tag-esper { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--esper); }
 
-/* Modern UI specimen: framed, rounded surfaces on the activity-bar ground */
-.mwin { border-radius: 10px; overflow: hidden; font-family: var(--code); display: flex; flex-direction: column; }
-.mwin .mtitle { height: 24px; display: flex; align-items: center; gap: 5px; padding-left: 10px; }
-.mwin .mtitle i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .45; }
-.mwin .mtitle span { margin-left: 10px; font-size: 10px; opacity: .8; font-family: var(--body); }
-.mwin .mbody { display: grid; grid-template-columns: 34px 96px minmax(0, 1fr); gap: 5px; padding: 0 6px 6px 0; }
-.mwin .mact { display: flex; flex-direction: column; align-items: center; gap: 7px; padding-top: 4px; }
-.mwin .mact i { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; }
-.mwin .mact i b { width: 10px; height: 10px; border-radius: 3px; border: 1.6px solid currentColor; display: block; }
-.mwin .mcard { border-radius: 8px; overflow: hidden; min-width: 0; }
-.mwin .mside { padding: 8px 8px; display: flex; flex-direction: column; gap: 7px; }
-.mwin .mside .hd { font-family: var(--body); font-size: 8.5px; font-weight: 700; letter-spacing: .08em; opacity: .9; }
-.mwin .mside i { height: 5px; border-radius: 3px; background: currentColor; opacity: .32; display: block; }
-.mwin .mside .sbt { font-size: 9.5px; line-height: 11px; white-space: nowrap; overflow: hidden; padding: 2px 4px; margin: 0 -4px; border-radius: 4px; }
-.mwin .mmain { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
-.mwin .mtabs { display: flex; gap: 5px; padding: 6px 6px 0; }
-.mwin .mtabs span { font-size: 10px; line-height: 17px; padding: 0 10px; border-radius: 6px; white-space: nowrap; border-top: 2px solid transparent; border-bottom: 2px solid transparent; }
-.mwin pre { margin: 0; padding: 6px 0 6px; font-size: 11.5px; line-height: 17px; overflow: hidden; white-space: pre; }
-.mwin pre.more { border-top: 1px dashed; padding-top: 6px; }
-.mwin .ln { display: flex; }
-.mwin .ln .g { width: 28px; text-align: right; padding-right: 9px; flex: none; }
-.mwin .cur { display: inline-block; width: 1.5px; height: 13px; vertical-align: -3px; margin-left: -1px; }
-.mwin .mpanel { padding: 6px 8px 7px; display: flex; flex-direction: column; gap: 5px; }
-.mwin .mpanel .pt { align-self: flex-start; font-family: var(--body); font-size: 8.5px; font-weight: 700; letter-spacing: .08em; padding: 2px 8px; border-radius: 5px; }
-.mwin .mpanel .tl { font-size: 11px; white-space: pre; overflow: hidden; }
-.mwin .mstatus { height: 18px; font-size: 9.5px; line-height: 18px; padding-left: 10px; white-space: nowrap; overflow: hidden; }
-.mwin.big pre { font-size: 13px; line-height: 19px; }
-.mwin.big .mbody { grid-template-columns: 40px 130px minmax(0, 1fr); }
+/*SPECIMEN_CSS*/
 
 .detail { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 18px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 20px; }
 @media (max-width: 1100px) { .detail { grid-template-columns: minmax(0, 1fr); } }
@@ -318,7 +291,7 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
 
     <section id="specimens">
       <div class="sec-head"><div class="eyebrow">01 · Specimens</div><h2>Every theme, rendered from its own colors</h2>
-        <div class="prose"><p>Each window is drawn as VS Code's Modern UI lays out the workbench: framed, rounded surfaces on the activity-bar ground, pill tabs, a filled active activity item, and a pane tab on the terminal. Esper sets the Modern UI keys (<code>surface.*</code>, <code>modernEditorTab.*</code>, <code>modernActivityBarItem.*</code>, <code>modernTab.*</code>); the popular themes do not, so theirs fall back to the matching classic keys. Every token comes from <code>tokenColors</code> plus <code>semanticTokenColors</code>, brackets are colorized as VS Code ships, and the editor is mid-search for <code>ship</code>. Select a window to open its breakdown below.</p></div></div>
+        <div class="prose"><p>Each window is drawn as VS Code lays out the workbench, in its Modern UI (rounded cards on the title-bar ground, the activity rail a card of its own, pill tabs, a pane tab on the terminal) or its classic layout; the Layout switch redraws every window on the page. Every element wears its own theme key: the activity items active and inactive, the explorer's title and section headers, the selected file with the tree focused and unfocused, git- and problem-decorated rows, an active, an inactive and a modified tab, the breadcrumbs, the find widget, the status bar's remote, error and warning items. Esper sets the Modern UI keys (<code>surface.*</code>, <code>modernEditorTab.*</code>, <code>modernActivityBarItem.*</code>, <code>modernTab.*</code>); the popular themes do not, so theirs fall back to the matching classic keys. Every token comes from <code>tokenColors</code> plus <code>semanticTokenColors</code>, brackets are colorized as VS Code ships, and the editor is mid-search for <code>ship</code>. Select a window to open its breakdown below.</p></div></div>
       <div class="controls">
         <div class="seg" role="group" aria-label="Theme set" id="setSeg">
           <button type="button" data-set="popular" aria-pressed="true">Top 30</button>
@@ -326,6 +299,7 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
           <button type="button" data-set="was" aria-pressed="false">Esper v0.11.0</button>
           <button type="button" data-set="light" aria-pressed="false">Light companions</button>
         </div>
+        <label class="sel">Layout <span class="seg uiseg" role="group" aria-label="Workbench layout"></span></label>
         <label class="sel" for="sortSel">Sort
           <select id="sortSel">
             <option value="installs">Installs</option>
@@ -410,7 +384,7 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
     <section id="themes">
       <div class="sec-head"><div class="eyebrow">08 · Theme by theme</div><h2>Any two versions side by side</h2>
         <div class="prose"><p>The page opens on v0.11.0 against now. Lines 5 and 6 carry modified and added gutter marks, the sidebar shows a filtered match, and the terminal prints each status color in its normal and bright form. Below each pair, every role whose color or style moved between the two versions is listed on its own theme's ground.</p></div></div>
-      <div class="picker"><label>Left <span class="seg" id="segL" role="group" aria-label="Left version"></span></label><label>Right <span class="seg" id="segR" role="group" aria-label="Right version"></span></label></div>
+      <div class="picker"><label>Left <span class="seg" id="segL" role="group" aria-label="Left version"></span></label><label>Right <span class="seg" id="segR" role="group" aria-label="Right version"></span></label><label>Layout <span class="seg uiseg" role="group" aria-label="Workbench layout"></span></label></div>
       <nav class="jump" id="jump" aria-label="Themes"></nav>
       <div id="themeList" style="display:flex;flex-direction:column;gap:20px"></div>
     </section>
@@ -458,7 +432,7 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
         <li><b>Flagship variant.</b> One variant per extension, the one it names after itself or its default dark variant. Thirteen extensions also ship a light variant; those form the light comparison set. Mix is left out of Esper because it is assembled from the others.</li>
         <li><b>Token resolution.</b> Each role is a full scope stack matched against every <code>tokenColors</code> selector, descendant selectors included; the deepest match wins, then the most specific, then the later rule. <code>semanticTokenColors</code> override names when semantic highlighting is on. Unset roles fall back to <code>editor.foreground</code>.</li>
         <li><b>Color math.</b> WCAG 2 contrast against <code>editor.background</code>; hue, lightness and chroma in OKLCH; collisions as OKLab ΔE × 100. Color blindness is simulated with Machado, Oliveira and Fernandes (2009) at full severity.</li>
-        <li><b>Limits.</b> Unset workbench keys fall back to VS Code's defaults. The Modern UI rendering is an approximation of VS Code's geometry; popular themes are drawn from their classic keys. Language servers beyond TypeScript can recolor names beyond what is measured here.</li>
+        <li><b>Limits.</b> Unset workbench keys fall back to VS Code's defaults. The window rendering is an approximation of VS Code's geometry; popular themes are drawn from their classic keys, and keys a theme leaves unset take VS Code's defaults. Icons are <a href="https://github.com/microsoft/vscode-codicons">Codicons</a> (Microsoft, CC BY 4.0). Language servers beyond TypeScript can recolor names beyond what is measured here.</li>
       </ul>
     </section>
   </main>
@@ -467,9 +441,16 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
 <div class="toast" id="toast" hidden></div>
 
 <script id="data" type="application/json">/*DATA*/</script>
+<script>/*ANALYZE_JS*/</script>
+<script>/*SPECIMEN_JS*/</script>
 <script>
 (() => {
-const D = JSON.parse(document.getElementById('data').textContent);
+const raw = document.getElementById('data').textContent;
+if (/^\/\*DATA\*\/$/.test(raw.trim())) {
+  document.querySelector('main').innerHTML = '<header><h1>This is the template</h1><p class="lede">Run <code>npm run build:census-page</code> and open <code>theme-census.html</code> at the repository root, where the measured data is filled in.</p></header>';
+  return;
+}
+const D = JSON.parse(raw);
 const ROLES = D.roles;
 const P = D.popular, L = D.light, SETS = D.sets, NOW = SETS.now, WAS = SETS.v011;
 const keyOf = (t, tag) => tag + ':' + t.label;
@@ -497,103 +478,21 @@ const W = (t, k) => t.wb[k] && t.wb[k].hex;
 const lab = r => { const h = r.H * Math.PI / 180; return [r.L, r.C * Math.cos(h), r.C * Math.sin(h)]; };
 const dist = (a, b) => { const x = lab(a), y = lab(b); return Math.hypot(x[0] - y[0], x[1] - y[1], x[2] - y[2]) * 100; };
 
-// ---------- Modern UI specimen ----------
-function mod(t) {
-  const sidebar = W(t, 'sidebar') || t.bg;
-  const paneTab = W(t, 'mTabBg') || W(t, 'activityBadge') || W(t, 'focus') || t.fg;
-  return {
-    frame: W(t, 'mActBg') || W(t, 'activity') || W(t, 'title') || t.bg,
-    title: W(t, 'title') || W(t, 'mActBg') || W(t, 'activity') || t.bg,
-    titleFg: W(t, 'sidebarFg') || t.fg,
-    actFg: W(t, 'actInactiveFg') || W(t, 'activityFg') || t.fg,
-    actItemBg: W(t, 'mActItemBg') || W(t, 'actActiveBg') || null,
-    actItemFg: W(t, 'mActItemFg') || W(t, 'activityFg') || t.fg,
-    surface: W(t, 'surfaceBg') || sidebar,
-    border: W(t, 'surfaceBorder') || W(t, 'sideBarBorder') || W(t, 'editorGroupBorder') || null,
-    edBorder: W(t, 'editorBorder') || W(t, 'surfaceBorder') || W(t, 'editorGroupBorder') || null,
-    sideFg: W(t, 'sidebarFg') || t.fg,
-    listHi: W(t, 'listHighlight') || t.fg,
-    tabA: W(t, 'mEdTabBg') || W(t, 'tabActive') || t.bg,
-    tabAFg: W(t, 'mEdTabFg') || t.fg,
-    tabI: W(t, 'mEdTabInactiveBg') || W(t, 'tabInactive') || sidebar,
-    tabIFg: W(t, 'tabInactiveFg') || W(t, 'lineNo') || t.fg,
-    tabTop: W(t, 'tabBorderTop'), tabBottom: W(t, 'tabBorder'),
-    paneTab, paneTabFg: W(t, 'mTabFg') || inkOn(paneTab),
-    panel: W(t, 'panel') || t.bg,
-    status: W(t, 'status') || sidebar, statusFg: W(t, 'statusFg') || t.fg,
-  };
-}
-const CODE = [
-  [['// fetch the crew manifest', 'comment']],
-  [['import', 'import'], [' {', 'punct'], [' log ', 'variable'], ['}', 'punct'], [' '], ['from', 'import'], [' '], ['"./util"', 'string'], [';', 'punct']],
-  [['export', 'modifier'], [' '], ['async', 'modifier'], [' '], ['function', 'storage'], [' '], ['load', 'function'], ['(', 'punct'], ['ship', 'parameter'], [': ', 'punct'], ['Ship', 'type'], [')', 'punct'], [' '], ['{', 'punct']],
-  [['  '], ['const', 'storage'], [' '], ['url', 'constant'], [' '], ['=', 'operator'], [' '], ['`/api/${', 'string'], ['ship', 'variable'], ['.', 'punct'], ['id', 'property'], ['}`', 'string'], [';', 'punct']],
-  [['  '], ['if', 'keyword'], [' '], ['(', 'punct'], ['ship', 'variable'], ['.', 'punct'], ['crew', 'property'], [' '], ['>', 'operator'], [' '], ['12', 'number'], [' '], ['&&', 'operator'], [' '], ['/^[A-Z]/', 'regex'], ['.', 'punct'], ['test', 'method'], ['(', 'punct'], ['url', 'variable'], [')', 'punct'], [')', 'punct'], [' '], ['{', 'punct']],
-  [['    '], ['console', 'variable'], ['.', 'punct'], ['log', 'method'], ['(', 'punct'], ['"found', 'string'], ['\\n', 'escape'], ['"', 'string'], [', ', 'punct'], ['url', 'variable', 'sel'], [')', 'punct'], [';', 'punct']],
-  [['  '], ['}', 'punct']],
-  [['  '], ['return', 'keyword'], [' '], ['new', 'keyword'], [' '], ['Manifest', 'class'], ['(', 'punct'], ['this', 'this'], ['.', 'punct'], ['name', 'property'], [', ', 'punct'], ['true', 'boolean'], [')', 'punct'], [';', 'punct']],
-  [['}', 'punct']],
-];
-const MORE = [
-  [['@@ -8,1 +8,1 @@', 'diffHeader']],
-  [['-  return null;', 'deleted']],
-  [['+  return new Manifest(this.name);', 'inserted']],
-  [['<', 'tagPunct'], ['a', 'tag'], [' '], ['href', 'attr'], ['='], ['"/crew"', 'attrValue'], ['>', 'tagPunct'], ['Crew'], ['</', 'tagPunct'], ['a', 'tag'], ['>', 'tagPunct']],
-  [['# Crew manifest', 'heading']],
-];
-const BRACKETABLE = new Set(['punct', 'operator', undefined]);
-const DEFAULT_BRACKETS = { dark: ['#FFD700', '#DA70D6', '#179FFF'], light: ['#0431FA', '#319331', '#7B3814'] };
+// ---------- specimen windows ----------
+// One switch redraws every window on the page as VS Code's classic layout or
+// its Modern UI; the choice is remembered per browser.
+let ui = 'modern';
+try { if (localStorage.getItem('esper-ui') === 'classic') ui = 'classic'; } catch (e) {}
+const win = (t, big) => EsperSpecimen.render(t, { ui, big });
 const styleOf = r => r && r.font ? (r.font.includes('italic') ? 'font-style:italic;' : '') + (r.font.includes('bold') ? 'font-weight:700;' : '') + (r.font.includes('underline') ? 'text-decoration:underline;' : '') : '';
-function lines(t, code, withCursor) {
-  const brackets = t.bracket.some(Boolean) ? t.bracket : DEFAULT_BRACKETS[t.kind];
-  const lnHex = W(t, 'lineNo') || '#858585', lnA = W(t, 'lineNoActive') || t.fg, lh = W(t, 'lineHighlight');
-  const sel = W(t, 'selection'), cur = W(t, 'cursor') || t.fg, find = withCursor ? W(t, 'findMatchHighlight') : null;
-  const marks = withCursor ? { 4: W(t, 'gutterModified'), 5: W(t, 'gutterAdded') } : {};
-  let depth = 0;
-  return code.map((line, i) => {
-    const active = withCursor && i === 3;
-    const parts = line.map(([txt, role, flag]) => {
-      const r = role ? t.roles[role] : null;
-      const col = r ? r.hex : t.fg, st = styleOf(r);
-      const bg = flag === 'sel' && sel ? `background:${sel};` : find && txt === 'ship' ? `background:${find};` : '';
-      if (BRACKETABLE.has(role) && /[()[\]{}]/.test(txt)) {
-        return [...txt].map(ch => {
-          if ('([{'.includes(ch)) { const c = brackets[depth % brackets.length]; depth++; return `<span style="color:${c}">${esc(ch)}</span>`; }
-          if (')]}'.includes(ch)) { depth = Math.max(0, depth - 1); return `<span style="color:${brackets[depth % brackets.length]}">${esc(ch)}</span>`; }
-          return `<span style="color:${col};${st}">${esc(ch)}</span>`;
-        }).join('');
-      }
-      return `<span style="color:${col};${st}${bg}">${esc(txt)}</span>`;
-    }).join('') + (active ? `<span class="cur" style="background:${cur}"></span>` : '');
-    const mark = marks[i] ? `box-shadow:inset 3px 0 0 ${marks[i]};` : '';
-    return `<div class="ln" style="${active && lh && lh !== t.bg ? 'background:' + lh : ''}"><span class="g" style="${mark}color:${active ? lnA : lnHex}">${i + 1}</span><span>${parts}</span></div>`;
-  }).join('');
+function renderUiSeg() {
+  for (const seg of document.querySelectorAll('.uiseg')) seg.innerHTML = [['classic', 'Classic'], ['modern', 'Modern UI']].map(([k, l]) => `<button type="button" data-ui="${k}" aria-pressed="${k === ui}">${l}</button>`).join('');
 }
-function termLine(t) {
-  const n = t.ansi || {}, b = t.ansiBright || {};
-  const pair = (k, word) => `<span style="color:${n[k] || t.fg}">${word}</span> <span style="color:${b[k] || n[k] || t.fg}">${word.toUpperCase()}</span>`;
-  return `${pair('Green', 'pass')}  ${pair('Red', 'fail')}  ${pair('Yellow', 'warn')}  ${pair('Blue', 'info')}  ${pair('Magenta', 'tag')}`;
-}
-function win(t, big) {
-  const m = mod(t), bd = m.border ? `box-shadow:inset 0 0 0 1px ${m.border};` : '';
-  const ebd = m.edBorder ? `box-shadow:inset 0 0 0 1px ${m.edBorder};` : '';
-  const dash = (W(t, 'lineNo') || t.fg) + '55';
-  const icon = (on) => `<i style="${on && m.actItemBg ? 'background:' + m.actItemBg + ';' : ''}color:${on ? (m.actItemBg ? m.actItemFg : W(t, 'activityFg') || t.fg) : m.actFg}"><b></b></i>`;
-  return `<div class="mwin${big ? ' big' : ''}" style="background:${m.frame}">
-    <div class="mtitle" style="background:${m.title};color:${m.titleFg}"><i></i><i></i><i></i><span>load.ts — crew</span></div>
-    <div class="mbody">
-      <div class="mact">${icon(true)}${icon(false)}${icon(false)}</div>
-      <div class="mcard mside" style="background:${m.surface};color:${m.sideFg};${bd}"><span class="hd">EXPLORER</span><i style="width:70%"></i><span class="sbt"><span style="color:${m.listHi};font-weight:700">lo</span>ad.ts</span><i style="width:80%"></i><i style="width:55%"></i><i style="width:65%"></i></div>
-      <div class="mmain">
-        <div class="mcard" style="background:${t.bg};${ebd}">
-          <div class="mtabs"><span style="background:${m.tabA};color:${m.tabAFg};${m.tabTop ? 'border-top-color:' + m.tabTop + ';' : ''}${m.tabBottom ? 'border-bottom-color:' + m.tabBottom : ''}">load.ts</span><span style="background:${m.tabI};color:${m.tabIFg}">crew.diff</span></div>
-          <pre>${lines(t, CODE, true)}</pre><pre class="more" style="border-color:${dash}">${lines(t, MORE, false)}</pre>
-        </div>
-        <div class="mcard mpanel" style="background:${m.panel};${bd}"><span class="pt" style="background:${m.paneTab};color:${m.paneTabFg}">TERMINAL</span><span class="tl">${termLine(t)}</span></div>
-      </div>
-    </div>
-    <div class="mstatus" style="background:${m.status};color:${m.statusFg}">main ✓ 0 ⚠ 0 · TypeScript</div></div>`;
-}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.uiseg button'); if (!b) return;
+  ui = b.dataset.ui; try { localStorage.setItem('esper-ui', ui); } catch (err) {}
+  renderUiSeg(); renderGallery(); renderDetail(); renderThemes();
+});
 
 // ---------- findings ----------
 const triple = (h, f, fmtv, p) => ({ h, v: [fmtv(f(PD)), fmtv(f(WD)), fmtv(f(ND))], p });
@@ -881,6 +780,6 @@ function contrastOn(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y)
 document.getElementById('palSeg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; palTheme = b.dataset.t; renderPalettes(); });
 document.getElementById('palGroups').addEventListener('click', e => { const s = e.target.closest('.swatch'); if (s) copyHex(s.dataset.hex); });
 
-renderGallery(); renderDetail(); renderPicker(); renderThemes(); renderPalettes();
+renderUiSeg(); renderGallery(); renderDetail(); renderPicker(); renderThemes(); renderPalettes();
 })();
 </script>

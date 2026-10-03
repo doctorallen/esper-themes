@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1328 200" width="1328" height="200" role="img" aria-label="Replicant — Esper Themes">
+  <rect width="1328" height="200" rx="28" fill="#050608"/>
+  <g fill="none" stroke="#FFB000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#050608" stroke="none"/>
+  <path d="M20,100 Q100,30 180,100 Q100,170 20,100 Z"/><circle cx="100" cy="100" r="34"/><circle cx="100" cy="100" r="22" stroke="#E86A4E"/><circle cx="100" cy="100" r="9" fill="#FFB000" stroke="none"/></g>
+  <g aria-hidden="true">
+    <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#FFB000" d="M866 524H91L197 690H766Q789 690 812.5 674.0Q836 658 848 636Q866 603 866 524ZM854 457Q846 396 784 342Q756 317 737 311Q760 275 760 235Q760 212 753 170Q749 144 701 1H477L557 276H321L236 1H3L137 457Z"/>
+    <path transform="translate(379.8 152) scale(0.15072 -0.15072)" fill="#3ED4E8" d="M775 690 731 522H79L187 690ZM710 457 662 275H337L311 181H633L585 1H-2L120 457Z"/>
+    <path transform="translate(500.2 152) scale(0.15072 -0.15072)" fill="#6BD0B2" d="M896 523H127L230 690H795Q818 690 842.0 674.0Q866 658 877 636Q896 601 896 523ZM878 457Q874 432 859 399Q800 276 577 276H347L270 1H41L166 456Z"/>
+    <path transform="translate(638.1 152) scale(0.15072 -0.15072)" fill="#4FC7DC" d="M432 690 382 523H140L186 688ZM620 171 480 1H-6L123 457H366L286 172Z"/>
+    <path transform="translate(740.8 152) scale(0.15072 -0.15072)" fill="#F0C97A" d="M408 690 362 522H121L169 690ZM347 457 222 1H-21L106 457Z"/>
+    <path transform="translate(805.1 152) scale(0.15072 -0.15072)" fill="#E86A4E" d="M771 690 722 522H123Q142 586 193 635Q250 690 311 690ZM629 185 577 -1H260Q95 -1 50 104Q36 136 41 193Q42 204 45 233L104 456L352 457L280 236Q283 223 286 209Q295 191 323 185Z"/>
+    <path transform="translate(925.7 152) scale(0.15072 -0.15072)" fill="#FFB000" d="M689 522H257L401 690H653ZM801 1H550L482 273H340L139 1H-154L204 458H703Z"/>
+    <path transform="translate(1053.5 152) scale(0.15072 -0.15072)" fill="#3ED4E8" d="M822 690 772 523H117L164 690H391L539 549L575 690ZM759 457 637 1H386L463 278L317 411L201 0H-28L97 457Z"/>
+    <path transform="translate(1177.1 152) scale(0.15072 -0.15072)" fill="#6BD0B2" d="M804 690 758 524H92L198 690ZM545 457 424 1H195L319 457Z"/>
+  </g>
+</svg>
