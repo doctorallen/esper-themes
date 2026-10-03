@@ -66,7 +66,9 @@ const contributedThemes = manifest.contributes.themes.map((theme) => ({
   label: theme.label,
   path: resolve(repositoryRoot, theme.path),
 }));
-const requested = process.argv.slice(2);
+// `--readme` rewrites the README section from the shots already on disk, without capturing.
+const readmeOnly = process.argv.includes('--readme');
+const requested = process.argv.slice(2).filter((arg) => arg !== '--readme');
 const unknown = requested.filter(
   (label) => !contributedThemes.some((theme) => theme.label === label),
 );
@@ -551,15 +553,26 @@ function updateReadme() {
     .filter((theme) => existsSync(join(imageDirectory, `${slug(theme.label)}.png`)))
     .map((theme) => {
       const image = relative(repositoryRoot, join(imageDirectory, `${slug(theme.label)}.png`));
+      // The heading is the theme's lockup (npm run build:lockups): its mark and
+      // its name in its own colors; the name is the image's alt text.
+      const lockup = `images/logos/lockup-${slug(theme.label)}.png`;
       const mark = `images/logos/mark-${slug(theme.label)}.png`;
-      const heading = existsSync(join(repositoryRoot, mark))
-        ? `### <img src="${mark}" width="64" height="64" alt=""> ${theme.label}`
-        : `### ${theme.label}`;
+      const heading = existsSync(join(repositoryRoot, lockup))
+        ? `### <img src="${lockup}" height="72" alt="${theme.label}">`
+        : existsSync(join(repositoryRoot, mark))
+          ? `### <img src="${mark}" width="64" height="64" alt=""> ${theme.label}`
+          : `### ${theme.label}`;
       const tagline = TAGLINES[theme.label];
       return `${heading}\n\n${tagline ? `${tagline}\n\n` : ''}![${theme.label} theme](${image})`;
     });
   const block = `${README_START}\n\n${sections.join('\n\n')}\n\n${README_END}`;
   writeFileSync(readmePath, readme.slice(0, start) + block + readme.slice(end + README_END.length));
+}
+
+if (readmeOnly) {
+  updateReadme();
+  console.log('Updated README.md screenshots.');
+  process.exit(0);
 }
 
 for (const theme of themes) {

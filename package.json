@@ -19,6 +19,7 @@
     "capture:screenshots": "node scripts/capture-theme-screenshots.mjs",
     "build:census-page": "node scripts/build-census-page.js",
     "build:specimens-page": "node scripts/build-specimens-page.js",
+    "build:lockups": "node scripts/build-lockups.js",
     "package:vsix": "vsce package --no-dependencies --skip-license"
   },
   "devDependencies": {

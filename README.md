@@ -8,73 +8,73 @@ Install **Esper Themes** from the Marketplace, then pick a theme under **Prefere
 
 <!-- theme-screenshots:start -->
 
-### <img src="images/logos/mark-lcars.png" width="64" height="64" alt=""> LCARS
+### <img src="images/logos/lockup-lcars.png" height="72" alt="LCARS">
 
 Starfleet console panels.
 
 ![LCARS theme](docs/images/themes/lcars.png)
 
-### <img src="images/logos/mark-q.png" width="64" height="64" alt=""> Q
+### <img src="images/logos/lockup-q.png" height="72" alt="Q">
 
 A new accessible palette, generated on demand.
 
 ![Q theme](docs/images/themes/q.png)
 
-### <img src="images/logos/mark-replicant.png" width="64" height="64" alt=""> Replicant
+### <img src="images/logos/lockup-replicant.png" height="72" alt="Replicant">
 
 Near-black night exteriors: petrol and cyan structure, neon signage for the literals.
 
 ![Replicant theme](docs/images/themes/replicant.png)
 
-### <img src="images/logos/mark-oblivion.png" width="64" height="64" alt=""> Oblivion
+### <img src="images/logos/lockup-oblivion.png" height="72" alt="Oblivion">
 
 Steel frames and cyan readouts, with orange kept for alerts.
 
 ![Oblivion theme](docs/images/themes/oblivion.png)
 
-### <img src="images/logos/mark-synthwave.png" width="64" height="64" alt=""> Synthwave
+### <img src="images/logos/lockup-synthwave.png" height="72" alt="Synthwave">
 
 Neon cyan and hot pink on violet night.
 
 ![Synthwave theme](docs/images/themes/synthwave.png)
 
-### <img src="images/logos/mark-tomcat.png" width="64" height="64" alt=""> Tomcat
+### <img src="images/logos/lockup-tomcat.png" height="72" alt="Tomcat">
 
 Green phosphor cockpit display with amber warnings.
 
 ![Tomcat theme](docs/images/themes/tomcat.png)
 
-### <img src="images/logos/mark-fellowship.png" width="64" height="64" alt=""> Fellowship
+### <img src="images/logos/lockup-fellowship.png" height="72" alt="Fellowship">
 
 Light. Parchment with olive greens and aged gold.
 
 ![Fellowship theme](docs/images/themes/fellowship.png)
 
-### <img src="images/logos/mark-cooper.png" width="64" height="64" alt=""> Cooper
+### <img src="images/logos/lockup-cooper.png" height="72" alt="Cooper">
 
 White-on-black instrument readouts and Gargantua's gold.
 
 ![Cooper theme](docs/images/themes/cooper.png)
 
-### <img src="images/logos/mark-bluey.png" width="64" height="64" alt=""> Bluey
+### <img src="images/logos/lockup-bluey.png" height="72" alt="Bluey">
 
 Light. Heeler-family daylight: cream paper, pale blue chrome.
 
 ![Bluey theme](docs/images/themes/bluey.png)
 
-### <img src="images/logos/mark-bluey-night.png" width="64" height="64" alt=""> Bluey Night
+### <img src="images/logos/lockup-bluey-night.png" height="72" alt="Bluey Night">
 
 The same palette after bedtime, on Bluey's navy.
 
 ![Bluey Night theme](docs/images/themes/bluey-night.png)
 
-### <img src="images/logos/mark-helix.png" width="64" height="64" alt=""> Helix
+### <img src="images/logos/lockup-helix.png" height="72" alt="Helix">
 
 Steel blue, dusty rose and lavender on Replicant's near-black. A custom theme that has been my friend through many dangers.
 
 ![Helix theme](docs/images/themes/helix.png)
 
-### <img src="images/logos/mark-mix.png" width="64" height="64" alt=""> Mix
+### <img src="images/logos/lockup-mix.png" height="72" alt="Mix">
 
 Any theme's workbench around any other's editor colors. Shown as it ships: Helix around LCARS.
 
@@ -101,7 +101,7 @@ Mix wears one theme's workbench around another theme's editor colors.
 ## Development
 
 - `npm run build:themes` rebuilds the fixed themes from the palettes in `scripts/build-themes.js`.
-- `npm run capture:screenshots` retakes the screenshots above.
+- `npm run capture:screenshots` retakes the screenshots above; `npm run build:lockups` redraws each theme's heading lockup, its mark and its name set in the Blade Runner Movie Font in its own colors.
 - `npm run build:specimens-page` regenerates `theme-specimens.html`: every Esper theme as it ships, drawn as VS Code draws it in the Modern UI or the classic layout, with an inspector that swaps any key for another color from the theme's palette, a live accessibility audit, and export.
 - `npm run build:census-page` regenerates `theme-census.html`: the thirty most-installed VS Code themes measured against Esper's, the regrade that followed, and every Esper theme's named palette, accessibility audit and color-theory recipes.
 - `npm run package:vsix` builds the extension. A push to `master` publishes a release.

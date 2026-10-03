@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1428 200" width="1428" height="200" role="img" aria-label="Synthwave — Esper Themes">
+  <rect width="1428" height="200" rx="28" fill="#100C20"/>
+  <g fill="none" stroke="#3FD8EA" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#100C20" stroke="none"/>
+  <path d="M40,110 A60,60 0 0 1 160,110"/><line x1="48" y1="80" x2="152" y2="80" stroke="#F25AA9"/><line x1="42.8" y1="92" x2="157.2" y2="92" stroke="#F25AA9"/><line x1="40.5" y1="102" x2="159.5" y2="102" stroke="#F25AA9"/><line x1="14" y1="110" x2="186" y2="110"/><line x1="100" y1="110" x2="20" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="60" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="100" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="140" y2="182" stroke="#AE9DFF"/><line x1="100" y1="110" x2="180" y2="182" stroke="#AE9DFF"/><line x1="48" y1="130" x2="152" y2="130" stroke="#AE9DFF"/><line x1="30" y1="156" x2="170" y2="156" stroke="#AE9DFF"/></g>
+  <g aria-hidden="true">
+    <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#3FD8EA" d="M833 690 788 524H140Q161 588 217 637Q278 690 341 690ZM664 64Q624 23 540 0L-6 1L47 191L425 189Q474 195 474 237Q474 262 467.5 271.0Q461 280 437 288H244Q181 288 152.0 319.5Q123 351 123 422Q123 457 123 457H565Q646 447 674 425Q678 422 728 366Q747 318 747 257Q747 146 664 64Z"/>
+    <path transform="translate(372.9 152) scale(0.15072 -0.15072)" fill="#F25AA9" d="M763 692 612 523H123L87 689H338L357 612L431 693ZM549 457 427 326 338 1H76L169 328L140 455Z"/>
+    <path transform="translate(480.3 152) scale(0.15072 -0.15072)" fill="#FF8B55" d="M822 690 772 523H117L164 690H391L539 549L575 690ZM759 457 637 1H386L463 278L317 411L201 0H-28L97 457Z"/>
+    <path transform="translate(603.9 152) scale(0.15072 -0.15072)" fill="#AE9DFF" d="M804 690 758 524H92L198 690ZM545 457 424 1H195L319 457Z"/>
+    <path transform="translate(726.2 152) scale(0.15072 -0.15072)" fill="#FF647E" d="M810 690 766 522H522L569 690ZM389 690 344 522H104L148 690ZM746 457 622 0H380L452 276H277L200 1H-45L81 457Z"/>
+    <path transform="translate(851.7 152) scale(0.15072 -0.15072)" fill="#3FD8EA" d="M973 689 932 523H695L743 689ZM434 690 388 523H142L189 690ZM912 457 785 0 553 1 410 130 239 1 0 0 127 457H372L321 289L491 425L628 289L678 457Z"/>
+    <path transform="translate(1000.3 152) scale(0.15072 -0.15072)" fill="#F25AA9" d="M689 522H257L401 690H653ZM801 1H550L482 273H340L139 1H-154L204 458H703Z"/>
+    <path transform="translate(1128.2 152) scale(0.15072 -0.15072)" fill="#FF8B55" d="M1060 688 932 524H609L728 690ZM391 524H134L100 690H351ZM875 458 492 1H241L146 458H405L442 305L551 457Z"/>
+    <path transform="translate(1279.0 152) scale(0.15072 -0.15072)" fill="#AE9DFF" d="M775 690 731 522H79L187 690ZM710 457 662 275H337L311 181H633L585 1H-2L120 457Z"/>
+  </g>
+</svg>
