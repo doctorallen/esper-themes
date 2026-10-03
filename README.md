@@ -102,6 +102,7 @@ Mix wears one theme's workbench around another theme's editor colors.
 
 - `npm run build:themes` rebuilds the fixed themes from the palettes in `scripts/build-themes.js`.
 - `npm run capture:screenshots` retakes the screenshots above.
+- `npm run build:specimens-page` regenerates `theme-specimens.html`: every Esper theme as it ships, drawn as VS Code draws it in the Modern UI or the classic layout, with an inspector that swaps any key for another color from the theme's palette, a live accessibility audit, and export.
 - `npm run build:census-page` regenerates `theme-census.html`: the thirty most-installed VS Code themes measured against Esper's, the regrade that followed, and every Esper theme's named palette, accessibility audit and color-theory recipes.
 - `npm run package:vsix` builds the extension. A push to `master` publishes a release.
 
