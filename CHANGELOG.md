@@ -30,7 +30,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Bright terminal colors are a visible step brighter than the normal ones instead of repeating them.
 - No two syntax roles read as one color to a red-green color-blind reader: the build checks every pair as deuteranopes and protanopes see it, LCARS included.
 - Pane boundaries (the side bar, Modern UI surface frames, the panel and split editors) are visible edges in every theme, halfway between the old hairline and WCAG's 3:1, and LCARS badge text clears AA.
-- LCARS's workbench is built from the Classic LCARS set its syntax already uses instead of the Picard set's blues: an orange activity rail, a dirty-mauve frame, status rail and section headers with starlight text, peach pane tabs, a mauve-dark active editor tab under orange and peach strokes, lilac around inputs and widgets, and brown pane frames. The only blue left is Bluey on info diagnostics. Q's static fallback follows. The status-bar states LCARS never set (no folder open, remote, prominent, error, warning, offline) are set, so VS Code's default purple no longer shows under dark text.
+- LCARS's workbench is built from the Classic LCARS set its syntax already uses instead of the Picard set's blues: an orange activity rail with a Bluey pill behind the active item, a dirty-mauve frame, status rail and section headers with starlight text, peach pane tabs, a mauve-dark active editor tab under an orange stroke and over a sky-blue one, lilac around inputs and widgets, and pane edges in almond creme around the side bar, sky blue around the editor and ghost gray over the classic panel. Blue stays only where it frames or signals: the edges, the pill, the tab stroke, the operators and info diagnostics. Q's static fallback follows. The status-bar states LCARS never set (no folder open, remote, prominent, error, warning, offline) are set, so VS Code's default purple no longer shows under dark text.
 - The census and specimen pages draw windows as VS Code does, in either layout: the Modern UI ground between the cards is the title bar's color and the activity rail is a card of its own; the explorer title, section headers, selected rows, tabs, breadcrumbs, find widget and status items each wear their own key, and keys a theme leaves unset take VS Code's defaults.
 
 - The LCARS mark is redrawn from the Enterprise-D blueprints: the phaser strip rings the saucer, the dome section is an egg, the hull flares to a squared stern, the nacelles taper to their bussard caps, and the pylons sweep from the hull's rear flanks.
@@ -44,6 +44,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+- The Modern UI tab strokes the extension copies into `workbench.colorCustomizations` follow the theme when it changes; before, the first values written stayed forever. Values a user set by hand are still left alone.
 - Active editor tabs show their top and bottom borders under VS Code's Modern UI.
 - Mermaid diagrams in the markdown preview draw their edges and node borders in the theme's accent instead of VS Code's steel-blue default, which all but vanished on the darker themes.
 

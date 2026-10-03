@@ -24,6 +24,9 @@ const MIX_THEME_NAME = "Mix";
 const MIX_SCOPE = "[Mix]";
 const MIX_TOKEN_RULE_PREFIX = "Esper Themes Mix token ";
 const LAST_MIX_KEY = "lastMix";
+// The tab strokes the extension itself copied into settings, per theme scope,
+// so a later theme change can update them without touching a user's own values.
+const WRITTEN_TAB_BORDERS_KEY = "modernTabBordersWritten";
 // VS Code's Modern UI draws the active editor tab's top and bottom strokes only
 // from workbench.colorCustomizations, never from a theme file, so the fixed
 // themes copy these roles into their theme-scoped settings.
@@ -527,7 +530,11 @@ function activeFixedTheme() {
   return FIXED_THEMES.find(theme => theme.label === themeName);
 }
 
-/** Adds the active fixed theme's tab strokes to its settings scope, keeping user values. */
+/**
+ * Copies the active fixed theme's tab strokes into its settings scope. A key the
+ * extension wrote follows the theme when the theme changes; a key the user set
+ * by hand (any value the extension did not write) is left alone.
+ */
 async function synchronizeModernTabBorders() {
   const theme = activeFixedTheme();
   if (!theme || !vscode.workspace.getConfiguration().get(MODERN_UI_SETTING)) {
@@ -537,19 +544,34 @@ async function synchronizeModernTabBorders() {
   const scope = `[${theme.label}]`;
   const customizations = getGlobalSetting("workbench.colorCustomizations");
   const current = isRecord(customizations[scope]) ? customizations[scope] : {};
-  const missing = MODERN_TAB_BORDER_KEYS.filter(
-    key => typeof colors[key] === "string" && current[key] === undefined
-  );
-  if (missing.length === 0) {
-    return;
+  const written = extensionContext ? extensionContext.globalState.get(WRITTEN_TAB_BORDERS_KEY, {}) : {};
+  // Before this record existed the extension wrote these keys without one, so
+  // on the first run whatever is there counts as its own.
+  const ours = isRecord(written[scope]) ? written[scope] : current;
+  const next = { ...current };
+  const wrote = {};
+  for (const key of MODERN_TAB_BORDER_KEYS) {
+    const value = colors[key];
+    if (typeof value !== "string") {
+      continue;
+    }
+    const userSet = current[key] !== undefined && current[key] !== ours[key];
+    if (userSet) {
+      continue;
+    }
+    next[key] = value;
+    wrote[key] = value;
   }
-  customizations[scope] = {
-    ...current,
-    ...Object.fromEntries(missing.map(key => [key, colors[key]])),
-  };
-  await vscode.workspace
-    .getConfiguration()
-    .update("workbench.colorCustomizations", customizations, vscode.ConfigurationTarget.Global);
+  const changed = MODERN_TAB_BORDER_KEYS.some(key => next[key] !== current[key]);
+  if (changed) {
+    customizations[scope] = next;
+    await vscode.workspace
+      .getConfiguration()
+      .update("workbench.colorCustomizations", customizations, vscode.ConfigurationTarget.Global);
+  }
+  if (extensionContext) {
+    await extensionContext.globalState.update(WRITTEN_TAB_BORDERS_KEY, { ...written, [scope]: wrote });
+  }
 }
 
 function reportTabBorderError(error) {
