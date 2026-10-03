@@ -95,13 +95,13 @@ select { font: 13px var(--body); padding: 6px 8px; border-radius: 6px; border: 1
 .card .stats { display: flex; gap: 10px; padding: 0 4px; font-family: var(--mono); font-size: 11px; color: var(--muted); flex-wrap: wrap; }
 .tag-esper { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--esper); }
 
-/* Modern UI specimen: framed, rounded surfaces on the activity-bar ground */
+/* Modern UI specimen: rounded cards, the activity rail among them, on the title-bar ground */
 .mwin { border-radius: 10px; overflow: hidden; font-family: var(--code); display: flex; flex-direction: column; }
 .mwin .mtitle { height: 24px; display: flex; align-items: center; gap: 5px; padding-left: 10px; }
 .mwin .mtitle i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .45; }
 .mwin .mtitle span { margin-left: 10px; font-size: 10px; opacity: .8; font-family: var(--body); }
-.mwin .mbody { display: grid; grid-template-columns: 34px 96px minmax(0, 1fr); gap: 5px; padding: 0 6px 6px 0; }
-.mwin .mact { display: flex; flex-direction: column; align-items: center; gap: 7px; padding-top: 4px; }
+.mwin .mbody { display: grid; grid-template-columns: 34px 96px minmax(0, 1fr); gap: 5px; padding: 0 6px 6px 6px; }
+.mwin .mact { display: flex; flex-direction: column; align-items: center; gap: 7px; padding-top: 6px; }
 .mwin .mact i { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; }
 .mwin .mact i b { width: 10px; height: 10px; border-radius: 3px; border: 1.6px solid currentColor; display: block; }
 .mwin .mcard { border-radius: 8px; overflow: hidden; min-width: 0; }
@@ -318,7 +318,7 @@ svg .hit:hover + circle { stroke: var(--ink); stroke-width: 2.2; }
 
     <section id="specimens">
       <div class="sec-head"><div class="eyebrow">01 · Specimens</div><h2>Every theme, rendered from its own colors</h2>
-        <div class="prose"><p>Each window is drawn as VS Code's Modern UI lays out the workbench: framed, rounded surfaces on the activity-bar ground, pill tabs, a filled active activity item, and a pane tab on the terminal. Esper sets the Modern UI keys (<code>surface.*</code>, <code>modernEditorTab.*</code>, <code>modernActivityBarItem.*</code>, <code>modernTab.*</code>); the popular themes do not, so theirs fall back to the matching classic keys. Every token comes from <code>tokenColors</code> plus <code>semanticTokenColors</code>, brackets are colorized as VS Code ships, and the editor is mid-search for <code>ship</code>. Select a window to open its breakdown below.</p></div></div>
+        <div class="prose"><p>Each window is drawn as VS Code's Modern UI lays out the workbench: rounded cards on the title-bar ground, the activity rail a card of its own, pill tabs, a filled active activity item, and a pane tab on the terminal. Esper sets the Modern UI keys (<code>surface.*</code>, <code>modernEditorTab.*</code>, <code>modernActivityBarItem.*</code>, <code>modernTab.*</code>); the popular themes do not, so theirs fall back to the matching classic keys. Every token comes from <code>tokenColors</code> plus <code>semanticTokenColors</code>, brackets are colorized as VS Code ships, and the editor is mid-search for <code>ship</code>. Select a window to open its breakdown below.</p></div></div>
       <div class="controls">
         <div class="seg" role="group" aria-label="Theme set" id="setSeg">
           <button type="button" data-set="popular" aria-pressed="true">Top 30</button>
@@ -502,9 +502,13 @@ function mod(t) {
   const sidebar = W(t, 'sidebar') || t.bg;
   const paneTab = W(t, 'mTabBg') || W(t, 'activityBadge') || W(t, 'focus') || t.fg;
   return {
-    frame: W(t, 'mActBg') || W(t, 'activity') || W(t, 'title') || t.bg,
-    title: W(t, 'title') || W(t, 'mActBg') || W(t, 'activity') || t.bg,
-    titleFg: W(t, 'sidebarFg') || t.fg,
+    // The ground between the cards is the title bar's color (VS Code's Modern UI
+    // README: "the shell gutters use the active or inactive titleBar.* background");
+    // the activity rail is its own card, painted by modernActivityBar.background.
+    frame: W(t, 'title') || W(t, 'activity') || t.bg,
+    title: W(t, 'title') || W(t, 'activity') || t.bg,
+    rail: W(t, 'mActBg') || W(t, 'activity') || W(t, 'title') || t.bg,
+    titleFg: W(t, 'titleFg') || W(t, 'sidebarFg') || t.fg,
     actFg: W(t, 'actInactiveFg') || W(t, 'activityFg') || t.fg,
     actItemBg: W(t, 'mActItemBg') || W(t, 'actActiveBg') || null,
     actItemFg: W(t, 'mActItemFg') || W(t, 'activityFg') || t.fg,
@@ -582,7 +586,7 @@ function win(t, big) {
   return `<div class="mwin${big ? ' big' : ''}" style="background:${m.frame}">
     <div class="mtitle" style="background:${m.title};color:${m.titleFg}"><i></i><i></i><i></i><span>load.ts — crew</span></div>
     <div class="mbody">
-      <div class="mact">${icon(true)}${icon(false)}${icon(false)}</div>
+      <div class="mcard mact" style="background:${m.rail}">${icon(true)}${icon(false)}${icon(false)}</div>
       <div class="mcard mside" style="background:${m.surface};color:${m.sideFg};${bd}"><span class="hd">EXPLORER</span><i style="width:70%"></i><span class="sbt"><span style="color:${m.listHi};font-weight:700">lo</span>ad.ts</span><i style="width:80%"></i><i style="width:55%"></i><i style="width:65%"></i></div>
       <div class="mmain">
         <div class="mcard" style="background:${t.bg};${ebd}">
