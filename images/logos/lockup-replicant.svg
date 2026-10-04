@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1328 200" width="1328" height="200" role="img" aria-label="Replicant — Esper Themes">
-  <rect width="1328" height="200" rx="28" fill="#050608"/>
-  <g fill="none" stroke="#FFB000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#050608" stroke="none"/>
+  <rect width="1328" height="200" rx="28" fill="#121417"/>
+  <g fill="none" stroke="#FFB000" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#121417" stroke="none"/>
   <path d="M20,100 Q100,30 180,100 Q100,170 20,100 Z"/><circle cx="100" cy="100" r="34"/><circle cx="100" cy="100" r="22" stroke="#E86A4E"/><circle cx="100" cy="100" r="9" fill="#FFB000" stroke="none"/></g>
   <g aria-hidden="true">
     <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#FFB000" d="M866 524H91L197 690H766Q789 690 812.5 674.0Q836 658 848 636Q866 603 866 524ZM854 457Q846 396 784 342Q756 317 737 311Q760 275 760 235Q760 212 753 170Q749 144 701 1H477L557 276H321L236 1H3L137 457Z"/>

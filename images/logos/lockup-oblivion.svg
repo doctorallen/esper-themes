@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1153 200" width="1153" height="200" role="img" aria-label="Oblivion — Esper Themes">
-  <rect width="1153" height="200" rx="28" fill="#04080B"/>
-  <g fill="none" stroke="#3FB6C9" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#04080B" stroke="none"/>
+  <rect width="1153" height="200" rx="28" fill="#0F1518"/>
+  <g fill="none" stroke="#3FB6C9" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#0F1518" stroke="none"/>
   <circle cx="100" cy="96" r="54"/><path d="M48,118 A54,54 0 0 0 152,118" stroke="#CDBE95"/><circle cx="100" cy="88" r="17"/><circle cx="100" cy="88" r="6" fill="#FF9A3C" stroke="none"/><rect x="58" y="138" width="20" height="28" rx="6"/><rect x="122" y="138" width="20" height="28" rx="6"/></g>
   <g aria-hidden="true">
     <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#3FB6C9" d="M788 522H129Q149 590 197 637Q256 694 319 694H659Q788 694 788 557Q788 523 788 522ZM774 458 770 442Q754 390 715 252Q690 165 638 106Q544 0 386 0H267Q171 0 115 36Q46 79 46 169Q46 217 61 271L111 456H344L275 213Q271 196 271 187Q271 167 289 162H434Q461 169 474 213L546 457Z"/>
