@@ -7,13 +7,13 @@
        outer edge and looped again at the tip. Drawn with the blade along +x,
        then turned to run from the stem at upper right to the point at lower left. -->
   <g transform="translate(128 76) rotate(139) scale(1.02 -1.02)">
-    <path d="M-8,0 C-18,-14 2,-50 40,-62 C46,-46 46,-32 42,-22 C62,-34 98,-24 122,0 C98,24 56,36 34,22 C34,34 24,48 0,54 C-14,42 -16,14 -8,0 Z" fill="#1F6E63"/>
+    <path d="M-8,0 C-16,-20 10,-52 46,-66 C40,-50 40,-34 38,-20 C62,-32 98,-24 122,0 C98,24 58,34 34,20 C32,36 18,52 -4,60 C-10,44 -14,14 -8,0 Z" fill="#1F6E63"/>
     <g stroke="#F1E8C8" stroke-width="3">
-      <path d="M0,0 L116,0 M0,0 L34,-54 M0,0 L2,46"/>
+      <path d="M0,0 L116,0 M0,0 L38,-56 M0,0 L-2,50"/>
       <path d="M22,0 L38,-14 M22,0 L38,14 M38,0 L56,-17 M38,0 L56,17 M54,0 L72,-16 M54,0 L72,16 M70,0 L88,-13 M70,0 L88,13 M86,0 L102,-9 M86,0 L102,9 M100,0 L112,-5 M100,0 L112,5"/>
-      <path d="M8,-14 L22,-12 M16,-26 L30,-24 M24,-38 L38,-36 M4,14 L16,16 M4,28 L18,30"/>
+      <path d="M10,-14 L22,-14 M18,-26 L30,-26 M26,-38 L36,-38 M2,14 L12,16 M0,28 L12,30"/>
     </g>
     <ellipse cx="-26" cy="-8" rx="16" ry="12" transform="rotate(30 -26 -8)" stroke-width="4"/>
-    <path d="M-14,-10 C-22,-44 10,-82 50,-74 C84,-56 112,-22 134,0 C140,8 136,16 128,14 C120,12 122,2 128,-2" stroke-width="4"/>
+    <path d="M-14,-10 C-24,-44 14,-84 56,-76 C88,-56 112,-22 134,0 C140,8 136,16 128,14 C120,12 122,2 128,-2" stroke-width="4"/>
   </g>
 </svg>
