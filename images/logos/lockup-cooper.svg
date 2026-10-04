@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1032 200" width="1032" height="200" role="img" aria-label="Cooper — Esper Themes">
-  <rect width="1032" height="200" rx="28" fill="#07090B"/>
-  <g fill="none" stroke="#DCA24A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#07090B" stroke="none"/>
+  <rect width="1032" height="200" rx="28" fill="#121416"/>
+  <g fill="none" stroke="#DCA24A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect width="200" height="200" rx="28" fill="#121416" stroke="none"/>
   <path d="M60,85 A44,44 0 0 1 140,85" stroke="#9FBFD4"/><circle cx="100" cy="104" r="36"/><path d="M16,104 A84,24 0 0 0 184,104" stroke="#9FBFD4"/></g>
   <g aria-hidden="true">
     <path transform="translate(244.0 152) scale(0.15072 -0.15072)" fill="#DCA24A" d="M771 690 722 522H123Q142 586 193 635Q250 690 311 690ZM629 185 577 -1H260Q95 -1 50 104Q36 136 41 193Q42 204 45 233L104 456L352 457L280 236Q283 223 286 209Q295 191 323 185Z"/>

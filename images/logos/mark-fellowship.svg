@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Fellowship theme mark" fill="none" stroke="#405E2A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
   <rect width="200" height="200" rx="28" fill="#F1E8C8" stroke="none"/>
-  <path d="M4,172 Q100,0 196,172" stroke="#94412C"/><line x1="4" y1="172" x2="196" y2="172"/><circle cx="100" cy="130" r="38" fill="#F1E8C8"/><circle cx="100" cy="130" r="30" stroke="#7D5311"/><circle cx="100" cy="130" r="5" fill="#7D5311" stroke="none"/><circle cx="46" cy="152" r="8" stroke="#7D5311"/><circle cx="154" cy="152" r="8" stroke="#7D5311"/>
+  <path d="M4,172 Q100,0 196,172" stroke="#8D3C28"/><line x1="4" y1="172" x2="196" y2="172"/><circle cx="100" cy="130" r="38" fill="#F1E8C8"/><circle cx="100" cy="130" r="30" stroke="#6E4A10"/><circle cx="100" cy="130" r="5" fill="#6E4A10" stroke="none"/><circle cx="46" cy="152" r="8" stroke="#6E4A10"/><circle cx="154" cy="152" r="8" stroke="#6E4A10"/>
 </svg>
