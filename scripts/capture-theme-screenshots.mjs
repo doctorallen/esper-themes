@@ -411,8 +411,16 @@ function renderedExpression(editorBackground, activeBorderTop, topLine) {
   return `(() => {
     const editor = document.querySelector('.part.editor .monaco-editor .monaco-editor-background');
     if (!editor || getComputedStyle(editor).backgroundColor !== ${JSON.stringify(editorBackground)}) return false;
-    const tab = document.querySelector('.part.editor .tab.active > .tab-fill');
-    if (!tab || getComputedStyle(tab).borderTopColor !== ${JSON.stringify(activeBorderTop)}) return false;
+    // Before VS Code 1.141 the stroke is the tab fill's top border; from
+    // 1.141, with connected tabs, it is the background of its own container.
+    const tab = document.querySelector('.part.editor .tab.active');
+    const fill = tab?.querySelector(':scope > .tab-fill');
+    const stroke = tab?.querySelector(':scope > .tab-border-top-container');
+    const strokes = [
+      fill && getComputedStyle(fill).borderTopColor,
+      stroke && getComputedStyle(stroke).backgroundColor,
+    ];
+    if (!strokes.includes(${JSON.stringify(activeBorderTop)})) return false;
     const firstLine = document.querySelector('.part.editor .margin-view-overlays .line-numbers');
     if (firstLine?.textContent?.trim() !== ${JSON.stringify(topLine)}) return false;
     // The capture window takes focus, so stray typing can land in a sample
