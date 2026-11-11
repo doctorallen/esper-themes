@@ -548,6 +548,64 @@ const THEMES = [
       invalid: "#D9673B",
     },
   },
+  {
+    // The Expanse: the Razorback's nav map and the UNN consoles, by way of the
+    // tactical plot at davidrallen.com/map. Thin console-blue rules on a
+    // blue-black ground, and one gold that only ever marks the lock: the file,
+    // line or match you are on.
+    name: "Razorback",
+    type: "dark",
+    surfaces: {
+      editor: "#04060B",
+      activity: "#04060B",
+      sidebar: "#070B12",
+      panel: "#070B12",
+      status: "#070B12",
+      widget: "#0D1420",
+      raised: "#0D1420",
+      tabActive: "#0D1420",
+      tabInactive: "#070B12",
+      border: "#12263A",
+    },
+    foreground: "#D9E0E4",
+    // The plot's dim label blue, lifted a step: at #4F7A99 it sat at 4.4:1.
+    muted: "#6F93AE",
+    // The console blue of every rule, heading and key on the plot.
+    primary: "#9AD0EA",
+    // The lock's gold.
+    secondary: "#D4922C",
+    // The plot has no red; this one is kept for errors alone.
+    error: "#FF5A4F",
+    warning: "#E8B75A",
+    // "On station."
+    success: "#7ED37A",
+    // The planned course, drawn ahead of the ship.
+    info: "#5AA9DE",
+    syntax: {
+      text: "#D9E0E4",
+      comment: "#6F93AE",
+      keyword: "#9AD0EA",
+      // Operators read as text: a grey between the text and the comments
+      // lands on the keyword blue.
+      operator: "#D9E0E4",
+      // The drive plume's cream.
+      string: "#FFE2A8",
+      number: "#E8B75A",
+      constant: "#D4922C",
+      variable: "#D9E0E4",
+      property: "#D9E0E4",
+      function: "#5AA9DE",
+      libraryFunction: "#5AA9DE",
+      // A transponder's teal, off one of the plot's contacts.
+      type: "#3FE0D0",
+      // Tags and decorators take the lock's gold.
+      markup: "#D4922C",
+      decorator: "#D4922C",
+      invalid: "#FF5A4F",
+    },
+    // Every pane is framed in the console blue, quieted, as the plot's are.
+    paneEdges: { surfaces: "primary", editor: "primary" },
+  },
   // The two Bluey themes are built from the characters' own colors, sampled from
   // the family artwork: navy #040620, purple-navy #403F65, Bluey blue #83BBE3,
   // steel #75A6BE, pale blue #D2EBFD, cream #FFF9D8, gold #EDCE74, orange

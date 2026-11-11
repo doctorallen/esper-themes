@@ -37,6 +37,7 @@ const TAGLINES = {
   Tomcat: 'Green phosphor cockpit display with amber warnings.',
   Fellowship: 'Light. Parchment with olive greens and aged gold.',
   Cooper: 'White-on-black instrument readouts and Gargantua\'s gold.',
+  Razorback: 'Console-blue rules on blue-black, with gold kept for the lock.',
   Bluey: 'Light. Heeler-family daylight: cream paper, pale blue chrome.',
   'Bluey Night': 'The same palette after bedtime, on Bluey\'s navy.',
   Helix: 'Steel blue, dusty rose and lavender on Replicant\'s near-black. A custom theme that has been my friend through many dangers.',
