@@ -56,6 +56,12 @@ White-on-black instrument readouts and Gargantua's gold.
 
 ![Cooper theme](docs/images/themes/cooper.png)
 
+### <img src="images/logos/lockup-razorback.png" height="72" alt="Razorback">
+
+Console-blue rules on blue-black, with gold kept for the lock.
+
+![Razorback theme](docs/images/themes/razorback.png)
+
 ### <img src="images/logos/lockup-bluey.png" height="72" alt="Bluey">
 
 Light. Heeler-family daylight: cream paper, pale blue chrome.

@@ -102,7 +102,7 @@ as a result.
 
 ## Film themes
 
-Replicant, Oblivion, Synthwave, Tomcat, Fellowship, and Cooper are outside the
+Replicant, Oblivion, Synthwave, Tomcat, Fellowship, Cooper, and Razorback are outside the
 approved LCARS palette: each takes its surfaces and accents from the matching
 Deckard webview theme (`src/ui/webview/themes.ts` in Deckard, with the base
 palette Replicant uses in `src/ui/webview/components.ts`).
@@ -133,6 +133,7 @@ its editor ground, so its activity bar is `#04080B`. Cooper did not change.
 | Tomcat | `themes/Tomcat-color-theme.json` | Phosphor green `#6FD96C` | Amber `#D89D31` |
 | Fellowship (light) | `themes/Fellowship-color-theme.json` | Olive `#405E2A` | Gold `#664317` |
 | Cooper | `themes/Cooper-color-theme.json` | Gold `#DCA24A` | Steel blue `#9FBFD4` |
+| Razorback | `themes/Razorback-color-theme.json` | Console blue `#9AD0EA` | Gold `#D4922C` |
 
 Replicant's syntax palette is the one exception to that sourcing, and the one
 exception to the contrast target. Its workbench surfaces and accents still come

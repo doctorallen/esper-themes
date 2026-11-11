@@ -18,6 +18,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - `theme-specimens.html` (`npm run build:specimens-page`): every Esper theme as it ships, drawn as VS Code draws it in the Modern UI or the classic layout, with real Codicons, the selected file shown with the tree focused and unfocused, git- and problem-decorated rows and tabs, and an inspector that swaps any key for another color from the theme's own palette, re-auditing as it goes, with export. It brings back what `theme-palettes.html` did in v0.11.0.
 - Mix theme and the **Esper Themes: Mix Themes** command: one theme's workbench, editor background included, around another theme's syntax colours, each colour lifted until it reads on the new ground as well as it read on its own.
 
+- Razorback theme, after The Expanse's nav displays by way of the tactical plot at davidrallen.com/map: console-blue rules on a blue-black ground, gold for the file, line and match you are on.
+
 ### Changed
 
 - The film themes' dark editors sit at OKLCH lightness 0.19, where GitHub Dark and Ayu Dark put theirs, instead of near black, and the chrome is held to a small step above them. LCARS keeps its ground.
