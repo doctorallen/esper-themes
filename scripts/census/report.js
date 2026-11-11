@@ -46,6 +46,10 @@ const KNOWN_NAMES = {
   "#6FC2B5": "Miller's Ocean", "#E86767": "Warning Red",
   "#8DB4E8": "Sky Tower Blue", "#5CD6B4": "Radar Teal", "#6FB3E8": "Canopy Blue",
   "#6BD0B2": "Sea Glass", "#F0C97A": "Brass", "#E86A4E": "Zhora Coral",
+  // Razorback, from the tactical plot at davidrallen.com/map
+  "#9AD0EA": "Console Blue", "#5AA9DE": "Plan Line", "#3FE0D0": "Transponder Teal",
+  "#FFE2A8": "Drive Plume", "#E8B75A": "Running Amber", "#D4922C": "Lock Gold",
+  "#7ED37A": "On Station", "#FF5A4F": "Alert Red", "#6F93AE": "Label Blue",
   // Helix, from the 2020 Sublime Text theme
   "#448AA9": "Helix Steel", "#AF8787": "Dusty Rose", "#A5B4DB": "Helix Slate",
   "#FF8147": "Helix Orange", "#BD93F9": "Lavender", "#A2A797": "Bracket Grey",
@@ -70,6 +74,7 @@ const CONTEXT = {
   Tomcat: "A green phosphor cockpit display. Green leads; the radar sweep's teal takes types, the caution lamp's amber literals, and a canopy blue the tags.",
   Fellowship: "Parchment and ink: olive greens and aged gold on a light page, with a river ink for types, a seal purple for constants and tags, and a vermilion for numbers.",
   Cooper: "Interstellar: white-on-black instrument readouts, Gargantua's gold, Miller's ocean for types and the Endurance's warning red for tags.",
+  Razorback: "The Expanse's nav displays, by way of the tactical plot at davidrallen.com/map: console-blue rules and keywords on a blue-black ground, the planned course for functions, a transponder's teal for types, the drive plume's cream for strings, and gold kept for the lock.",
   Bluey: "Heeler-family daylight, sampled from the artwork: cream paper, pale blue chrome, the purple-navy of Bluey's head for keywords, Chilli's brown for strings.",
   "Bluey Night": "The same artwork after bedtime, on Bluey's navy: the blues of his body for structure, the muzzle golds and Bingo's orange for literals.",
   Helix: "The Sublime Text theme David wrote in 2020, carried into VS Code: steel blue for values, dusty rose for keywords, lavender for functions and slate for types, on Replicant's workbench.",
